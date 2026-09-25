@@ -35,6 +35,11 @@ function expense(a,b,src){return sum(t=>t.tj==='Pengeluaran'&&t.t==='K'&&inR(t,a
 function tabNet(a,b,mm=false){return sum(t=>t.tj==='Tabungan'&&inR(t,a,b)&&((t.sb==='Reksadana uang kos mama')===mm)&&t.t==='K')-sum(t=>t.tj==='Tabungan'&&inR(t,a,b)&&((t.sb==='Reksadana uang kos mama')===mm)&&t.t==='M')}
 function mama(d){const z='2000-01-01';const inn=income(z,d,'Uang Kos Mama')+income(z,d,'Uang Kedai'),out=expense(z,d,'Pengeluaran Uang Kos')+expense(z,d,'Pengeluaran Uang Kedai'),inv=tabNet(z,d,true);
  const kantong=S.acc.filter(a=>a.g==='Titipan Mama').reduce((s,a)=>s+bal(a.n,d),0);const sisa=(S.mamaOpen||0)+inn-out-inv;return{inn,out,inv,sisa,kantong,pribadi:Math.max(0,sisa-kantong)}}
+const MAMA_SB=['Uang Kos Mama','Uang Kedai','Pengeluaran Uang Kos','Pengeluaran Uang Kedai','Reksadana uang kos mama'];
+function mamaIds(a,b){return S.tx.filter(t=>inR(t,a,b)&&MAMA_SB.includes(t.sb)).map(t=>t.id)}
+function kantongRows(d){return S.acc.filter(a=>a.g==='Titipan Mama').map(a=>`<div class="kv"><span>${esc(a.n)}</span><span>${L(rp(bal(a.n,d)),{a:a.n,title:'Semua transaksi '+a.n})}</span></div>`).join('')}
+function kantongSheet(){const M=mama(today);sheet(`<h3>Uang mama yang ada sekarang</h3><div class="tiny">Angka ini gabungan saldo semua akun titipan mama, dihitung dari transaksi yang tercatat.</div>${kantongRows(today)}<div class="kv"><b>Total</b><b>${rp(M.kantong)}</b></div><div class="tiny" style="margin-top:6px">Ketuk angka untuk melihat riwayat transaksi akun itu.</div>`)}
+function disanMonth(a,b){const inn=income(a,b,'Uang Disan'),out=expense(a,b,'Pengeluaran Uang Disan');return{inn,out}}
 function disan(d){const z='2000-01-01';const s=income(z,d,'Uang Disan')-expense(z,d,'Pengeluaran Uang Disan');const k=S.acc.filter(a=>a.g==='Titipan Disan').reduce((x,a)=>x+bal(a.n,d),0);return{sisa:s,kantong:k,pribadi:Math.max(0,s-k)}}
 /* investasi */
 function saham(){const pos={};for(const e of INV.saham){const p=pos[e.kode]=pos[e.kode]||{kode:e.kode,blot:0,cost:0,slot:0,div:0,real:0,ev:[]};p.ev.push(e);
@@ -53,7 +58,7 @@ function match(t,f){if(f.ids&&!f.ids.includes(t.id))return false;
 function lacak(f,title){F={...f,title};page=1;go('trx')}
 const flow=(t,a)=>t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-const VIEWS=[['home','Beranda'],['trx','Transaksi'],['rep','Laporan'],['mama','Uang Mama'],['inv','Investasi'],['plan','Rencana'],['add','Catat'],['set','Atur']];
+const VIEWS=[['home','Beranda'],['trx','Transaksi'],['rep','Laporan'],['mama','Amanah'],['inv','Investasi'],['plan','Rencana'],['add','Catat'],['set','Atur']];
 let V='home',charts={};
 function nav(){$('nav').innerHTML=VIEWS.map(([k,l])=>`<button data-v="${k}" class="${k===V?'on':''}">${l}</button>`).join('');
  $('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.dataset.v==='trx'&&V!=='trx'&&!F.keep)F={};go(b.dataset.v)})}
@@ -79,13 +84,13 @@ function home(){LK={};const now=new Date(),y=now.getFullYear(),m=now.getMonth(),
  <div class="card"><h3>Pendapatan (ketuk untuk melacak)</h3>${inc.map(([x,v])=>row(x,v,{tj:'Pendapatan',sb:x,from:a,to:b},'up')).join('')||'<div class="tiny">Belum ada</div>'}</div>
  <div class="card"><h3>Pengeluaran (ketuk untuk melacak)</h3>${exp.map(([x,v])=>row(x,v,{tj:'Pengeluaran',sb:x,from:a,to:b},'dn')).join('')}
   ${tb?row('Tabungan bersih (disetor − dicairkan)',tb,{tj:'Tabungan',from:a,to:b},''):''}${!exp.length&&!tb?'<div class="tiny">Belum ada</div>':''}</div>
- <div class="card"><h3>Uang mama</h3><div class="g2">
+ <div class="card"><h3>Uang mama (ketuk untuk rincian)</h3><div class="g2">
   <div class="kp" id="kSisa"><div class="a">Sisa uang mama</div><div class="b">${rp(M.sisa)}</div></div><div class="kp" id="kKant"><div class="a">Di Kantong/Cash Uang Kos Mama</div><div class="b">${rp(M.kantong)}</div></div></div>
   <div class="st ${M.pribadi>0?'w':'ok'}">${M.pribadi>0?'Masih ada '+rp(M.pribadi)+' uang mama di akun pribadimu — pindahkan ke Kantong Uang Kos Mama':'Aman ✓ Tidak ada uang mama di akun pribadimu'}</div></div>
  <div class="card"><h3>Saldo per akun (ketuk untuk melihat asal saldonya)</h3>${S.acc.map(x=>({x,v:bal(x.n)})).filter(o=>o.v||o.x.g!=='Usaha').map(({x,v})=>`<div class="row" data-acc="${esc(x.n)}"><div class="l"><div class="t1">${esc(x.n)}</div><div class="t2">${esc(x.g)}</div></div><div class="r">${rp(v)}</div><span class="chev">›</span></div>`).join('')}</div>`;
  document.querySelectorAll('#main [data-f]').forEach(r=>r.onclick=()=>{const f=JSON.parse(r.dataset.f);lacak(f,`${f.sb||f.tj} · ${BULAN[m]} ${y}`)});
  document.querySelectorAll('#main [data-acc]').forEach(r=>r.onclick=()=>accSheet(r.dataset.acc));
- $('kSisa').onclick=()=>go('mama');$('kKant').onclick=()=>lacak({a:'Jago - Uang Kos Mama'},'Kantong Uang Kos Mama')}
+ $('kSisa').onclick=()=>{MT='mama';go('mama')};$('kKant').onclick=kantongSheet}
 function accSheet(n){const x=S.acc.find(a=>a.n===n),b=bal(n);let mi=0,ko=0,ti=0,to=0;
  for(const t of S.tx){if(t.a===n){if(t.t==='M')mi+=t.j;else if(t.t==='K')ko+=t.j;else to+=t.j}if(t.t==='T'&&t.tu===n)ti+=t.j}
  sheet(`<h3>${esc(n)}</h3><div class="tiny">${esc(x.ket||'')}</div>
@@ -183,21 +188,22 @@ function rep(){LK={};const P=period(),tree={};
  charts.c1=new Chart($('c1'),{type:'bar',data:{labels:Lb,datasets:[{label:'Pendapatan',data:I,backgroundColor:'#1D9E75'},{label:'Pengeluaran',data:X,backgroundColor:'#D85A30'}]},options:{scales:{y:{ticks:{callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'jt':(v/1e3).toFixed(0)+'rb'}}}}})}
 /* ================= UANG MAMA ================= */
 let MY=new Date().getFullYear(),MT='mama';
-function mamaV(){LK={};const tabs=`<div class="seg" id="mt">${[['mama','Uang mama'],['kos','Kos per kamar'],['lain','Disan & riba']].map(([k,l])=>`<button data-t="${k}" class="${k===MT?'on':''}">${l}</button>`).join('')}</div>
+function mamaV(){LK={};const tabs=`<div class="seg" id="mt">${[['mama','Uang mama'],['kos','Kos per kamar'],['disan','Disan'],['riba','Riba']].map(([k,l])=>`<button data-t="${k}" class="${k===MT?'on':''}">${l}</button>`).join('')}</div>
  <div class="seg" id="my" style="margin-top:6px">${[...new Set(S.tx.map(t=>+t.d.slice(0,4)))].sort().slice(-3).map(y=>`<button data-y="${y}" class="${y===MY?'on':''}">${y}</button>`).join('')}</div>`;
  const bl=[...Array(12)].map((_,i)=>({i,a:ds(new Date(MY,i,1)),b:mEnd(MY,i)})).filter(x=>x.a<=today);
  let body='';
  if(MT==='mama'){const M=mama(today),prev=mama(MY-1+'-12-31');
   body=`<div class="card"><h3>Hari ini</h3>
-  <div class="kv"><span>Sisa uang mama</span><span>${rp(M.sisa)}</span></div>
-  <div class="kv"><span>Ada di Kantong/Cash Uang Kos Mama</span><span>${L(rp(M.kantong),{a:'Jago - Uang Kos Mama',title:'Kantong Uang Kos Mama'})}</span></div>
-  <div class="kv"><span>Masih di akun pribadimu</span><span>${rp(M.pribadi)}</span></div>
-  <div class="st ${M.pribadi>0?'w':'ok'}">${M.pribadi>0?'Pindahkan '+rp(M.pribadi)+' ke Kantong Uang Kos Mama':'Aman ✓'}</div>
-  <div class="tiny" style="margin-top:6px">Sisa = uang kos & kedai masuk − pengeluaran kos & kedai − yang disetor ke reksadana uang kos mama. Minus berarti pengeluaran/setoran lebih besar dari uang mama yang tercatat masuk sejak Feb 2024 (biasanya uang mama dari sebelum Feb 2024).</div></div>
-  <div class="card"><h3>Per bulan ${MY} (ketuk untuk melihat transaksinya)</h3><table><tr><th>Bln</th><th class="n">Masuk</th><th class="n">Keluar + ke reksadana</th><th class="n">Sisa</th><th class="n">Status</th></tr>
+  <div class="kv"><span>Sisa uang mama (hitungan)</span><span>${L(rp(M.sisa),{ids:mamaIds('2000-01-01',today),title:'Semua transaksi uang mama'})}</span></div>
+  <div class="tiny" style="margin:2px 0 6px">= uang kos & kedai masuk ${rp(M.inn)} − dipakai ${rp(M.out)} − disetor ke reksadana uang kos mama ${rp(M.inv)}${S.mamaOpen?' + saldo awal '+rp(S.mamaOpen):''}</div>
+  <h3 style="margin-top:8px">Uang mama yang ada sekarang</h3>${kantongRows(today)}
+  <div class="kv"><b>Total</b><b>${rp(M.kantong)}</b></div>
+  <div class="st ${M.pribadi>0?'w':'ok'}">${M.pribadi>0?'Masih ada '+rp(M.pribadi)+' uang mama di akun pribadimu — pindahkan ke Kantong Uang Kos Mama':'Aman ✓ Tidak ada uang mama yang tertinggal di akun pribadimu'}</div>
+  <div class="tiny" style="margin-top:6px">Sisa minus artinya uang mama yang dipakai & disetor ke reksadana lebih besar dari uang mama yang tercatat masuk sejak Feb 2024. Selisihnya berasal dari uang mama sebelum Feb 2024 yang belum dicatat sebagai saldo awal (bisa diisi di menu Atur). Minus bukan berarti kamu memakai uang mama. Status "Aman" dilihat dari apakah ada uang mama yang masih tertinggal di akun pribadimu.</div></div>
+  <div class="card"><h3>Per bulan ${MY} (ketuk untuk melihat transaksinya)</h3><div class="tw"><table><tr><th>Bln</th><th class="n">Masuk</th><th class="n">Keluar*</th><th class="n">Sisa</th><th class="n">Status</th></tr>
   <tr><td colspan=3 class="tiny">Sisa akhir ${MY-1}</td><td class="n">${rp(prev.sisa)}</td><td></td></tr>
   ${bl.map(x=>{const mm=mama(x.b),inn=income(x.a,x.b,'Uang Kos Mama')+income(x.a,x.b,'Uang Kedai'),out=expense(x.a,x.b,'Pengeluaran Uang Kos')+expense(x.a,x.b,'Pengeluaran Uang Kedai')+tabNet(x.a,x.b,true);
-   return`<tr class="cl" data-mm="${x.a}|${x.b}"><td>${BLN[x.i]}</td><td class="n up">${rp(inn)}</td><td class="n dn">${rp(out)}</td><td class="n">${rp(mm.sisa)}</td><td class="n"><span class="pill ${mm.pribadi>0?'w':''}">${mm.pribadi>0?'Pindahkan':'Aman'}</span></td></tr>`}).join('')}</table></div>`}
+   return`<tr class="cl" data-mm="${x.a}|${x.b}"><td>${BLN[x.i]}</td><td class="n up">${rp(inn)}</td><td class="n dn">${rp(out)}</td><td class="n">${rp(mm.sisa)}</td><td class="n"><span class="pill ${mm.pribadi>0?'w':''}">${mm.pribadi>0?'Pindahkan':'Aman'}</span></td></tr>`}).join('')}</table></div><div class="tiny" style="margin-top:6px">*Keluar = pengeluaran kos & kedai + setoran bersih ke reksadana uang kos mama.</div></div>`}
  if(MT==='kos'){const a=MY+'-01-01',b=MY+'-12-31';const byK={};for(const t of S.tx)if(t.kos&&inR(t,a,b))byK[t.kos]=(byK[t.kos]||0)+t.j;
   const grp=w=>Object.entries(byK).filter(([k])=>k.startsWith('Kos '+w)).sort();const tot=w=>grp(w).reduce((p,x)=>p+x[1],0);
   const outK={};for(const t of S.tx)if(t.sb==='Pengeluaran Uang Kos'&&inR(t,a,b))outK[t.kt]=(outK[t.kt]||0)+t.j;const rk=tabNet(a,b,true);
@@ -208,13 +214,23 @@ function mamaV(){LK={};const tabs=`<div class="seg" id="mt">${[['mama','Uang mam
   <div class="card"><h3>Sumber masuk lainnya</h3>${['Campuran (cewek & cowok)','Sewa lapak pasar','Penggantian / lainnya','Belum diketahui'].filter(k=>byK[k]).map(k=>`<div class="row" data-kos="${k}"><div class="l">${k}</div><div class="r up">${rp(byK[k])}</div><span class="chev">›</span></div>`).join('')||'<div class="tiny">Tidak ada</div>'}</div>
   <div class="card"><h3>Uang kos dipakai untuk</h3>${Object.entries(outK).sort((x,y)=>y[1]-x[1]).map(([k,v])=>`<div class="row" data-ok="${esc(k)}"><div class="l">${esc(k)}</div><div class="r dn">${rp(v)}</div><span class="chev">›</span></div>`).join('')}
    ${rk?`<div class="row" data-rk="1"><div class="l">Disetor ke reksadana uang kos mama (bersih)</div><div class="r">${rp(rk)}</div><span class="chev">›</span></div>`:''}</div>`}
- if(MT==='lain'){const D=disan(today);body=`<div class="card"><h3>Uang Disan</h3><div class="kv"><span>Sisa uang Disan</span><span>${L(rp(D.sisa),{sb:'Uang Disan',title:'Uang Disan'})}</span></div><div class="kv"><span>Ada di akun Uang Disan</span><span>${rp(D.kantong)}</span></div>
-  <div class="st ${D.pribadi>0?'w':'ok'}">${D.pribadi>0?'Masih '+rp(D.pribadi)+' di akun pribadimu':'Aman ✓'}</div></div>
-  <div class="card"><h3>Dana riba</h3>${[...new Set(S.tx.filter(t=>t.sb==='Dana riba').map(t=>t.kt))].map(k=>`<div class="kv"><span>${esc(k)}</span><span>${L(rp(sum(t=>t.sb==='Dana riba'&&t.kt===k)),{sb:'Dana riba',kt:k,title:'Riba: '+k})}</span></div>`).join('')}
-  <div class="kv"><b>Sisa di Kantong Riba</b><b>${rp(S.acc.filter(a=>a.g==='Dana Riba').reduce((p,a)=>p+bal(a.n),0))}</b></div></div>`}
+ if(MT==='disan'){const D=disan(today),prevD=disan(MY-1+'-12-31');let ti=0,to=0;
+  const rows=bl.map(x=>{const m=disanMonth(x.a,x.b),e=disan(x.b);ti+=m.inn;to+=m.out;return`<tr class="cl" data-dm="${x.a}|${x.b}"><td>${BLN[x.i]}</td><td class="n up">${rp(m.inn)}</td><td class="n dn">${rp(m.out)}</td><td class="n">${rp(e.sisa)}</td><td class="n"><span class="pill ${e.pribadi>0?'w':''}">${e.pribadi>0?'Pindahkan':'Aman'}</span></td></tr>`}).join('');
+  body=`<div class="card"><h3>Hari ini</h3>
+  <div class="kv"><span>Sisa uang Disan (hitungan)</span><span>${L(rp(D.sisa),{ids:S.tx.filter(t=>t.sb==='Uang Disan'||t.sb==='Pengeluaran Uang Disan').map(t=>t.id),title:'Semua transaksi uang Disan'})}</span></div>
+  <div class="kv"><span>Ada di akun Uang Disan</span><span>${L(rp(D.kantong),{a:'Uang Disan',title:'Semua transaksi Uang Disan'})}</span></div>
+  <div class="st ${D.pribadi>0?'w':'ok'}">${D.pribadi>0?'Masih ada '+rp(D.pribadi)+' uang Disan di akun pribadimu':'Aman ✓ Tidak ada uang Disan yang tertinggal di akun pribadimu'}</div>
+  <div class="tiny" style="margin-top:6px">Sisa = uang Disan masuk − uang Disan keluar.</div></div>
+  <div class="card"><h3>Per bulan ${MY} (ketuk untuk melihat transaksinya)</h3><div class="tw"><table><tr><th>Bln</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Sisa</th><th class="n">Status</th></tr>
+  <tr><td colspan=3 class="tiny">Sisa akhir ${MY-1}</td><td class="n">${rp(prevD.sisa)}</td><td></td></tr>${rows}
+  <tr><td><b>Total</b></td><td class="n up"><b>${rp(ti)}</b></td><td class="n dn"><b>${rp(to)}</b></td><td></td><td></td></tr></table></div>
+  ${ti||to?'':`<div class="tiny" style="margin-top:6px">Belum ada catatan uang Disan di tahun ${MY}.</div>`}</div>`}
+ if(MT==='riba'){body=`<div class="card"><h3>Dana riba</h3>${[...new Set(S.tx.filter(t=>t.sb==='Dana riba').map(t=>t.kt))].map(k=>`<div class="kv"><span>${esc(k)}</span><span>${L(rp(sum(t=>t.sb==='Dana riba'&&t.kt===k)),{sb:'Dana riba',kt:k,title:'Riba: '+k})}</span></div>`).join('')}
+  <div class="kv"><b>Sisa di Kantong Riba</b><b>${L(rp(S.acc.filter(a=>a.g==='Dana Riba').reduce((p,a)=>p+bal(a.n),0)),{a:'Kantong Uang Riba',title:'Semua transaksi Kantong Uang Riba'})}</b></div></div>`}
  $('main').innerHTML=tabs+body;
  document.querySelectorAll('#mt button').forEach(b=>b.onclick=()=>{MT=b.dataset.t;mamaV()});document.querySelectorAll('#my button').forEach(b=>b.onclick=()=>{MY=+b.dataset.y;mamaV()});
- document.querySelectorAll('[data-mm]').forEach(r=>r.onclick=()=>{const[a,b]=r.dataset.mm.split('|');lacak({from:a,to:b,ids:S.tx.filter(t=>inR(t,a,b)&&(['Uang Kos Mama','Uang Kedai','Pengeluaran Uang Kos','Pengeluaran Uang Kedai','Reksadana uang kos mama'].includes(t.sb))).map(t=>t.id)},'Uang mama '+r.firstChild.textContent+' '+MY)});
+ document.querySelectorAll('[data-mm]').forEach(r=>r.onclick=()=>{const[a,b]=r.dataset.mm.split('|');lacak({from:a,to:b,ids:mamaIds(a,b)},'Uang mama '+r.firstChild.textContent+' '+MY)});
+ document.querySelectorAll('[data-dm]').forEach(r=>r.onclick=()=>{const[a,b]=r.dataset.dm.split('|');lacak({from:a,to:b,ids:S.tx.filter(t=>inR(t,a,b)&&(t.sb==='Uang Disan'||t.sb==='Pengeluaran Uang Disan')).map(t=>t.id)},'Uang Disan '+r.firstChild.textContent+' '+MY)});
  document.querySelectorAll('[data-kos]').forEach(r=>r.onclick=()=>lacak({kos:r.dataset.kos,from:MY+'-01-01',to:MY+'-12-31'},r.dataset.kos+' · '+MY));
  document.querySelectorAll('[data-ok]').forEach(r=>r.onclick=()=>lacak({sb:'Pengeluaran Uang Kos',kt:r.dataset.ok,from:MY+'-01-01',to:MY+'-12-31'},r.dataset.ok+' · '+MY));
  document.querySelectorAll('[data-rk]').forEach(r=>r.onclick=()=>lacak({sb:'Reksadana uang kos mama',from:MY+'-01-01',to:MY+'-12-31'},'Reksadana uang kos mama · '+MY))}
