@@ -1,6 +1,6 @@
 'use strict';
 /* ================= DATA ================= */
-const KEY='dd-v2';
+const KEY='dd-v3';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const rp=n=>{n=Math.round(n||0);return(n<0?'-':'')+'Rp'+Math.abs(n).toLocaleString('id-ID')};
@@ -13,9 +13,10 @@ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','De
 const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 const fdate=s=>{const d=pd(s);return d.getDate()+' '+BLN[d.getMonth()]+' '+d.getFullYear()};
 const TUJ=['Pendapatan','Pengeluaran','Tabungan','Pindah Uang'];
+const KOSL=['Kos cowok · Kamar 1','Kos cowok · Kamar 2','Kos cowok · Kamar 3','Kos cowok · Kamar 4','Kos cowok · Kamar 5','Kos cowok · Kamar ?','Kos cewek · Kamar 1','Kos cewek · Kamar 2','Kos cewek · Kamar 3','Kos cewek · Kamar 4','Kos cewek · Kamar 5','Kos cewek · Kamar 6','Kos cewek · Kamar 7','Kos cewek · Kamar ?','Sewa lapak pasar','Penggantian / lainnya'];
 const SUMBER={Pendapatan:['Gaji','Jasa','Uang Kos Mama','Uang Kedai','Uang Disan'],
   Pengeluaran:['Pengeluaran Gaji','Pengeluaran Jasa','Pengeluaran Uang Kos','Pengeluaran Uang Kedai','Pengeluaran Uang Disan'],
-  Tabungan:['Saham','Reksadana','Deposito','Jula-jula','Reksadana uang kos mama','Riba'],'Pindah Uang':['Pindah akun','Utang & piutang','Pinjam uang mama','Titipan orang lain']};
+  Tabungan:['Saham','Reksadana','Deposito','Jula-jula','Reksadana uang kos mama'],'Pindah Uang':['Pindah akun','Dana riba','Utang & piutang','Pinjam uang mama','Titipan orang lain']};
 const MAMA_IN=['Uang Kos Mama','Uang Kedai'],MAMA_OUT=['Pengeluaran Uang Kos','Pengeluaran Uang Kedai'];
 let S;
 function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
@@ -31,30 +32,23 @@ function sum(f){let s=0;for(const t of S.tx)if(f(t))s+=t.j;return s}
 const inR=(t,a,b)=>t.d>=a&&t.d<=b;
 function income(a,b,src){return sum(t=>t.tj==='Pendapatan'&&t.t==='M'&&inR(t,a,b)&&(!src||t.sb===src))}
 function expense(a,b,src){return sum(t=>t.tj==='Pengeluaran'&&t.t==='K'&&inR(t,a,b)&&(!src||t.sb===src))}
-function mama(d){ // uang mama
- const inn=sum(t=>t.d<=d&&t.tj==='Pendapatan'&&MAMA_IN.includes(t.sb)),out=sum(t=>t.d<=d&&t.tj==='Pengeluaran'&&MAMA_OUT.includes(t.sb));
- const inv=sum(t=>t.d<=d&&t.sb==='Reksadana uang kos mama'&&t.t==='K')-sum(t=>t.d<=d&&t.sb==='Reksadana uang kos mama'&&t.t==='M');
- const akun=S.acc.filter(a=>a.g==='Titipan Mama').reduce((s,a)=>s+bal(a.n,d),0);
- const held=inn-out+(S.mamaOpen||0),aman=akun+inv;return{inn,out,held,inv,akun,aman,sisa:held-aman}}
-function disan(d){const inn=sum(t=>t.d<=d&&t.sb==='Uang Disan'),out=sum(t=>t.d<=d&&t.sb==='Pengeluaran Uang Disan');const ak=S.acc.filter(a=>a.g==='Titipan Disan').reduce((s,a)=>s+bal(a.n,d),0);return{held:inn-out,akun:ak,sisa:inn-out-ak}}
-function utangMama(d){return sum(t=>t.d<=d&&t.kt==='Pinjam dari Mama')-sum(t=>t.d<=d&&t.kt==='Bayar Utang ke Mama')}
+function tabNet(a,b,mm=false){return sum(t=>t.tj==='Tabungan'&&inR(t,a,b)&&((t.sb==='Reksadana uang kos mama')===mm)&&t.t==='K')-sum(t=>t.tj==='Tabungan'&&inR(t,a,b)&&((t.sb==='Reksadana uang kos mama')===mm)&&t.t==='M')}
+function mama(d){const z='2000-01-01';const inn=income(z,d,'Uang Kos Mama')+income(z,d,'Uang Kedai'),out=expense(z,d,'Pengeluaran Uang Kos')+expense(z,d,'Pengeluaran Uang Kedai'),inv=tabNet(z,d,true);
+ const kantong=S.acc.filter(a=>a.g==='Titipan Mama').reduce((s,a)=>s+bal(a.n,d),0);const sisa=(S.mamaOpen||0)+inn-out-inv;return{inn,out,inv,sisa,kantong,pribadi:Math.max(0,sisa-kantong)}}
+function disan(d){const z='2000-01-01';const s=income(z,d,'Uang Disan')-expense(z,d,'Pengeluaran Uang Disan');const k=S.acc.filter(a=>a.g==='Titipan Disan').reduce((x,a)=>x+bal(a.n,d),0);return{sisa:s,kantong:k,pribadi:Math.max(0,s-k)}}
 /* investasi */
 function saham(){const pos={};for(const e of INV.saham){const p=pos[e.kode]=pos[e.kode]||{kode:e.kode,blot:0,cost:0,slot:0,div:0,real:0,ev:[]};p.ev.push(e);
   if(e.jenis==='Beli'){p.blot+=e.lot;p.cost+=e.total}else if(e.jenis==='Jual'){p.slot+=e.lot;p.real+=e.untung}else p.div+=e.total}
  return Object.values(pos).map(p=>{p.lot=p.blot-p.slot;p.modal=p.blot?p.cost*p.lot/p.blot:0;p.harga=S.price[p.kode]||0;p.nilai=p.lot*100*p.harga;p.pl=p.nilai-p.modal;return p})}
 function rdGoals(){const g={};for(const e of INV.rd){const x=g[e.tujuan]=g[e.tujuan]||{tujuan:e.tujuan,beli:0,jual:0,untung:0,ev:[],produk:''};x.ev.push(e);if(e.jenis==='Beli'){x.beli+=e.modal||0;x.produk=e.produk}else{x.jual+=e.modal||0;x.untung+=e.untung||0}}
  return Object.values(g).map(x=>{const c=INV.cur[x.tujuan]||[0,0];x.modal=c[0];x.nilai=S.rdcur[x.tujuan]??c[1];x.pl=x.nilai-x.modal;return x})}
-function wealthPersonal(d=today){const tot=S.acc.reduce((s,a)=>s+bal(a.n,d),0),m=mama(d),di=disan(d),riba=S.acc.filter(a=>a.g==='Dana Riba').reduce((s,a)=>s+bal(a.n,d),0);
- const sh=saham().reduce((s,p)=>s+p.nilai,0),rd=rdGoals().reduce((s,g)=>s+g.nilai,0);
- const kosInv=S.rdcur['__kos']??INV.kos[1];
- return{tot,mama:m,disan:di,riba,sh,rd,kosInv,val:tot-m.held-di.held-riba+m.inv+sh+rd-utangMama(d)}}
 /* ================= FILTER / PELACAKAN ================= */
 let F={}, page=1, agg='bulan';
 function match(t,f){if(f.ids&&!f.ids.includes(t.id))return false;
  if(f.from&&t.d<f.from)return false;if(f.to&&t.d>f.to)return false;
  if(f.tj&&t.tj!==f.tj)return false;if(f.sb&&t.sb!==f.sb)return false;if(f.kt&&t.kt!==f.kt)return false;
- if(f.a&&t.a!==f.a&&t.tu!==f.a)return false;if(f.cek&&!t.cek)return false;if(f.tipe&&t.t!==f.tipe)return false;
- if(f.q){const q=f.q.toLowerCase();if(!(t.ket+' '+t.kt+' '+t.sb+' '+t.a+' '+(t.tu||'')+' '+t.cek).toLowerCase().includes(q))return false}
+ if(f.a&&t.a!==f.a&&t.tu!==f.a)return false;if(f.kos&&t.kos!==f.kos)return false;if(f.cek&&!t.cek)return false;if(f.tipe&&t.t!==f.tipe)return false;
+ if(f.q){const q=f.q.toLowerCase();if(!(t.ket+' '+t.kt+' '+t.sb+' '+t.a+' '+(t.tu||'')+' '+t.cek+' '+t.kos).toLowerCase().includes(q))return false}
  return true}
 function lacak(f,title){F={...f,title};page=1;go('trx')}
 const flow=(t,a)=>t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
@@ -75,32 +69,23 @@ let LK={};
 document.addEventListener('click',e=>{const x=e.target.closest('[data-l]');if(x&&LK[x.dataset.l]){closeSheet();const f=LK[x.dataset.l];lacak(f,f.title)}
  const r=e.target.closest('[data-tx]');if(r)detail(+r.dataset.tx)});
 /* ================= BERANDA ================= */
-function home(){LK={};const now=new Date(),y=now.getFullYear(),m=now.getMonth(),a=ds(new Date(y,m,1)),b=mEnd(y,m),W=wealthPersonal(),M=W.mama;
- const inc=SUMBER.Pendapatan.map(s=>[s,income(a,b,s)]).filter(x=>x[1]),exp=SUMBER.Pengeluaran.map(s=>[s,expense(a,b,s)]).filter(x=>x[1]);
+function home(){LK={};const now=new Date(),y=now.getFullYear(),m=now.getMonth(),a=ds(new Date(y,m,1)),b=mEnd(y,m),M=mama(today);
+ const inc=SUMBER.Pendapatan.map(x=>[x,income(a,b,x)]).filter(x=>x[1]),exp=SUMBER.Pengeluaran.map(x=>[x,expense(a,b,x)]).filter(x=>x[1]),tb=tabNet(a,b);
+ const tI=inc.reduce((p,x)=>p+x[1],0),tE=exp.reduce((p,x)=>p+x[1],0)+tb;
+ const row=(lbl,v,f,c)=>`<div class="row" data-f='${esc(JSON.stringify(f))}'><div class="l">${lbl}</div><div class="r ${c}">${rp(v)}</div><span class="chev">›</span></div>`;
  $('main').innerHTML=`
- <div class="card"><div class="mut">Kekayaan pribadimu (perkiraan)</div><div class="big">${rp(W.val)}</div>
-  <div class="tiny">Uang di semua akun ${rp(W.tot)} − uang mama & disan − dana riba + investasi. <span class="ac" id="howW">Lihat rinciannya</span></div></div>
+ <div class="card"><h3>Bulan ini — ${BULAN[m]} ${y}</h3><div class="g3">
+  <div class="kp"><div class="a">Pendapatan</div><div class="b up">${rp(tI)}</div></div><div class="kp"><div class="a">Pengeluaran</div><div class="b dn">${rp(tE)}</div></div><div class="kp"><div class="a">Selisih</div><div class="b">${rp(tI-tE)}</div></div></div></div>
+ <div class="card"><h3>Pendapatan (ketuk untuk melacak)</h3>${inc.map(([x,v])=>row(x,v,{tj:'Pendapatan',sb:x,from:a,to:b},'up')).join('')||'<div class="tiny">Belum ada</div>'}</div>
+ <div class="card"><h3>Pengeluaran (ketuk untuk melacak)</h3>${exp.map(([x,v])=>row(x,v,{tj:'Pengeluaran',sb:x,from:a,to:b},'dn')).join('')}
+  ${tb?row('Tabungan bersih (disetor − dicairkan)',tb,{tj:'Tabungan',from:a,to:b},''):''}${!exp.length&&!tb?'<div class="tiny">Belum ada</div>':''}</div>
  <div class="card"><h3>Uang mama</h3><div class="g2">
-  <div class="kp" id="kMama"><div class="a">Dipegang olehmu</div><div class="b">${rp(M.held)}</div></div>
-  <div class="kp" id="kAman"><div class="a">Aman (kantong mama + investasi)</div><div class="b">${rp(M.aman)}</div></div></div>
-  <div class="st ${M.sisa<=0?'ok':'w'}">${M.sisa<=0?'LUNAS ✓ Semua uang mama sudah dipisahkan':'BELUM LUNAS: '+rp(M.sisa)+' uang mama masih ada di akun pribadimu'}</div></div>
- <div class="card"><h3>Bulan ini (${BULAN[m]} ${y})</h3>
-  <div class="mut">Pendapatan</div>${inc.map(([s,v])=>`<div class="row" data-f='${esc(JSON.stringify({tj:'Pendapatan',sb:s,from:a,to:b}))}'><div class="l">${s}</div><div class="r up">${rp(v)}</div><span class="chev">›</span></div>`).join('')||'<div class="tiny">Belum ada</div>'}
-  <div class="mut" style="margin-top:8px">Pengeluaran</div>${exp.map(([s,v])=>`<div class="row" data-f='${esc(JSON.stringify({tj:'Pengeluaran',sb:s,from:a,to:b}))}'><div class="l">${s}</div><div class="r dn">${rp(v)}</div><span class="chev">›</span></div>`).join('')||'<div class="tiny">Belum ada</div>'}</div>
- <div class="card"><h3>Saldo per akun (ketuk untuk melacak)</h3>${S.acc.map(x=>({x,b:bal(x.n)})).filter(o=>o.b||o.x.g!=='Usaha').map(({x,b})=>`<div class="row" data-acc="${esc(x.n)}"><div class="l"><div class="t1">${esc(x.n)}</div><div class="t2">${esc(x.g)}</div></div><div class="r">${rp(b)}</div><span class="chev">›</span></div>`).join('')}</div>`;
- document.querySelectorAll('#main [data-f]').forEach(r=>r.onclick=()=>{const f=JSON.parse(r.dataset.f);lacak(f,`${f.sb} · ${fdate(f.from)} – ${fdate(f.to)}`)});
+  <div class="kp" id="kSisa"><div class="a">Sisa uang mama</div><div class="b">${rp(M.sisa)}</div></div><div class="kp" id="kKant"><div class="a">Di Kantong/Cash Uang Kos Mama</div><div class="b">${rp(M.kantong)}</div></div></div>
+  <div class="st ${M.pribadi>0?'w':'ok'}">${M.pribadi>0?'Masih ada '+rp(M.pribadi)+' uang mama di akun pribadimu — pindahkan ke Kantong Uang Kos Mama':'Aman ✓ Tidak ada uang mama di akun pribadimu'}</div></div>
+ <div class="card"><h3>Saldo per akun (ketuk untuk melihat asal saldonya)</h3>${S.acc.map(x=>({x,v:bal(x.n)})).filter(o=>o.v||o.x.g!=='Usaha').map(({x,v})=>`<div class="row" data-acc="${esc(x.n)}"><div class="l"><div class="t1">${esc(x.n)}</div><div class="t2">${esc(x.g)}</div></div><div class="r">${rp(v)}</div><span class="chev">›</span></div>`).join('')}</div>`;
+ document.querySelectorAll('#main [data-f]').forEach(r=>r.onclick=()=>{const f=JSON.parse(r.dataset.f);lacak(f,`${f.sb||f.tj} · ${BULAN[m]} ${y}`)});
  document.querySelectorAll('#main [data-acc]').forEach(r=>r.onclick=()=>accSheet(r.dataset.acc));
- $('kMama').onclick=()=>lacak({tj:'Pendapatan',sb:'Uang Kos Mama'},'Uang kos mama masuk');$('kAman').onclick=()=>go('mama');
- $('howW').onclick=()=>sheet(`<h3>Rincian kekayaan pribadi</h3>
-  <div class="kv"><span>Uang di semua akun</span><span>${rp(W.tot)}</span></div>
-  <div class="kv"><span>− Uang mama yang kamu pegang</span><span>${rp(W.mama.held)}</span></div>
-  <div class="kv"><span>+ Uang mama yang sudah diinvestasikan (tidak ada di akun)</span><span>${rp(W.mama.inv)}</span></div>
-  <div class="kv"><span>− Uang Disan</span><span>${rp(W.disan.held)}</span></div>
-  <div class="kv"><span>− Dana riba (Kantong Riba)</span><span>${rp(W.riba)}</span></div>
-  <div class="kv"><span>− Utang ke mama</span><span>${rp(utangMama(today))}</span></div>
-  <div class="kv"><span>+ Nilai saham</span><span>${rp(W.sh)}</span></div>
-  <div class="kv"><span>+ Nilai reksadana pribadi</span><span>${rp(W.rd)}</span></div>
-  <div class="kv"><b>Kekayaan pribadi</b><b>${rp(W.val)}</b></div>`)}
+ $('kSisa').onclick=()=>go('mama');$('kKant').onclick=()=>lacak({a:'Jago - Uang Kos Mama'},'Kantong Uang Kos Mama')}
 function accSheet(n){const x=S.acc.find(a=>a.n===n),b=bal(n);let mi=0,ko=0,ti=0,to=0;
  for(const t of S.tx){if(t.a===n){if(t.t==='M')mi+=t.j;else if(t.t==='K')ko+=t.j;else to+=t.j}if(t.t==='T'&&t.tu===n)ti+=t.j}
  sheet(`<h3>${esc(n)}</h3><div class="tiny">${esc(x.ket||'')}</div>
@@ -128,8 +113,8 @@ function trx(){LK={};const f=F;const res=S.tx.filter(t=>match(t,f)).sort((p,q)=>
   <select id="ftj">${opts(TUJ,f.tj,'Semua tujuan')}</select>
   <select id="fsb">${opts(f.tj?SUMBER[f.tj]:Object.values(SUMBER).flat(),f.sb,'Semua sumber')}</select>
   <select class="w2" id="fkt">${opts(katList(f.tj,f.sb),f.kt,'Semua kategori')}</select>
-  <select id="fa">${opts(accNames(),f.a,'Semua akun')}</select>
-  <select id="ftp">${opts(['Masuk','Keluar','Pindah'],{M:'Masuk',K:'Keluar',T:'Pindah'}[f.tipe],'Semua jenis')}</select>
+  <select id="fa">${opts(accNames(),f.a,'Semua akun')}</select><select id="fkos">${opts(KOSL.concat(['Campuran (cewek & cowok)','Belum diketahui']),f.kos,'Semua kos/kamar')}</select>
+  <select id="ftp" class="w2">${opts(['Masuk','Keluar','Pindah'],{M:'Masuk',K:'Keluar',T:'Pindah'}[f.tipe],'Semua jenis')}</select>
   <input type="date" id="ffrom" value="${f.from||''}"><input type="date" id="fto" value="${f.to||''}">
   <label class="w2 tiny"><input type="checkbox" id="fcek" style="width:auto;min-height:0" ${f.cek?'checked':''}> Hanya yang perlu dicek</label>
   <button class="b" id="fclr">Hapus filter</button><button class="b p" id="fgo">Cari</button></div></div>
@@ -145,7 +130,7 @@ function trx(){LK={};const f=F;const res=S.tx.filter(t=>match(t,f)).sort((p,q)=>
  <div class="card"><h3>Daftar transaksi</h3>${shown.map(txRow).join('')||'<div class="empty">Tidak ada transaksi</div>'}
   ${res.length>shown.length?`<button class="b" style="width:100%;margin-top:8px" id="more">Tampilkan lagi (${res.length-shown.length} tersisa)</button>`:''}</div>`;
  const rd=()=>({q:$('fq').value.trim()||undefined,tj:$('ftj').value||undefined,sb:$('fsb').value||undefined,kt:$('fkt').value||undefined,a:$('fa').value||undefined,
-   tipe:{Masuk:'M',Keluar:'K',Pindah:'T'}[$('ftp').value],from:$('ffrom').value||undefined,to:$('fto').value||undefined,cek:$('fcek').checked||undefined});
+   tipe:{Masuk:'M',Keluar:'K',Pindah:'T'}[$('ftp').value],kos:$('fkos').value||undefined,from:$('ffrom').value||undefined,to:$('fto').value||undefined,cek:$('fcek').checked||undefined});
  $('ftj').onchange=()=>{F={...rd(),sb:undefined,kt:undefined};trx()};$('fsb').onchange=()=>{F={...rd(),kt:undefined};trx()};
  $('fgo').onclick=()=>{F=rd();page=1;trx()};$('fclr').onclick=()=>{F={};page=1;trx()};
  $('fq').onkeydown=e=>{if(e.key==='Enter'){F=rd();page=1;trx()}};
@@ -153,7 +138,7 @@ function trx(){LK={};const f=F;const res=S.tx.filter(t=>match(t,f)).sort((p,q)=>
  document.querySelectorAll('[data-g2]').forEach(r=>r.onclick=()=>{const[a1,b1]=r.dataset.g2.split('|');F={...F,from:a1,to:b1,title:(F.title?F.title+' · ':'')+r.firstChild.textContent};page=1;trx()});
  if($('more'))$('more').onclick=()=>{page++;trx()}}
 function txRow(t){const c=t.t==='M'?'up':t.t==='K'?'dn':'';const s=t.t==='M'?'+':t.t==='K'?'−':'';
- return`<div class="row" data-tx="${t.id}"><div class="l"><div class="t1">${esc(t.ket||t.kt)}</div><div class="t2">${fdate(t.d)} · ${esc(t.a)}${t.t==='T'?' → '+esc(t.tu):''} · ${esc(t.sb)} › ${esc(t.kt)}${t.cek?' · ⚠️':''}</div></div><div class="r ${c}">${s}${rp(t.j)}</div></div>`}
+ return`<div class="row" data-tx="${t.id}"><div class="l"><div class="t1">${esc(t.ket||t.kt)}</div><div class="t2">${fdate(t.d)} · ${esc(t.a)}${t.t==='T'?' → '+esc(t.tu):''} · ${esc(t.sb)} › ${esc(t.kt)}${t.kos?' · '+esc(t.kos):''}${t.cek?' · ⚠️':''}</div></div><div class="r ${c}">${s}${rp(t.j)}</div></div>`}
 function invLinks(id){const out=[];for(const e of INV.saham)if(e.tx===id)out.push(`${e.jenis} saham ${e.kode} (${fdate(e.tgl)})`);for(const e of INV.rd)if(e.tx===id)out.push(`${e.jenis} reksadana ${e.tujuan} (${fdate(e.tgl)})`);return out}
 function detail(id){const t=byId(id);if(!t)return;const inv=invLinks(id);
  const before=S.tx.filter(x=>(x.a===t.a||x.tu===t.a)&&(x.d<t.d||(x.d===t.d&&x.id<=t.id)));
@@ -164,6 +149,7 @@ function detail(id){const t=byId(id);if(!t)return;const inv=invLinks(id);
  <div class="kv"><span>Tujuan</span><span>${L(esc(t.tj),{tj:t.tj,title:t.tj})}</span></div>
  <div class="kv"><span>Sumber</span><span>${L(esc(t.sb),{tj:t.tj,sb:t.sb,title:t.sb})}</span></div>
  <div class="kv"><span>Kategori</span><span>${L(esc(t.kt),{tj:t.tj,sb:t.sb,kt:t.kt,title:t.kt})}</span></div>
+ ${t.kos?`<div class="kv"><span>Kos / kamar</span><span>${L(esc(t.kos),{kos:t.kos,title:t.kos})}</span></div>`:''}
  <div class="kv"><span>${t.t==='T'?'Dari akun':'Akun'}</span><span>${L(esc(t.a),{a:t.a,title:'Semua transaksi '+t.a})}</span></div>
  ${t.t==='T'?`<div class="kv"><span>Ke akun</span><span>${L(esc(t.tu),{a:t.tu,title:'Semua transaksi '+t.tu})}</span></div>`:''}
  <div class="kv"><span>Saldo ${esc(t.a)} setelah transaksi ini</span><span>${rp(saldo)}</span></div>
@@ -180,13 +166,13 @@ function period(){const d=pd(RP.d),y=d.getFullYear(),m=d.getMonth();
 function rep(){LK={};const P=period(),tree={};
  for(const t of S.tx){if(!inR(t,P.a,P.b)||t.tj==='Pindah Uang')continue;const x=tree[t.tj]=tree[t.tj]||{v:0,s:{}},y=x.s[t.sb]=x.s[t.sb]||{v:0,k:{}};
   const sg=t.tj==='Tabungan'?(t.t==='K'?1:-1):1;x.v+=t.j*sg;y.v+=t.j*sg;y.k[t.kt]=(y.k[t.kt]||0)+t.j*sg}
- const inc=income(P.a,P.b),exp=expense(P.a,P.b);
+ const inc=income(P.a,P.b),tbn=tabNet(P.a,P.b),exp=expense(P.a,P.b)+tbn;
  $('main').innerHTML=`<div class="card"><div class="seg" id="rpm">${['hari','bulan','tahun'].map(x=>`<button data-m="${x}" class="${x===RP.m?'on':''}">Per ${x}</button>`).join('')}</div>
   <input type="date" id="rpd" value="${RP.d}" style="margin-top:8px"><div class="mut" style="margin-top:6px">${P.lab}</div>
   <div class="g2" style="margin-top:8px"><div class="kp"><div class="a">Pendapatan</div><div class="b up">${rp(inc)}</div></div><div class="kp"><div class="a">Pengeluaran</div><div class="b dn">${rp(exp)}</div></div></div>
-  <div class="tiny" style="margin-top:6px">Selisih ${rp(inc-exp)}. Pindah uang antar akun tidak dihitung.</div></div>
+  <div class="tiny" style="margin-top:6px">Pengeluaran sudah termasuk tabungan bersih ${rp(tbn)}. Selisih ${rp(inc-exp)}. Pindah uang tidak dihitung.</div></div>
  <div class="card tree"><h3>Rincian (ketuk untuk melacak)</h3>${['Pendapatan','Pengeluaran','Tabungan'].map(tj=>{const x=tree[tj];if(!x)return'';
-  return`<div class="row n0" data-f='${esc(JSON.stringify({tj,from:P.a,to:P.b}))}'><div class="l">${tj}</div><div class="r">${rp(x.v)}</div></div>`+Object.entries(x.s).sort((a,b)=>b[1].v-a[1].v).map(([sb,y])=>
+  return`<div class="row n0" data-f='${esc(JSON.stringify({tj,from:P.a,to:P.b}))}'><div class="l">${tj==='Tabungan'?'Tabungan bersih':tj}</div><div class="r">${rp(x.v)}</div></div>`+Object.entries(x.s).sort((a,b)=>b[1].v-a[1].v).map(([sb,y])=>
    `<div class="row n1" data-f='${esc(JSON.stringify({tj,sb,from:P.a,to:P.b}))}'><div class="l">${esc(sb)}</div><div class="r">${rp(y.v)}</div></div>`+Object.entries(y.k).sort((a,b)=>b[1]-a[1]).map(([kt,v])=>
    `<div class="row n2" data-f='${esc(JSON.stringify({tj,sb,kt,from:P.a,to:P.b}))}'><div class="l">${esc(kt)}</div><div class="r">${rp(v)}</div></div>`).join('')).join('')}).join('')||'<div class="empty">Tidak ada transaksi</div>'}
   <div class="tiny">Tabungan: angka positif = uang disetor ke tabungan/investasi; negatif = dicairkan.</div></div>
@@ -196,29 +182,42 @@ function rep(){LK={};const P=period(),tree={};
  const d=pd(RP.d),Lb=[],I=[],X=[];for(let i=11;i>=0;i--){const dd=new Date(d.getFullYear(),d.getMonth()-i,1),a=ds(dd),b=mEnd(dd.getFullYear(),dd.getMonth());Lb.push(BLN[dd.getMonth()]);I.push(income(a,b));X.push(expense(a,b))}
  charts.c1=new Chart($('c1'),{type:'bar',data:{labels:Lb,datasets:[{label:'Pendapatan',data:I,backgroundColor:'#1D9E75'},{label:'Pengeluaran',data:X,backgroundColor:'#D85A30'}]},options:{scales:{y:{ticks:{callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'jt':(v/1e3).toFixed(0)+'rb'}}}}})}
 /* ================= UANG MAMA ================= */
-let MY=new Date().getFullYear();
-function mamaV(){LK={};const M=mama(today),D=disan(today),U=utangMama(today);
- const rows=BULAN.map((n,i)=>{const a=ds(new Date(MY,i,1)),b=mEnd(MY,i);if(a>today)return null;const m=mama(b);return{n,a,b,m,inn:income(a,b,'Uang Kos Mama')+income(a,b,'Uang Kedai'),out:expense(a,b,'Pengeluaran Uang Kos')+expense(a,b,'Pengeluaran Uang Kedai')}}).filter(Boolean);
- $('main').innerHTML=`<div class="card"><h3>Status uang mama hari ini</h3>
-  <div class="kv"><span>Uang mama yang pernah kamu terima (kos + kedai)</span><span>${L(rp(M.inn),{tj:'Pendapatan',sb:'Uang Kos Mama',title:'Uang kos mama masuk'})}</span></div>
-  <div class="kv"><span>− Dipakai untuk kebutuhan kos & kedai</span><span>${L(rp(M.out),{tj:'Pengeluaran',sb:'Pengeluaran Uang Kos',title:'Pengeluaran uang kos'})}</span></div>
-  ${S.mamaOpen?`<div class="kv"><span>+ Saldo awal (sebelum Feb 2024)</span><span>${rp(S.mamaOpen)}</span></div>`:''}
-  <div class="kv"><b>= Uang mama yang kamu pegang</b><b>${rp(M.held)}</b></div>
-  <div class="kv"><span>Tersimpan di kantong mama (Kos Mama Cash + Jago)</span><span>${L(rp(M.akun),{a:'Jago - Uang Kos Mama',title:'Kantong uang kos mama'})}</span></div>
-  <div class="kv"><span>Diinvestasikan untuk mama (bersih)</span><span>${L(rp(M.inv),{sb:'Reksadana uang kos mama',title:'Investasi uang kos mama'})}</span></div>
-  <div class="st ${M.sisa<=0?'ok':'w'}">${M.sisa<=0?'LUNAS ✓ — uang mama aman, terpisah dari uang pribadimu'+(M.sisa<0?' (kamu malah menambah '+rp(-M.sisa)+')':''):'BELUM LUNAS — '+rp(M.sisa)+' masih ada di akun pribadimu atau terpakai. Pindahkan ke Kantong Uang Kos Mama.'}</div>
-  <div class="tiny" style="margin-top:6px">Rincian pengeluaran kedai: ${L('lihat',{tj:'Pengeluaran',sb:'Pengeluaran Uang Kedai',title:'Pengeluaran uang kedai'})}. Pendapatan kedai: ${L('lihat',{tj:'Pendapatan',sb:'Uang Kedai',title:'Uang kedai masuk'})}.</div></div>
- <div class="card"><h3>Per bulan</h3><div class="seg" id="my">${[MY-2,MY-1,MY].map(y=>`<button data-y="${y}" class="${y===MY?'on':''}">${y}</button>`).join('')}</div>
-  <table style="margin-top:8px"><tr><th>Bulan</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Dipegang</th><th class="n">Status</th></tr>
-  ${rows.map(r=>`<tr class="cl" data-mm="${r.a}|${r.b}"><td>${r.n.slice(0,3)}</td><td class="n up">${rp(r.inn)}</td><td class="n dn">${rp(r.out)}</td><td class="n">${rp(r.m.held)}</td><td class="n"><span class="pill ${r.m.sisa<=0?'':'w'}">${r.m.sisa<=0?'Lunas':'Belum'}</span></td></tr>`).join('')}</table>
-  <div class="tiny">Ketuk bulan untuk melihat transaksi uang mama bulan itu.</div></div>
- <div class="card"><h3>Uang Disan</h3><div class="kv"><span>Dipegang</span><span>${L(rp(D.held),{sb:'Uang Disan',title:'Uang Disan'})}</span></div><div class="kv"><span>Ada di akun Uang Disan</span><span>${rp(D.akun)}</span></div>
-  <div class="st ${D.sisa<=0?'ok':'w'}">${D.sisa<=0?'LUNAS ✓':'Belum: '+rp(D.sisa)}</div></div>
- <div class="card"><h3>Utang ke mama (kotak pribadi)</h3><div class="kv"><span>Sisa utang</span><span>${L(rp(U),{sb:'Pinjam uang mama',title:'Pinjam uang mama'})}</span></div></div>
- <div class="card"><h3>Dana riba</h3>${['Bunga bank','Bunga deposito','Dividen bank','Pajak bunga','Selisih bunga','Disalurkan'].map(k=>`<div class="kv"><span>${k}</span><span>${L(rp(sum(t=>t.sb==='Riba'&&t.kt===k)),{sb:'Riba',kt:k,title:'Riba: '+k})}</span></div>`).join('')}
-  <div class="kv"><b>Sisa di Kantong Riba (harus disalurkan)</b><b>${rp(S.acc.filter(a=>a.g==='Dana Riba').reduce((s,a)=>s+bal(a.n),0))}</b></div></div>`;
- document.querySelectorAll('#my button').forEach(b=>b.onclick=()=>{MY=+b.dataset.y;mamaV()});
- document.querySelectorAll('[data-mm]').forEach(r=>r.onclick=()=>{const[a,b]=r.dataset.mm.split('|');lacak({from:a,to:b,q:undefined,ids:S.tx.filter(t=>inR(t,a,b)&&(MAMA_IN.includes(t.sb)||MAMA_OUT.includes(t.sb)||t.sb==='Reksadana uang kos mama'||S.acc.find(x=>x.n===t.a&&x.g==='Titipan Mama'))).map(t=>t.id)},'Uang mama '+r.firstChild.textContent+' '+MY)})}
+let MY=new Date().getFullYear(),MT='mama';
+function mamaV(){LK={};const tabs=`<div class="seg" id="mt">${[['mama','Uang mama'],['kos','Kos per kamar'],['lain','Disan & riba']].map(([k,l])=>`<button data-t="${k}" class="${k===MT?'on':''}">${l}</button>`).join('')}</div>
+ <div class="seg" id="my" style="margin-top:6px">${[...new Set(S.tx.map(t=>+t.d.slice(0,4)))].sort().slice(-3).map(y=>`<button data-y="${y}" class="${y===MY?'on':''}">${y}</button>`).join('')}</div>`;
+ const bl=[...Array(12)].map((_,i)=>({i,a:ds(new Date(MY,i,1)),b:mEnd(MY,i)})).filter(x=>x.a<=today);
+ let body='';
+ if(MT==='mama'){const M=mama(today),prev=mama(MY-1+'-12-31');
+  body=`<div class="card"><h3>Hari ini</h3>
+  <div class="kv"><span>Sisa uang mama</span><span>${rp(M.sisa)}</span></div>
+  <div class="kv"><span>Ada di Kantong/Cash Uang Kos Mama</span><span>${L(rp(M.kantong),{a:'Jago - Uang Kos Mama',title:'Kantong Uang Kos Mama'})}</span></div>
+  <div class="kv"><span>Masih di akun pribadimu</span><span>${rp(M.pribadi)}</span></div>
+  <div class="st ${M.pribadi>0?'w':'ok'}">${M.pribadi>0?'Pindahkan '+rp(M.pribadi)+' ke Kantong Uang Kos Mama':'Aman ✓'}</div>
+  <div class="tiny" style="margin-top:6px">Sisa = uang kos & kedai masuk − pengeluaran kos & kedai − yang disetor ke reksadana uang kos mama. Minus berarti pengeluaran/setoran lebih besar dari uang mama yang tercatat masuk sejak Feb 2024 (biasanya uang mama dari sebelum Feb 2024).</div></div>
+  <div class="card"><h3>Per bulan ${MY} (ketuk untuk melihat transaksinya)</h3><table><tr><th>Bln</th><th class="n">Masuk</th><th class="n">Keluar + ke reksadana</th><th class="n">Sisa</th><th class="n">Status</th></tr>
+  <tr><td colspan=3 class="tiny">Sisa akhir ${MY-1}</td><td class="n">${rp(prev.sisa)}</td><td></td></tr>
+  ${bl.map(x=>{const mm=mama(x.b),inn=income(x.a,x.b,'Uang Kos Mama')+income(x.a,x.b,'Uang Kedai'),out=expense(x.a,x.b,'Pengeluaran Uang Kos')+expense(x.a,x.b,'Pengeluaran Uang Kedai')+tabNet(x.a,x.b,true);
+   return`<tr class="cl" data-mm="${x.a}|${x.b}"><td>${BLN[x.i]}</td><td class="n up">${rp(inn)}</td><td class="n dn">${rp(out)}</td><td class="n">${rp(mm.sisa)}</td><td class="n"><span class="pill ${mm.pribadi>0?'w':''}">${mm.pribadi>0?'Pindahkan':'Aman'}</span></td></tr>`}).join('')}</table></div>`}
+ if(MT==='kos'){const a=MY+'-01-01',b=MY+'-12-31';const byK={};for(const t of S.tx)if(t.kos&&inR(t,a,b))byK[t.kos]=(byK[t.kos]||0)+t.j;
+  const grp=w=>Object.entries(byK).filter(([k])=>k.startsWith('Kos '+w)).sort();const tot=w=>grp(w).reduce((p,x)=>p+x[1],0);
+  const outK={};for(const t of S.tx)if(t.sb==='Pengeluaran Uang Kos'&&inR(t,a,b))outK[t.kt]=(outK[t.kt]||0)+t.j;const rk=tabNet(a,b,true);
+  body=`<div class="card"><h3>Kos cowok (5 kamar) — ${MY}</h3>${[1,2,3,4,5,'?'].map(i=>{const k='Kos cowok · Kamar '+i,v=byK[k]||0;return`<div class="row" data-kos="${k}"><div class="l">${i==='?'?'Kamar belum tercatat':'Kamar '+i}</div><div class="r up">${rp(v)}</div><span class="chev">›</span></div>`}).join('')}
+   ${grp('cowok').filter(([k])=>!/Kamar [1-5?]$/.test(k)).map(([k,v])=>`<div class="row" data-kos="${esc(k)}"><div class="l">${esc(k.replace('Kos cowok · ',''))}</div><div class="r up">${rp(v)}</div><span class="chev">›</span></div>`).join('')}<div class="kv"><b>Total kos cowok</b><b>${rp(tot('cowok'))}</b></div></div>
+  <div class="card"><h3>Kos cewek (7 kamar) — ${MY}</h3>${[1,2,3,4,5,6,7,'?'].map(i=>{const k='Kos cewek · Kamar '+i,v=byK[k]||0;return`<div class="row" data-kos="${k}"><div class="l">${i==='?'?'Kamar belum tercatat':'Kamar '+i}</div><div class="r up">${rp(v)}</div><span class="chev">›</span></div>`}).join('')}
+   ${grp('cewek').filter(([k])=>!/Kamar [1-7?]$/.test(k)).map(([k,v])=>`<div class="row" data-kos="${esc(k)}"><div class="l">${esc(k.replace('Kos cewek · ',''))}</div><div class="r up">${rp(v)}</div><span class="chev">›</span></div>`).join('')}<div class="kv"><b>Total kos cewek</b><b>${rp(tot('cewek'))}</b></div></div>
+  <div class="card"><h3>Sumber masuk lainnya</h3>${['Campuran (cewek & cowok)','Sewa lapak pasar','Penggantian / lainnya','Belum diketahui'].filter(k=>byK[k]).map(k=>`<div class="row" data-kos="${k}"><div class="l">${k}</div><div class="r up">${rp(byK[k])}</div><span class="chev">›</span></div>`).join('')||'<div class="tiny">Tidak ada</div>'}</div>
+  <div class="card"><h3>Uang kos dipakai untuk</h3>${Object.entries(outK).sort((x,y)=>y[1]-x[1]).map(([k,v])=>`<div class="row" data-ok="${esc(k)}"><div class="l">${esc(k)}</div><div class="r dn">${rp(v)}</div><span class="chev">›</span></div>`).join('')}
+   ${rk?`<div class="row" data-rk="1"><div class="l">Disetor ke reksadana uang kos mama (bersih)</div><div class="r">${rp(rk)}</div><span class="chev">›</span></div>`:''}</div>`}
+ if(MT==='lain'){const D=disan(today);body=`<div class="card"><h3>Uang Disan</h3><div class="kv"><span>Sisa uang Disan</span><span>${L(rp(D.sisa),{sb:'Uang Disan',title:'Uang Disan'})}</span></div><div class="kv"><span>Ada di akun Uang Disan</span><span>${rp(D.kantong)}</span></div>
+  <div class="st ${D.pribadi>0?'w':'ok'}">${D.pribadi>0?'Masih '+rp(D.pribadi)+' di akun pribadimu':'Aman ✓'}</div></div>
+  <div class="card"><h3>Dana riba</h3>${[...new Set(S.tx.filter(t=>t.sb==='Dana riba').map(t=>t.kt))].map(k=>`<div class="kv"><span>${esc(k)}</span><span>${L(rp(sum(t=>t.sb==='Dana riba'&&t.kt===k)),{sb:'Dana riba',kt:k,title:'Riba: '+k})}</span></div>`).join('')}
+  <div class="kv"><b>Sisa di Kantong Riba</b><b>${rp(S.acc.filter(a=>a.g==='Dana Riba').reduce((p,a)=>p+bal(a.n),0))}</b></div></div>`}
+ $('main').innerHTML=tabs+body;
+ document.querySelectorAll('#mt button').forEach(b=>b.onclick=()=>{MT=b.dataset.t;mamaV()});document.querySelectorAll('#my button').forEach(b=>b.onclick=()=>{MY=+b.dataset.y;mamaV()});
+ document.querySelectorAll('[data-mm]').forEach(r=>r.onclick=()=>{const[a,b]=r.dataset.mm.split('|');lacak({from:a,to:b,ids:S.tx.filter(t=>inR(t,a,b)&&(['Uang Kos Mama','Uang Kedai','Pengeluaran Uang Kos','Pengeluaran Uang Kedai','Reksadana uang kos mama'].includes(t.sb))).map(t=>t.id)},'Uang mama '+r.firstChild.textContent+' '+MY)});
+ document.querySelectorAll('[data-kos]').forEach(r=>r.onclick=()=>lacak({kos:r.dataset.kos,from:MY+'-01-01',to:MY+'-12-31'},r.dataset.kos+' · '+MY));
+ document.querySelectorAll('[data-ok]').forEach(r=>r.onclick=()=>lacak({sb:'Pengeluaran Uang Kos',kt:r.dataset.ok,from:MY+'-01-01',to:MY+'-12-31'},r.dataset.ok+' · '+MY));
+ document.querySelectorAll('[data-rk]').forEach(r=>r.onclick=()=>lacak({sb:'Reksadana uang kos mama',from:MY+'-01-01',to:MY+'-12-31'},'Reksadana uang kos mama · '+MY))}
 /* ================= INVESTASI ================= */
 let IT='saham';
 function invV(){LK={};const P=saham(),G=rdGoals(),hold=P.filter(p=>p.lot>0),sold=P.filter(p=>p.lot<=0);
@@ -285,9 +284,7 @@ function plan(){LK={};const G=rdGoals(),g=n=>G.find(x=>x.tujuan===n)||{nilai:0,m
   <div class="tiny">${rp(cur)} dari ${rp(x.t)}${x.g?' · dari reksadana '+esc(x.g):''}${x.note?' · '+esc(x.note):''}</div><div class="bar"><i style="width:${p*100}%"></i></div>
   <div class="tiny" style="margin-top:4px">${need!=null?'Perlu '+rp(need)+'/bulan sampai '+fdate(x.dl):'Belum ada tenggat'} · <span class="ac" data-gi="${i}">ubah</span></div></div>`}).join('')}
   <button class="b" style="width:100%;margin-top:8px" id="gAdd">+ Tambah tujuan</button></div>
- <div class="card"><h3>Proyeksi kekayaan pribadi 12 bulan</h3><div class="ch"><canvas id="cp"></canvas></div><div class="tiny">Kekayaan sekarang ${rp(wealthPersonal().val)} + ${rp(sur)}/bulan.</div></div>`;
- const W=wealthPersonal().val,Lb=['Kini'],P=[W];for(let k=1;k<=12;k++){const d=new Date();d.setMonth(d.getMonth()+k);Lb.push(BLN[d.getMonth()]);P.push(W+sur*k)}
- charts.cp=new Chart($('cp'),{type:'line',data:{labels:Lb,datasets:[{data:P,borderColor:'#378ADD',borderDash:[5,4],pointRadius:2}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>(v/1e6).toFixed(1)+'jt'}}}}});
+`;
  const edit=x=>{sheet(`<h3>${x?'Ubah':'Tambah'} tujuan</h3><div class="fl"><input class="w2" id="gn" placeholder="Nama" value="${esc(x?.n||'')}"><input type="number" id="gt" placeholder="Target (Rp)" value="${x?.t||''}"><input type="date" id="gd" value="${x?.dl||''}">
   <select class="w2" id="gg">${opts(rdGoals().map(z=>z.tujuan),x?.g,'Tidak terhubung ke reksadana')}</select><button class="b p w2" id="gs">Simpan</button></div>`);
   $('gs').onclick=()=>{const o={n:$('gn').value.trim(),t:+$('gt').value||0,dl:$('gd').value,g:$('gg').value||''};if(!o.n)return;S.goals=S.goals.filter(z=>z.n!==(x?.n||o.n));S.goals.push(o);save();closeSheet();plan()}};
@@ -301,6 +298,7 @@ function add(){LK={};const t=EDIT?byId(EDIT):null;const tipe=t?t.t:'K';
   <select id="aa">${opts(accNames(),t?t.a:'Dompet')}</select><select id="atu">${opts(accNames(),t?t.tu:'')}</select>
   <select id="atj"></select><select id="asb"></select>
   <input class="w2" id="akt" list="ktl" placeholder="Kategori (pilih atau ketik baru)" value="${esc(t?t.kt:'')}"><datalist id="ktl"></datalist>
+  <select class="w2" id="akos">${opts(KOSL,t?t.kos:'','Kos / kamar (khusus uang kos masuk)')}</select>
   <input class="w2" id="aket" placeholder="Keterangan" value="${esc(t?t.ket:'')}">
   <button class="b w2 p" id="asave">${t?'Simpan perubahan':'Simpan'}</button>${t?'<button class="b w2" id="acan">Batal</button>':''}</div>
  <div class="tiny" id="ahint" style="margin-top:8px"></div></div>
@@ -309,13 +307,13 @@ function add(){LK={};const t=EDIT?byId(EDIT):null;const tipe=t?t.t:'K';
   $('atu').style.display=k==='T'?'':'none';const tjs=k==='M'?['Pendapatan','Tabungan','Pindah Uang']:k==='K'?['Pengeluaran','Tabungan','Pindah Uang']:['Pindah Uang'];
   $('atj').innerHTML=opts(tjs,t&&tjs.includes(t.tj)?t.tj:tjs[0]);fillSb()};
  const fillSb=()=>{const tj=$('atj').value;$('asb').innerHTML=opts(SUMBER[tj],t&&t.tj===tj?t.sb:(tj==='Pengeluaran'?({'Uang Jasa':'Pengeluaran Jasa','Uang Kos Mama Cash':'Pengeluaran Uang Kos','Jago - Uang Kos Mama':'Pengeluaran Uang Kos','Uang Disan':'Pengeluaran Uang Disan'}[$('aa').value]||'Pengeluaran Gaji'):SUMBER[tj][0]));fillKt()};
- const fillKt=()=>{$('ktl').innerHTML=katList($('atj').value,$('asb').value).map(k=>`<option value="${esc(k)}">`).join('');
+ const fillKt=()=>{$('akos').style.display=$('asb').value==='Uang Kos Mama'?'':'none';$('ktl').innerHTML=katList($('atj').value,$('asb').value).map(k=>`<option value="${esc(k)}">`).join('');
   $('ahint').textContent=$('atj').value==='Pindah Uang'?'Pindah uang tidak dihitung sebagai pendapatan/pengeluaran.':''};
  document.querySelectorAll('#tt button').forEach(b=>b.onclick=()=>setT(b.dataset.k));$('atj').onchange=fillSb;$('asb').onchange=fillKt;$('aa').onchange=()=>{if($('atj').value==='Pengeluaran')fillSb()};setT(tipe);
  if($('acan'))$('acan').onclick=()=>{EDIT=null;go('trx')};
  $('asave').onclick=()=>{const j=+$('aj').value,d=$('ad').value;if(!(j>0)||!d)return alert('Isi tanggal dan jumlah.');
   if(tp==='T'&&$('atu').value===$('aa').value)return alert('Akun tujuan harus berbeda.');
-  const o={d,a:$('aa').value,t:tp,j,tj:$('atj').value,sb:$('asb').value,kt:$('akt').value.trim()||(tp==='T'?'Pindah antar akun sendiri':'Lain-lain'),ket:$('aket').value.trim(),tu:tp==='T'?$('atu').value:null,cek:''};
+  const o={d,a:$('aa').value,t:tp,j,tj:$('atj').value,sb:$('asb').value,kt:$('akt').value.trim()||(tp==='T'?'Pindah antar akun sendiri':'Lain-lain'),ket:$('aket').value.trim(),tu:tp==='T'?$('atu').value:null,cek:'',kos:$('asb').value==='Uang Kos Mama'?$('akos').value:''};
   if(t)Object.assign(t,o);else S.tx.push({id:S.next++,...o});save();EDIT=null;alert('Tersimpan ✓');add()}}
 /* ================= ATUR ================= */
 function set(){LK={};$('main').innerHTML=`<div class="card"><h3>Akun</h3>${S.acc.map((a,i)=>`<div class="row" style="cursor:default"><div class="l"><div class="t1">${esc(a.n)}</div><div class="t2">${esc(a.g)} · awal ${rp(a.o)} (${fdate(a.od)})</div></div><div class="r">${rp(bal(a.n))}</div></div>`).join('')}
@@ -330,13 +328,13 @@ function set(){LK={};$('main').innerHTML=`<div class="card"><h3>Akun</h3>${S.acc
  $('nadd').onclick=()=>{const n=$('nn').value.trim();if(!n||S.acc.find(a=>a.n===n))return;S.acc.push({n,o:+$('no').value||0,od:today,g:$('ng').value,ket:''});save();set()};
  $('mo').onchange=e=>{S.mamaOpen=+e.target.value||0;save()};
  const dl=(txt,name,type)=>{const u=URL.createObjectURL(new Blob([txt],{type})),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)};
- $('exc').onclick=()=>{const rows=[['Tanggal','Akun','Tipe','Akun Tujuan','Jumlah','Tujuan','Sumber','Kategori','Keterangan','Perlu Dicek']];
-  S.tx.slice().sort((a,b)=>a.d.localeCompare(b.d)||a.id-b.id).forEach(t=>rows.push([t.d,t.a,{M:'Masuk',K:'Keluar',T:'Transfer'}[t.t],t.tu||'',t.j,t.tj,t.sb,t.kt,t.ket,t.cek]));dl(Papa.unparse(rows),'dompet-digital-transaksi.csv','text/csv')};
+ $('exc').onclick=()=>{const rows=[['Tanggal','Akun','Tipe','Akun Tujuan','Jumlah','Tujuan','Sumber','Kategori','Keterangan','Perlu Dicek','Kos / Kamar']];
+  S.tx.slice().sort((a,b)=>a.d.localeCompare(b.d)||a.id-b.id).forEach(t=>rows.push([t.d,t.a,{M:'Masuk',K:'Keluar',T:'Pindah'}[t.t],t.tu||'',t.j,t.tj,t.sb,t.kt,t.ket,t.cek,t.kos||'']));dl(Papa.unparse(rows),'dompet-digital-transaksi.csv','text/csv')};
  $('bak').onclick=()=>dl(JSON.stringify(S),'dompet-digital-cadangan-'+today+'.json','application/json');
  $('res').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.tx)throw 0;S=x;save();alert('Dipulihkan ✓');go('home')}catch(_){alert('File tidak valid')}};r.readAsText(f)};
  $('imp').onchange=e=>{const f=e.target.files[0];if(!f)return;Papa.parse(f,{header:true,skipEmptyLines:true,complete:({data})=>{let n=0;for(const r of data){const d=(r.Tanggal||'').trim(),j=+String(r.Jumlah||r.Nominal||'').replace(/[^0-9]/g,'');if(!/^\d{4}-\d{2}-\d{2}$/.test(d)||!(j>0))continue;
   const tp={masuk:'M',keluar:'K',transfer:'T',pindah:'T'}[String(r.Tipe||'').toLowerCase().trim()];if(!tp)continue;
-  S.tx.push({id:S.next++,d,a:(r.Akun||'Dompet').trim(),t:tp,j,tj:r.Tujuan||(tp==='M'?'Pendapatan':tp==='K'?'Pengeluaran':'Pindah Uang'),sb:r.Sumber||(tp==='M'?'Gaji':tp==='K'?'Pengeluaran Gaji':'Pindah akun'),kt:r.Kategori||'Lain-lain',ket:r.Keterangan||'',tu:tp==='T'?(r['Akun Tujuan']||'').trim():null,cek:'Diimpor dari CSV'});n++}
+  S.tx.push({id:S.next++,d,a:(r.Akun||'Dompet').trim(),t:tp,j,tj:r.Tujuan||(tp==='M'?'Pendapatan':tp==='K'?'Pengeluaran':'Pindah Uang'),sb:r.Sumber||(tp==='M'?'Gaji':tp==='K'?'Pengeluaran Gaji':'Pindah akun'),kt:r.Kategori||'Lain-lain',ket:r.Keterangan||'',tu:tp==='T'?(r['Akun Tujuan']||'').trim():null,cek:'Diimpor dari CSV',kos:r['Kos / Kamar']||''});n++}
   save();alert(n+' transaksi diimpor');set()}})};
  $('rst').onclick=()=>{if(confirm('Semua perubahan akan hilang dan kembali ke data awal. Lanjut?')){localStorage.removeItem(KEY);load();save();go('home')}}}
 /* ================= MULAI ================= */
