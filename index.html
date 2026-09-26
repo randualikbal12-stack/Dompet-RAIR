@@ -31,7 +31,11 @@ button.p{background:var(--acc);border-color:var(--acc);color:#fff}button.d{color
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.chip{background:var(--acc2);color:var(--acc);border-radius:14px;padding:4px 10px;font-size:12px;cursor:pointer}
 .seg{display:flex;gap:5px}.seg button{flex:1;font:inherit;font-size:12.5px;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:8px;padding:6px 4px}.seg button.on{background:var(--acc2);color:var(--acc);border-color:transparent;font-weight:600}
 table{width:100%;border-collapse:collapse;font-size:12.5px}th{text-align:left;font-weight:600;color:var(--tx2);font-size:11px;padding:4px 3px}td{padding:6px 3px;border-top:1px solid var(--line)}td.n,th.n{text-align:right;white-space:nowrap}
-tr.cl{cursor:pointer}.hero .big{font-size:26px;font-weight:700;margin:2px 0;display:inline-block}
+tr.cl{cursor:pointer}.lockw{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;align-items:center;justify-content:center}
+.lk{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:320px;padding:20px}
+.dots{display:flex;gap:12px;margin:8px 0}.dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--acc)}.dots i.on{background:var(--acc)}
+.pad{display:grid;grid-template-columns:repeat(3,72px);gap:12px;margin:6px 0}.pad button{height:64px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:22px;font-weight:600}.pad button:active{background:var(--acc2)}
+.hero .big{font-size:26px;font-weight:700;margin:2px 0;display:inline-block}
 .alloc{display:flex;justify-content:space-around;margin-top:10px;text-align:center}.ab{width:54px;height:54px;border-radius:50%;border:3px solid;display:flex;align-items:center;justify-content:center;font-weight:700;margin:0 auto 3px}
 .pc{display:flex;gap:10px;padding:11px;border:1px solid var(--line);border-radius:12px;margin:8px 0;cursor:pointer;background:var(--card)}.pc:active{opacity:.7}.pi{width:38px;height:38px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 auto}
 .pr{display:flex;justify-content:space-between;margin-top:6px;gap:8px}
@@ -64,6 +68,7 @@ if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWor
 <header><div class="top"><b>Dompet Digital</b><span id="net" class="pill">…</span></div>
 <nav id="nav"></nav></header>
 <main id="main"></main>
+<div class="lockw" id="lock"></div>
 <div class="sheet" id="sheet"><div class="in" id="sheetIn"></div></div>
 <script src="libs.js"></script><script src="seed.js"></script><script src="inv.js"></script><script src="app.js"></script>
 </body></html>

@@ -21,7 +21,7 @@ const MAMA_IN=['Uang Kos Mama','Uang Kedai'],MAMA_OUT=['Pengeluaran Uang Kos','P
 let S;
 function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
  if(!S||!S.tx){S={acc:SEED.acc,tx:SEED.tx,next:Math.max(...SEED.tx.map(t=>t.id))+1,price:{...INV.last},rdcur:{},goals:[],seedAt:today}}
- S.price=S.price||{...INV.last};S.rdcur=S.rdcur||{};S.goals=S.goals||[];S.inv=S.inv||{saham:[],rd:[],dep:[]};S.inv.saham=S.inv.saham||[];S.inv.rd=S.inv.rd||[];S.inv.dep=S.inv.dep||[];S.pxUrl=S.pxUrl||'';S.kuliah=S.kuliah||null;migrate();migrate5();if(!S.mig6){S.rdcur={};S.mig6=1;save()}migrate7()}
+ S.price=S.price||{...INV.last};S.rdcur=S.rdcur||{};S.goals=S.goals||[];S.inv=S.inv||{saham:[],rd:[],dep:[]};S.inv.saham=S.inv.saham||[];S.inv.rd=S.inv.rd||[];S.inv.dep=S.inv.dep||[];S.pxUrl=S.pxUrl||'';S.kuliah=S.kuliah||null;migrate();migrate5();if(!S.mig6){S.rdcur={};S.mig6=1;save()}migrate7();migrate8()}
 const MIG4={"rename": {"from": "Uang dari Disan", "to": "Uang untuk Disan"}, "upd": [{"id": 1591, "d": "2025-12-09", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1612, "d": "2025-12-15", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1832, "d": "2026-02-02", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Dianggap uang untuk Disan: kk Lisa mengganti uang yang dipakai untuk belanja Disan 28 Jan 2026"}}, {"id": 1843, "d": "2026-02-05", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1935, "d": "2026-02-13", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2074, "d": "2026-03-13", "j": 600000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "THR untuk Disan: belum ada catatan kapan uang ini diberikan ke Disan"}}, {"id": 2110, "d": "2026-04-01", "j": 200000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2245, "d": "2026-05-05", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Untuk perbaikan HP Disan: belum ada catatan kapan uang ini dipakai/diberikan"}}, {"id": 2340, "d": "2026-06-05", "j": 400000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2341, "d": "2026-06-05", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2527, "d": "2026-07-10", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2548, "d": "2026-07-16", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2608, "d": "2026-08-03", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2664, "d": "2026-08-14", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Belum ada catatan kapan uang ini diberikan ke Disan"}}, {"id": 2707, "d": "2026-09-01", "j": 350000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2725, "d": "2026-09-06", "j": 50000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1592, "d": "2025-12-10", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 1620, "d": "2025-12-17", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Dikembalikan ke kk Lisa"}}, {"id": 1948, "d": "2026-02-23", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2353, "d": "2026-06-05", "j": 500000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2529, "d": "2026-07-11", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2549, "d": "2026-07-16", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2622, "d": "2026-08-05", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2716, "d": "2026-09-04", "j": 300000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2730, "d": "2026-09-06", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 1827, "d": "2026-01-28", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 1932, "d": "2026-02-11", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2010, "d": "2026-03-03", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2088, "d": "2026-03-18", "j": 50000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2162, "d": "2026-04-08", "j": 150000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2277, "d": "2026-05-11", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2278, "d": "2026-05-11", "j": 150000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2087, "d": "2026-03-16", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2252, "d": "2026-05-06", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 1994, "d": "2026-03-02", "j": 550000, "set": {"j": 450000, "cek": "Dipisah: Rp100.000 untuk belanja Disan dicatat di baris sendiri (Uang untuk Disan)"}}], "add": [{"d": "2026-03-02", "a": "Bank Mandiri", "t": "M", "j": 100000, "tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "ket": "Bagian dari Tf masuk kk lisa Rp550.000: Rp100.000 untuk belanja disan", "tu": null, "cek": "", "kos": ""}, {"d": "2026-09-08", "a": "Uang Kos Mama Cash", "t": "K", "j": 300000, "tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri", "ket": "Top up saldo gopay tabungan, uang kos mama cash Rp300.000 (pasangan catatan GoPay 8 Sep 2026: dari dompet Rp230.500, dari uang kos mama Rp300.000)", "tu": null, "cek": "", "kos": ""}]};
 function migrate(){if(S.mig4)return;const T={};for(const t of S.tx)T[t.id]=t;
  for(const t of S.tx)if(t.kt===MIG4.rename.from)t.kt=MIG4.rename.to;
@@ -35,6 +35,8 @@ function migrate5(){if(S.mig5)return;const T={};for(const t of S.tx)T[t.id]=t;
  S.mig5=1;save()}
 const MIG7={"upd": [{"id": 2008, "d": "2026-03-03", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan", "cek": "Diberikan ke Disan (dicek dari WA 3 Mar 2026)"}}, {"id": 2076, "d": "2026-03-14", "j": 600000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan", "ket": "Penarikan tunai di Atm Mandiri Rs Mutia Sari, THR untuk Disan diberikan", "cek": "THR Disan diberikan (dicek dari WA 14 Mar 2026)"}}, {"id": 2665, "d": "2026-08-15", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan", "cek": "Uang Disan diberikan (dicek dari WA 15 Agu 2026)"}}]};
 function migrate7(){if(S.mig7)return;const T={};for(const t of S.tx)T[t.id]=t;for(const u of MIG7.upd){const t=T[u.id];if(t&&t.d===u.d&&t.j===u.j)Object.assign(t,u.set)}S.mig7=1;save()}
+const MIG8={"upd": [{"id": 2010, "d": "2026-03-03", "j": 100000, "set": {"d": "2026-03-11", "ket": "Penarikan tunai tanpa kartu di Atm Rs Mutia Sari 11 Mar, uang belanja disan (dipinjam untuk zakat fitrah 16 Mar)", "cek": "Tanggal disesuaikan: uang tarik tunai 11 Mar 2026 (Mandiri) masuk ke uang Disan, karena uang 3 Mar sudah diberikan ke Disan"}}]};
+function migrate8(){if(S.mig8)return;for(const u of MIG8.upd){const t=S.tx.find(x=>x.id===u.id);if(t&&t.d===u.d&&t.j===u.j)Object.assign(t,u.set)}S.mig8=1;save()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('Penyimpanan HP penuh: '+e.message)}}
 const accNames=()=>S.acc.map(a=>a.n);
 const byId=id=>S.tx.find(t=>t.id===id);
@@ -145,11 +147,14 @@ function why(f,title,o={}){const res=S.tx.filter(t=>match(t,f)).sort((p,q)=>q.d.
  if(o.lines)h+=`<div class="box">${o.lines.map(([l,v,f2,b])=>`<div class="kv"><span>${b?'<b>'+esc(l)+'</b>':esc(l)}</span><span>${f2&&Math.round(v)!==0?`<span class="ac" data-l="${LKs({...f2,title:f2.title||(title+' · '+l.replace(/^[−+=] /,''))})}">${vv(v,b)}</span>`:vv(v,b)}</span></div>`).join('')}</div>`;
  if(o.html)h+=o.html;
  if(o.note)h+=`<div class="tiny" style="margin:6px 0">${o.note}</div>`;
+ if(!o.noTx&&res.length){const mg=grp(t=>t.d.slice(0,7)),byDay=mg.length<=1,rows=byDay?grp(t=>t.d):mg;rows.sort((a,b)=>b[0].localeCompare(a[0]));
+  const n0=v=>v?Math.round(v).toLocaleString('id-ID'):'-',hasT=rows.some(([,z])=>z.T),shown=rows.slice(0,36);let sM=0,sK=0,sT=0;
+  const tr=shown.map(([k,z])=>{sM+=z.M;sK+=z.K;sT+=z.T;return`<tr class="cl" data-l="${LKs({ids:z.ids,title:title+' · '+(byDay?fdate(k):BULAN[+k.slice(5)-1]+' '+k.slice(0,4))})}"><td style="white-space:nowrap">${byDay?k.slice(8)+' '+BLN[+k.slice(5,7)-1]:BLN[+k.slice(5)-1]+' '+k.slice(2,4)}</td><td class="n up">${n0(z.M)}</td><td class="n dn">${n0(z.K)}</td>${hasT?`<td class="n">${n0(z.T)}</td>`:''}<td class="n"><b>${(z.M-z.K)?Math.round(z.M-z.K).toLocaleString('id-ID'):'0'}</b></td></tr>`}).join('');
+  h+=`<h4>Rincian per ${byDay?'tanggal':'bulan'} (Rp, ketuk baris untuk transaksinya)</h4><div class="tw"><table class="sm"><tr><th>${byDay?'Tgl':'Bulan'}</th><th class="n">Masuk</th><th class="n">Keluar</th>${hasT?'<th class="n">Pindah</th>':''}<th class="n">Selisih</th></tr>${tr}<tr><td><b>Total</b></td><td class="n up"><b>${n0(sM)}</b></td><td class="n dn"><b>${n0(sK)}</b></td>${hasT?`<td class="n"><b>${n0(sT)}</b></td>`:''}<td class="n"><b>${Math.round(sM-sK).toLocaleString('id-ID')}</b></td></tr></table></div>${rows.length>36?'<div class="tiny">Ditampilkan 36 bulan terakhir</div>':''}`}
  if(!o.noTx){
  h+=`<h4>Dari ${res.length} transaksi</h4>`+[['Uang masuk','M','up'],['Uang keluar','K','dn'],['Pindah antar akun','T','']].filter(x=>T[x[1]]).map(([l,k,c])=>`<div class="kv"><span>${l}</span><span class="ac ${c}" data-l="${LKs({...clean(f),tipe:k,title:title+' · '+l})}">${rp(T[k])}</span></div>`).join('');
  h+=list('Menurut tujuan › sumber › kategori',grp(t=>`${t.tj} › ${t.sb} › ${t.kt}`).sort((a,b)=>tot(b[1])-tot(a[1])));
  h+=list('Menurut akun',grp(t=>t.t==='T'?t.a+' → '+t.tu:t.a).sort((a,b)=>tot(b[1])-tot(a[1])));
- const mg=grp(t=>t.d.slice(0,7));if(mg.length>1)h+=list('Menurut bulan',mg.sort((a,b)=>b[0].localeCompare(a[0])).map(([k,z])=>[BULAN[+k.slice(5)-1]+' '+k.slice(0,4),z]),24);
  h+=res.length?`<h4>Transaksi terbesar (ketuk untuk detail)</h4>`+res.slice().sort((a,b)=>b.j-a.j).slice(0,5).map(txRow).join(''):'<div class="empty">Tidak ada transaksi</div>';
  if(res.length)h+=`<button class="b p" style="width:100%;margin-top:10px" data-l="${LKs({...clean(f),title})}">Lihat semua ${res.length} transaksi di Riwayat</button>`}
  sheet(h,o.bind)}
@@ -622,7 +627,7 @@ function invSave(){const n=id=>$(id)?+$(id).value||0:0,d=$('id').value,a=$('ia')
  save();alert('Tersimpan ✓ '+msg);TPL={mode:'inv',ij:IJ,jn:JN};add()}
 /* ================= ATUR ================= */
 function set(){LK={};WK={};const held=saham().filter(p=>p.lot>0).map(p=>p.kode);
- $('main').innerHTML=`<div class="card"><h3>Harga saham otomatis (Google Sheets)</h3>
+ $('main').innerHTML=`${secCard()}<div class="card"><h3>Harga saham otomatis (Google Sheets)</h3>
   <div class="tiny">Harga diambil dari Google Sheets milikmu (fungsi GOOGLEFINANCE) setiap kali aplikasi dibuka saat online. Yang disimpan hanya 1 harga terakhir per saham, jadi tidak memakan memori. Cara membuat Google Sheets-nya ada di menu Panduan › "Harga saham otomatis".</div>
   <input id="pxu" placeholder="Tempel link CSV dari Google Sheets di sini" value="${esc(S.pxUrl)}" style="margin-top:6px">
   <div class="g2" style="margin-top:6px"><button class="b p" id="pxs">Simpan & perbarui</button><button class="b" id="pxc">Salin daftar kode saham</button></div>
@@ -637,6 +642,7 @@ function set(){LK={};WK={};const held=saham().filter(p=>p.lot>0).map(p=>p.kode);
   <label class="b w2" style="text-align:center">Impor CSV transaksi baru<input type="file" id="imp" accept=".csv" style="display:none"></label>
   <button class="b w2 d" id="rst">Kembalikan ke data awal (hapus semua perubahan)</button></div>
   <div class="tiny" style="margin-top:6px">Data tersimpan di HP ini saja. Cadangkan secara rutin ke Google Drive. ${S.tx.length} transaksi.</div></div>`;
+ bindSec();
  $('pxs').onclick=()=>{S.pxUrl=$('pxu').value.trim();save();if(S.pxUrl)refreshPx(false,()=>set());else{S.pxAt=null;save();set()}};
  $('pxc').onclick=()=>{const t='Kode\tHarga\n'+held.map((k,i)=>k+'\t=GOOGLEFINANCE("IDX:"&A'+(i+2)+')').join('\n');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('Tersalin. Tempel di sel A1 Google Sheets.'),()=>prompt('Salin teks ini:',t))};
  $('nadd').onclick=()=>{const n=$('nn').value.trim();if(!n||S.acc.find(a=>a.n===n))return;S.acc.push({n,o:+$('no').value||0,od:today,g:$('ng').value,ket:''});save();set()};
@@ -751,8 +757,87 @@ function guide(){LK={};WK={};const grups=[...new Set(GUIDE.map(x=>x.g))];
   <li>Klik <b>File › Bagikan › Publikasikan ke web</b>. Pilih sheet-nya, format <b>Nilai yang dipisahkan koma (.csv)</b>, klik <b>Publikasikan</b>, lalu salin link-nya.</li>
   <li>Kembali ke aplikasi: <b>Atur › Harga saham otomatis</b>, tempel link-nya, ketuk <b>Simpan & perbarui</b>.</li></ol>
   <div class="tiny">Harga dari Google Finance biasanya tertunda sekitar 20 menit. Aplikasi memperbarui harga saat dibuka dan online (paling sering tiap 15 menit), dan hanya menyimpan 1 harga terakhir per saham. Saat offline, harga terakhir tetap dipakai.</div></div>
+ <div class="card"><h3>Cadangan otomatis ke Google Drive (sekali pasang)</h3><ol class="ol">
+  <li>Di aplikasi ini buka <b>Atur › Cadangan otomatis › Salin kode Apps Script</b>.</li>
+  <li>Buka <b>script.google.com</b> di Chrome (centang <b>Situs desktop</b> di menu ⋮ Chrome), login dengan akun Google-mu, ketuk <b>Proyek baru</b>.</li>
+  <li>Hapus semua tulisan yang ada, lalu <b>tempel</b> kode tadi. Ketuk ikon <b>Simpan</b> (💾).</li>
+  <li>Ketuk <b>Terapkan › Deployment baru</b>. Pilih jenis <b>Aplikasi web</b>. Isi: <i>Jalankan sebagai</i> = <b>Saya</b>, <i>Siapa yang memiliki akses</i> = <b>Siapa saja</b>. Ketuk <b>Terapkan</b>.</li>
+  <li>Google akan minta izin: ketuk <b>Izinkan akses</b> → pilih akunmu → <b>Lanjutan</b> → <b>Buka … (tidak aman)</b> → <b>Izinkan</b>. Ini karena script-nya buatanmu sendiri.</li>
+  <li>Salin <b>URL aplikasi web</b> (berakhiran <b>/exec</b>), tempel di <b>Atur › Cadangan otomatis</b>, ketuk <b>Simpan & cadangkan</b>.</li></ol>
+  <div class="tiny">Kode berisi kunci rahasia khusus HP-mu, jadi hanya aplikasi ini yang bisa menyimpan & mengambil cadangan. File tersimpan di Google Drive folder <b>Dompet Digital Cadangan</b>. Kalau aplikasi terhapus: buka lagi, isi link yang sama di Atur, ketuk <b>Pulihkan dari Google Drive</b>. Simpan link /exec itu (mis. di catatan HP).</div></div>
+ <div class="card"><h3>Kunci aplikasi (PIN, sidik jari, wajah)</h3><ol class="ol"><li>Buka <b>Atur › Keamanan › Aktifkan PIN</b>, isi 6 angka dua kali.</li><li>Ketuk <b>Aktifkan sidik jari / wajah</b>, lalu sentuh sensor sidik jari (atau lihat kamera) saat HP meminta.</li><li>Pilih kapan aplikasi terkunci lagi setelah ditinggal (langsung, 1, 5, atau 15 menit).</li></ol><div class="tiny">Jangan lupa PIN-nya. Kalau lupa dan sidik jari tidak bisa, data hanya bisa dikembalikan dari cadangan Google Drive.</div></div>
  <div class="card"><h3>Menjaga data tetap aman</h3><div class="tiny">Data tersimpan di HP ini. Seminggu sekali buka <b>Atur › Cadangkan (JSON)</b> dan simpan filenya ke Google Drive. Untuk memperbarui Excel, pakai <b>Atur › Ekspor untuk Excel (CSV)</b>.</div></div>`;
  document.querySelectorAll('[data-gd]').forEach(b=>b.onclick=()=>useTpl(b.dataset.gd));
  document.querySelectorAll('[data-cb]').forEach(c=>c.onclick=()=>{const o=combos[c.dataset.cb];EDIT=null;TPL={t:top(o.t),a:top(o.a),tj:o.tj,sb:o.sb,kt:o.kt,judul:o.tj+' › '+o.sb+' › '+o.kt};if(o.tj==='Tabungan'&&['Saham','Reksadana','Reksadana uang kos mama'].includes(o.sb))TPL={mode:'inv',ij:o.sb==='Saham'?'saham':'rd',jn:o.kt==='Disetor'?'Beli':'Jual'};if(o.kt==='Pindah antar akun sendiri')TPL.t='T';if(TPL.t==='T')TPL.tu='';go('add')})}
+/* ================= KEAMANAN & CADANGAN ================= */
+const SK='dd-sec';
+function secGet(){try{return JSON.parse(localStorage.getItem(SK))||{}}catch(e){return{}}}
+function secSet(o){try{localStorage.setItem(SK,JSON.stringify(o))}catch(e){}}
+const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a))),ub64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function sha(t){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return b64(d)}
+let hiddenAt=0,locked=false;
+function lockNow(){const c=secGet();if(!c.hash)return;locked=true;closeSheet();let pin='';
+ const L=$('lock');L.style.display='flex';
+ L.innerHTML=`<div class="lk"><div style="font-size:34px">🔒</div><b style="font-size:17px">Dompet Digital</b><div class="tiny">Masukkan PIN${c.cred?' atau pakai sidik jari / wajah':''}</div>
+ <div class="dots" id="dots">${'<i></i>'.repeat(c.len||6)}</div><div class="tiny dn" id="lkErr" style="min-height:16px"></div>
+ <div class="pad">${[1,2,3,4,5,6,7,8,9,'bio',0,'del'].map(k=>`<button data-p="${k}" ${k==='bio'&&!c.cred?'style="visibility:hidden"':''}>${k==='bio'?'👆':k==='del'?'⌫':k}</button>`).join('')}</div>
+ <span class="ac tiny" id="lkForgot">Lupa PIN?</span></div>`;
+ const draw=()=>document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('on',i<pin.length));
+ L.querySelectorAll('[data-p]').forEach(b=>b.onclick=async()=>{const k=b.dataset.p;if(k==='bio')return bioUnlock();if(k==='del')pin=pin.slice(0,-1);else if(pin.length<(c.len||6))pin+=k;draw();
+  if(pin.length===(c.len||6)){if(await sha(c.salt+pin)===c.hash)unlock();else{$('lkErr').textContent='PIN salah';pin='';draw()}}});
+ $('lkForgot').onclick=()=>alert('PIN tidak bisa dilihat ulang demi keamanan.\n\nKalau lupa: pakai sidik jari/wajah (jika aktif). Kalau tidak bisa juga, hapus data situs aplikasi ini di pengaturan Chrome, buka lagi, lalu pulihkan data dari cadangan Google Drive (Atur › Cadangan otomatis).');
+ if(c.cred)setTimeout(bioUnlock,300)}
+function unlock(){locked=false;$('lock').style.display='none';$('lock').innerHTML='';autoBackup()}
+async function bioUnlock(){const c=secGet();if(!c.cred||!window.PublicKeyCredential)return;try{
+  await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:ub64(c.cred),transports:['internal']}],userVerification:'required',timeout:60000}});unlock()}
+ catch(e){const x=$('lkErr');if(x)x.textContent='Sidik jari/wajah dibatalkan, pakai PIN'}}
+async function bioRegister(){if(!window.PublicKeyCredential||!await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(()=>false))return alert('HP ini belum mendukung sidik jari/wajah untuk aplikasi web. Pastikan sidik jari/wajah sudah didaftarkan di pengaturan HP dan pakai Chrome versi terbaru.');
+ try{const cr=await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:'Dompet Digital',id:location.hostname},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:'pemilik',displayName:'Pemilik Dompet Digital'},
+  pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'preferred'},timeout:60000}});
+  const c=secGet();c.cred=b64(cr.rawId);secSet(c);alert('Sidik jari / wajah aktif ✓');set()}catch(e){alert('Gagal mengaktifkan: '+e.message)}}
+function pinSetup(){sheet(`<h3>Atur PIN</h3><div class="tiny">PIN 6 angka. Dipakai setiap membuka aplikasi.</div><div class="fl" style="margin-top:8px"><label class="lb w2">PIN baru<input type="password" inputmode="numeric" maxlength="6" id="p1"></label><label class="lb w2">Ulangi PIN<input type="password" inputmode="numeric" maxlength="6" id="p2"></label><button class="b p w2" id="psv">Simpan PIN</button></div>`,()=>{
+ $('psv').onclick=async()=>{const a=$('p1').value,b=$('p2').value;if(!/^\d{6}$/.test(a))return alert('PIN harus 6 angka');if(a!==b)return alert('PIN tidak sama');const c=secGet();c.salt=b64(crypto.getRandomValues(new Uint8Array(16)));c.hash=await sha(c.salt+a);c.len=6;c.delay=c.delay??60;secSet(c);closeSheet();alert('PIN aktif ✓');set()}})}
+document.addEventListener('visibilitychange',()=>{if(document.hidden){hiddenAt=Date.now();autoBackup(true)}else{const c=secGet();if(c.hash&&!locked&&Date.now()-hiddenAt>=(c.delay??60)*1000)lockNow()}});
+/* cadangan otomatis ke Google Drive (Apps Script milik user) */
+function bkKey(){const c=secGet();if(!c.bk){c.bk=b64(crypto.getRandomValues(new Uint8Array(18))).replace(/[^A-Za-z0-9]/g,'');secSet(c)}return c.bk}
+function bkScript(){return`var KUNCI='${bkKey()}';var FOLDER='Dompet Digital Cadangan';
+function folder_(){var f=DriveApp.getFoldersByName(FOLDER);return f.hasNext()?f.next():DriveApp.createFolder(FOLDER)}
+function doPost(e){if(e.parameter.k!==KUNCI)return ContentService.createTextOutput('ditolak');var f=folder_();var n='dompet-digital-'+Utilities.formatDate(new Date(),'Asia/Jakarta','yyyy-MM-dd')+'.json';
+ var ex=f.getFilesByName(n);while(ex.hasNext())ex.next().setTrashed(true);f.createFile(n,e.postData.contents,'application/json');
+ var a=[],it=f.getFiles();while(it.hasNext())a.push(it.next());a.sort(function(x,y){return y.getDateCreated()-x.getDateCreated()});for(var i=60;i<a.length;i++)a[i].setTrashed(true);return ContentService.createTextOutput('ok')}
+function doGet(e){if(e.parameter.k!==KUNCI)return ContentService.createTextOutput('{"error":"ditolak"}');var f=folder_(),it=f.getFiles(),b=null;while(it.hasNext()){var x=it.next();if(!b||x.getDateCreated()>b.getDateCreated())b=x}
+ if(e.parameter.cek)return ContentService.createTextOutput(JSON.stringify({file:b?b.getName():null,waktu:b?b.getDateCreated().toISOString():null})).setMimeType(ContentService.MimeType.JSON);
+ return ContentService.createTextOutput(b?b.getBlob().getDataAsString():'{}').setMimeType(ContentService.MimeType.JSON)}`}
+let bkBusy=false;
+async function backupNow(silent){if(!S.bkUrl||bkBusy)return;if(!navigator.onLine){if(!silent)alert('Sedang offline. Cadangan akan dikirim otomatis saat online.');return}bkBusy=true;
+ try{const u=S.bkUrl+(S.bkUrl.includes('?')?'&':'?')+'k='+bkKey();await fetch(u,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({...S,bkAt:undefined})});
+  let ok=true;try{const r=await fetch(u+'&cek=1',{cache:'no-store'});const j=await r.json();ok=!!j.file}catch(e){}
+  S.bkAt=new Date().toISOString();S.bkSig=S.tx.length+':'+S.next;save();if(!silent)alert(ok?'Cadangan tersimpan di Google Drive ✓ (folder "Dompet Digital Cadangan")':'Cadangan sudah dikirim. Cek folder "Dompet Digital Cadangan" di Google Drive.')}
+ catch(e){if(!silent)alert('Gagal mencadangkan: '+e.message)}bkBusy=false;if(V==='set')set()}
+function autoBackup(changedOnly){if(!S.bkUrl||locked)return;const age=S.bkAt?Date.now()-new Date(S.bkAt).getTime():1e12,sig=S.tx.length+':'+S.next;
+ if(age>24*3600e3||(sig!==S.bkSig&&age>30*60e3))backupNow(true)}
+async function restoreDrive(){if(!S.bkUrl)return alert('Isi dulu link Apps Script');if(!confirm('Data di HP ini akan diganti dengan cadangan terbaru dari Google Drive. Lanjut?'))return;
+ try{const r=await fetch(S.bkUrl+(S.bkUrl.includes('?')?'&':'?')+'k='+bkKey(),{cache:'no-store'});const x=await r.json();if(!x.tx)throw new Error('cadangan kosong / kunci salah');const url=S.bkUrl;S=x;S.bkUrl=url;save();alert('Dipulihkan ✓ ('+S.tx.length+' transaksi)');go('home')}catch(e){alert('Gagal memulihkan: '+e.message)}}
+function secCard(){const c=secGet(),bk=S.bkAt?new Date(S.bkAt):null;
+ return`<div class="card"><h3>Keamanan</h3>
+  <div class="kv"><span>Kunci PIN</span><span>${c.hash?'<b class="up">Aktif</b>':'Belum aktif'}</span></div>
+  <div class="kv"><span>Sidik jari / wajah</span><span>${c.cred?'<b class="up">Aktif</b>':'Belum aktif'}</span></div>
+  <div class="kv"><span>Kunci otomatis setelah keluar</span><span><select id="sdl" style="width:auto;min-height:30px;padding:2px 6px">${[[0,'Langsung'],[60,'1 menit'],[300,'5 menit'],[900,'15 menit']].map(([v,l])=>`<option value="${v}" ${(c.delay??60)==v?'selected':''}>${l}</option>`).join('')}</select></span></div>
+  <div class="g2" style="margin-top:8px"><button class="b" id="spin">${c.hash?'Ganti PIN':'Aktifkan PIN'}</button><button class="b" id="sbio" ${c.hash?'':'disabled'}>${c.cred?'Daftar ulang sidik jari':'Aktifkan sidik jari / wajah'}</button></div>
+  ${c.hash?'<div class="g2" style="margin-top:6px"><button class="b" id="slock">Kunci sekarang</button><button class="b d" id="soff">Matikan kunci</button></div>':''}
+  <div class="tiny" style="margin-top:6px">Sidik jari/wajah memakai sensor HP-mu sendiri (butuh PIN aktif lebih dulu). Wajah bisa dipakai kalau HP mendukung buka kunci wajah yang aman.</div></div>
+ <div class="card"><h3>Cadangan otomatis ke Google Drive</h3>
+  <div class="tiny">Aplikasi mengirim salinan data ke Google Drive milikmu sendiri: otomatis sehari sekali dan setiap ada transaksi baru (paling sering tiap 30 menit), saat online. Disimpan 60 cadangan harian terakhir. Cara memasang ada di Panduan › "Cadangan otomatis".</div>
+  <input id="bku" placeholder="Tempel link Apps Script (…/exec)" value="${esc(S.bkUrl||'')}" style="margin-top:6px">
+  <div class="g2" style="margin-top:6px"><button class="b p" id="bks">Simpan & cadangkan</button><button class="b" id="bkc">Salin kode Apps Script</button></div>
+  <button class="b" style="width:100%;margin-top:6px" id="bkr">Pulihkan dari Google Drive</button>
+  <div class="tiny" style="margin-top:6px">${bk?'Cadangan terakhir: '+fdate(ds(bk))+' '+String(bk.getHours()).padStart(2,'0')+'.'+String(bk.getMinutes()).padStart(2,'0'):'Belum pernah dicadangkan ke Google Drive'}</div></div>`}
+function bindSec(){const c=secGet();
+ $('sdl').onchange=e=>{const x=secGet();x.delay=+e.target.value;secSet(x)};$('spin').onclick=pinSetup;if($('sbio'))$('sbio').onclick=bioRegister;
+ if($('slock'))$('slock').onclick=lockNow;if($('soff'))$('soff').onclick=()=>{if(!confirm('Matikan kunci PIN & sidik jari?'))return;const x=secGet();delete x.hash;delete x.salt;delete x.cred;secSet(x);set()};
+ $('bks').onclick=()=>{S.bkUrl=$('bku').value.trim();save();if(S.bkUrl)backupNow(false);else set()};
+ $('bkc').onclick=()=>{const t=bkScript();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('Kode Apps Script tersalin ✓ Tempel di script.google.com (lihat Panduan).'),()=>prompt('Salin kode ini:',t))};
+ $('bkr').onclick=()=>{S.bkUrl=$('bku').value.trim()||S.bkUrl;restoreDrive()}}
 /* ================= MULAI ================= */
-load();save();netS();nav();home();setTimeout(autoPx,800);
+load();save();netS();nav();home();if(secGet().hash)lockNow();setTimeout(autoPx,800);setTimeout(autoBackup,3000);
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
