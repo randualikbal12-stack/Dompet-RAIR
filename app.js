@@ -901,11 +901,21 @@ function doGet(e){if(e.parameter.k!==KUNCI)return ContentService.createTextOutpu
  if(e.parameter.cek)return ContentService.createTextOutput(JSON.stringify({file:b?b.getName():null,waktu:b?b.getDateCreated().toISOString():null})).setMimeType(ContentService.MimeType.JSON);
  return ContentService.createTextOutput(b?b.getBlob().getDataAsString():'{}').setMimeType(ContentService.MimeType.JSON)}`}
 let bkBusy=false;
+const bkU=(x)=>S.bkUrl.trim()+(S.bkUrl.includes('?')?'&':'?')+'k='+encodeURIComponent(bkKey())+(x||'');
+async function bkCek(){const r=await fetch(bkU('&cek=1&t='+Date.now()),{cache:'no-store'});const t=await r.text();let j=null;try{j=JSON.parse(t)}catch(e){}return{t,j}}
+function bkWhy(t){t=String(t||'');if(/ditolak/.test(t))return'Kunci ditolak: kunci di aplikasi tidak sama dengan KUNCI di kode Apps Script. Salin ulang kode dari aplikasi (Atur › Salin kode Apps Script), tempel di Apps Script, lalu Terapkan › Kelola deployment › ✏️ › Versi: Versi baru › Terapkan.';
+ if(/<html|<!DOCTYPE/i.test(t))return'Google membalas dengan halaman web, bukan data. Biasanya karena akses deployment bukan "Siapa saja", link yang ditempel bukan link /exec, atau izin belum diberikan.';return'Balasan tidak dikenal: '+t.slice(0,120)}
 async function backupNow(silent){if(!S.bkUrl||bkBusy)return;if(!navigator.onLine){if(!silent)alert('Sedang offline. Cadangan akan dikirim otomatis saat online.');return}bkBusy=true;
- try{const u=S.bkUrl+(S.bkUrl.includes('?')?'&':'?')+'k='+bkKey();await fetch(u,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({...S,bkAt:undefined,fotos:await fotoAll().catch(()=>({}))})});
-  let ok=true;try{const r=await fetch(u+'&cek=1',{cache:'no-store'});const j=await r.json();ok=!!j.file}catch(e){}
-  S.bkAt=new Date().toISOString();S.bkSig=S.tx.length+':'+S.next;save();if(!silent)alert(ok?'Cadangan tersimpan di Google Drive ✓ (folder "Dompet Digital Cadangan")':'Cadangan sudah dikirim. Cek folder "Dompet Digital Cadangan" di Google Drive.')}
- catch(e){if(!silent)alert('Gagal mencadangkan: '+e.message)}bkBusy=false;if(V==='set')set()}
+ let ok=false,msg='';
+ try{const body=JSON.stringify({...S,bkAt:undefined,bkErr:undefined,fotos:await fotoAll().catch(()=>({}))});
+  try{const r=await fetch(bkU(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});const t=(await r.text()).trim();ok=t==='ok';if(!ok)msg=bkWhy(t)}
+  catch(e){await fetch(bkU(),{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body});
+   const c=await bkCek();ok=!!(c.j&&c.j.file&&c.j.waktu&&Date.now()-new Date(c.j.waktu).getTime()<5*60e3);if(!ok)msg=c.j&&c.j.error?bkWhy('ditolak'):c.j?'Kiriman belum tercatat di Google Drive.':bkWhy(c.t)}}
+ catch(e){msg='Tidak bisa terhubung ke Google: '+e.message}
+ if(ok){S.bkAt=new Date().toISOString();S.bkSig=S.tx.length+':'+S.next;delete S.bkErr}else S.bkErr={w:new Date().toISOString(),m:msg};save();
+ if(!silent)alert(ok?'Cadangan tersimpan di Google Drive ✓ (folder "Dompet Digital Cadangan")':'Cadangan GAGAL ✗\n\n'+msg);bkBusy=false;if(V==='set')set()}
+async function bkTest(){if(!S.bkUrl)return alert('Tempel link /exec dulu');try{const c=await bkCek();
+ alert(c.j&&c.j.file?'Koneksi OK ✓\nCadangan terbaru di Drive: '+c.j.file:c.j&&c.j.error?'✗ '+bkWhy('ditolak'):c.j?'Koneksi OK ✓ dan kunci cocok, tapi belum ada file cadangan. Ketuk "Simpan & cadangkan".':'✗ '+bkWhy(c.t))}catch(e){alert('✗ Tidak bisa terhubung: '+e.message)}}
 function autoBackup(changedOnly){if(!S.bkUrl||locked)return;const age=S.bkAt?Date.now()-new Date(S.bkAt).getTime():1e12,sig=S.tx.length+':'+S.next;
  if(age>24*3600e3||(sig!==S.bkSig&&age>30*60e3))backupNow(true)}
 function restoreDrive(){sheet(`<h3>Pulihkan dari Google Drive</h3><div class="tiny">Data di HP ini akan diganti dengan cadangan terbaru di Google Drive.</div>
@@ -928,17 +938,17 @@ function secCard(){const c=secGet(),bk=S.bkAt?new Date(S.bkAt):null;
   <div class="tiny">Aplikasi mengirim salinan data ke Google Drive milikmu sendiri: otomatis sehari sekali dan setiap ada transaksi baru (paling sering tiap 30 menit), saat online. Disimpan 60 cadangan harian terakhir. Cara memasang ada di Panduan › "Cadangan otomatis".</div>
   <input id="bku" placeholder="Tempel link Apps Script (…/exec)" value="${esc(S.bkUrl||'')}" style="margin-top:6px">
   <div class="g2" style="margin-top:6px"><button class="b p" id="bks">Simpan & cadangkan</button><button class="b" id="bkc">Salin kode Apps Script</button></div>
-  <button class="b" style="width:100%;margin-top:6px" id="bkr">Pulihkan dari Google Drive</button>
+  <div class="g2" style="margin-top:6px"><button class="b" id="bkt">Tes koneksi</button><button class="b" id="bkr">Pulihkan dari Drive</button></div>
   <div class="kv" style="margin-top:6px"><span>Kunci cadangan</span><span><code id="bkkv">••••••</code> <span class="ac" id="bkks">lihat</span></span></div>
   <div class="tiny">Kunci ini juga tertulis di kode Apps Script-mu. Dibutuhkan untuk memulihkan data di HP baru.</div>
-  <div class="tiny" style="margin-top:6px">${bk?'Cadangan terakhir: '+fdate(ds(bk))+' '+String(bk.getHours()).padStart(2,'0')+'.'+String(bk.getMinutes()).padStart(2,'0'):'Belum pernah dicadangkan ke Google Drive'}</div></div>`}
+  <div class="tiny" style="margin-top:6px">${bk?'Cadangan terakhir: '+fdate(ds(bk))+' '+String(bk.getHours()).padStart(2,'0')+'.'+String(bk.getMinutes()).padStart(2,'0'):'Belum pernah berhasil dicadangkan ke Google Drive'}</div>${S.bkErr?`<div class="st w" style="margin-top:6px">Percobaan terakhir GAGAL (${fdate(ds(new Date(S.bkErr.w)))}): ${esc(S.bkErr.m)}</div>`:''}</div>`}
 function bindSec(){const c=secGet();
  $('sdl').onchange=e=>{const x=secGet();x.delay=+e.target.value;secSet(x)};$('spin').onclick=pinSetup;if($('sbio'))$('sbio').onclick=bioRegister;
  if($('slock'))$('slock').onclick=lockNow;if($('srec'))$('srec').onclick=async()=>{if(!confirm('Buat kode pemulihan baru? Kode lama tidak berlaku lagi.'))return;const x=secGet();const code=await setRec(x);secSet(x);showRec(code)};
  $('bkks').onclick=()=>{$('bkkv').textContent=bkKey();$('bkks').remove()};if($('soff'))$('soff').onclick=()=>{if(!confirm('Matikan kunci PIN & sidik jari?'))return;const x=secGet();delete x.hash;delete x.salt;delete x.cred;delete x.rhash;delete x.rsalt;secSet(x);set()};
  $('bks').onclick=()=>{S.bkUrl=$('bku').value.trim();save();if(S.bkUrl)backupNow(false);else set()};
  $('bkc').onclick=()=>{const t=bkScript();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('Kode Apps Script tersalin ✓ Tempel di script.google.com (lihat Panduan).'),()=>prompt('Salin kode ini:',t))};
- $('bkr').onclick=()=>{S.bkUrl=$('bku').value.trim()||S.bkUrl;restoreDrive()}}
+ $('bkt').onclick=()=>{S.bkUrl=$('bku').value.trim()||S.bkUrl;save();bkTest()};$('bkr').onclick=()=>{S.bkUrl=$('bku').value.trim()||S.bkUrl;restoreDrive()}}
 /* ================= FITUR: ANGGARAN · RUTIN · COCOKKAN SALDO · FOTO STRUK · LAPORAN PDF ================= */
 const ym=d=>d.slice(0,7),ymLab=k=>{const[y,m]=k.split('-');return BULAN[+m-1]+' '+y};
 const monRange=k=>{const[y,m]=k.split('-').map(Number);return{a:k+'-01',b:mEnd(y,m-1)}};

@@ -1,4 +1,4 @@
-const C='dompet-digital-v20';
+const C='dompet-digital-v21';
 const FILES=['./','./app.js','./libs.js','./seed.js','./inv.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(FILES)))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
