@@ -204,7 +204,7 @@ function home(){LK={};WK={};const now=new Date(),C=monthCtx(now.getFullYear(),no
   mama:{t:'Uang mama',b:`<div class="g2"><div class="kp" data-x="${FN(mamaSisaSheet)}"><div class="a">Sisa uang mama (hitungan)</div><div class="b">${rp(M.sisa)}</div></div><div class="kp" data-x="${FN(kantongSheet)}"><div class="a">Ada di Kantong/Cash Uang Kos Mama</div><div class="b">${rp(M.kantong)}</div></div></div>
   <div class="st ${M.pribadi>0?'w':'ok'}">${M.pribadi>0?'Masih ada '+rp(M.pribadi)+' uang mama di akun pribadimu — pindahkan ke Kantong Uang Kos Mama':'Aman ✓ Tidak ada uang mama di akun pribadimu'}</div>`},
   akun:{t:'Saldo per akun',b:S.acc.map(x=>({x,v:bal(x.n)})).filter(o=>o.v||o.x.g!=='Usaha').map(({x,v})=>`<div class="row" data-acc="${esc(x.n)}"><div class="l"><div class="t1">${esc(x.n)}</div><div class="t2">${esc(x.g)}</div></div><div class="r">${rp(v)}</div><span class="chev">›</span></div>`).join('')+`<div class="kv"><b>Total semua akun</b><b class="ac" data-x="${FN(totalAkunSheet)}">${rp(S.acc.reduce((p,x)=>p+bal(x.n),0))}</b></div>`}};
- $('main').innerHTML=`<div class="hero2"><div class="hh"><span>Total aset pribadi</span><button class="eyeb" id="hideB" aria-label="Sembunyikan saldo">${HIDE?'🙈':'👁'}</button></div>
+ $('main').innerHTML=`${bkChip()}<div class="hero2"><div class="hh"><span>Total aset pribadi</span><button class="eyeb" id="hideB" aria-label="Sembunyikan saldo">${HIDE?'🙈':'👁'}</button></div>
   <div class="hv" data-x="${FN(asetSheet)}">${rp(A.tot)}</div>
   <div class="hs"><span class="${sel<0?'dn':'up'}" data-x="${WKs(...C.fS())}">${sel<0?'▼':'▲'} ${rp(Math.abs(sel))} <small>bulan ini</small></span><span class="${pl<0?'dn':'up'}" data-x="${FN(portoSum)}">${pl<0?'▼':'▲'} ${rp(Math.abs(pl))} <small>investasi</small></span></div>
   <div class="hg"><div data-acc-g="kas" data-x="${FN(asetSheet)}"><small>Kas & bank</small><b>${rp(A.kas+A.rdn)}</b></div><div data-go="inv"><small>Investasi</small><b>${rp(A.I.tn)}</b></div><div data-go="mama"><small>Amanah</small><b>${rp(M.kantong)}</b></div></div></div>
@@ -214,7 +214,7 @@ function home(){LK={};WK={};const now=new Date(),C=monthCtx(now.getFullYear(),no
  $('hideB').onclick=e=>{e.stopPropagation();HIDE=!HIDE;try{localStorage.setItem('dd-hide',HIDE?'1':'0')}catch(x){}home()};
  document.querySelectorAll('[data-qa]').forEach(b=>b.onclick=()=>{EDIT=null;TPL=null;if(b.dataset.qa==='trx')F={};go(b.dataset.qa)});
  document.querySelectorAll('[data-hc]').forEach(h=>h.onclick=e=>{if(e.target.closest('[data-x],[data-go]'))return;const id=h.dataset.hc;cfg.col[id]=!cfg.col[id];save();h.parentElement.classList.toggle('col',!!cfg.col[id]);if(id==='tren'&&!cfg.col[id])trenChart()});
- $('homeSet').onclick=homeSetSheet;if(!cfg.col.tren)trenChart()}
+ $('homeSet').onclick=homeSetSheet;if($('bkChip'))$('bkChip').onclick=()=>go('set');if(!cfg.col.tren)trenChart()}
 function trenChart(){const c=$('ctr');if(!c)return;if(charts.tr)charts.tr.destroy();const now=new Date(),L=[];for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);L.push(monthCtx(d.getFullYear(),d.getMonth()))}
  const cs=getComputedStyle(document.documentElement),col=n=>cs.getPropertyValue(n).trim();
  charts.tr=new Chart(c,{type:'bar',data:{labels:L.map(x=>x.ttl.slice(0,3)),datasets:[{label:'Pendapatan',data:L.map(x=>HIDE?0:x.tI),backgroundColor:col('--ok')},{label:'Pengeluaran',data:L.map(x=>HIDE?0:x.tE),backgroundColor:col('--no')}]},
@@ -913,16 +913,18 @@ async function backupNow(silent){if(!S.bkUrl||bkBusy)return;if(!navigator.onLine
    const c=await bkCek();ok=!!(c.j&&c.j.file&&c.j.waktu&&Date.now()-new Date(c.j.waktu).getTime()<5*60e3);if(!ok)msg=c.j&&c.j.error?bkWhy('ditolak'):c.j?'Kiriman belum tercatat di Google Drive.':bkWhy(c.t)}}
  catch(e){msg='Tidak bisa terhubung ke Google: '+e.message}
  if(ok){S.bkAt=new Date().toISOString();S.bkSig=S.tx.length+':'+S.next;delete S.bkErr}else S.bkErr={w:new Date().toISOString(),m:msg};save();
- if(!silent)alert(ok?'Cadangan tersimpan di Google Drive ✓ (folder "Dompet Digital Cadangan")':'Cadangan GAGAL ✗\n\n'+msg);bkBusy=false;if(V==='set')set()}
+ if(!silent)alert(ok?'Cadangan tersimpan di Google Drive ✓ (folder "Dompet Digital Cadangan")':'Cadangan GAGAL ✗\n\n'+msg);bkBusy=false;if(V==='set')set();else if(V==='home')home()}
 async function bkTest(){if(!S.bkUrl)return alert('Tempel link /exec dulu');try{const c=await bkCek();
  alert(c.j&&c.j.file?'Koneksi OK ✓\nCadangan terbaru di Drive: '+c.j.file:c.j&&c.j.error?'✗ '+bkWhy('ditolak'):c.j?'Koneksi OK ✓ dan kunci cocok, tapi belum ada file cadangan. Ketuk "Simpan & cadangkan".':'✗ '+bkWhy(c.t))}catch(e){alert('✗ Tidak bisa terhubung: '+e.message)}}
 function autoBackup(changedOnly){if(!S.bkUrl||locked)return;const age=S.bkAt?Date.now()-new Date(S.bkAt).getTime():1e12,sig=S.tx.length+':'+S.next;
  if(age>24*3600e3||(sig!==S.bkSig&&age>30*60e3))backupNow(true)}
 function restoreDrive(){sheet(`<h3>Pulihkan dari Google Drive</h3><div class="tiny">Data di HP ini akan diganti dengan cadangan terbaru di Google Drive.</div>
+ <label class="lb">Tempel info pemulihan di sini (dari catatanmu)<textarea id="rsp" rows="3" placeholder="Dompet Digital — info pemulihan data&#10;Link: https://script.google.com/…/exec&#10;Kunci: …"></textarea></label>
+ <div class="tiny" id="rspm" style="min-height:14px"></div>
  <label class="lb">Link Apps Script (…/exec)<input id="rsu" value="${esc(S.bkUrl||'')}"></label>
  <label class="lb">Kunci cadangan<span class="pw"><input id="rsk" type="password" value="${esc(secGet().bk||'')}">${eyeBtn('rsk')}</span></label>
  <div class="tiny">Kunci cadangan ada di kode Apps Script-mu, baris pertama: <code>var KUNCI='…'</code>.</div>
- <button class="b p" id="rsgo" style="width:100%;margin-top:8px">Pulihkan sekarang</button>`,()=>{bindEye();$('rsgo').onclick=async()=>{const url=$('rsu').value.trim(),k=$('rsk').value.trim();if(!url||!k)return alert('Isi link dan kunci cadangan');
+ <button class="b p" id="rsgo" style="width:100%;margin-top:8px">Pulihkan sekarang</button>`,()=>{bindEye();$('rsp').oninput=()=>{const r=parseRec($('rsp').value);if(r.u)$('rsu').value=r.u;if(r.k)$('rsk').value=r.k;$('rspm').innerHTML=r.u&&r.k?'<span class="up">✓ Link dan kunci terisi otomatis</span>':'<span class="dn">Link atau kunci belum terbaca</span>'};$('rsgo').onclick=async()=>{const url=$('rsu').value.trim(),k=$('rsk').value.trim();if(!url||!k)return alert('Isi link dan kunci cadangan');
  try{const r=await fetch(url+(url.includes('?')?'&':'?')+'k='+encodeURIComponent(k),{cache:'no-store'});const x=await r.json();if(!x.tx)throw new Error('cadangan kosong / kunci salah');
   const c=secGet();c.bk=k;secSet(c);const fo=x.fotos||{};delete x.fotos;for(const id in fo)await fotoPut(+id,fo[id]).catch(()=>{});S=x;S.bkUrl=url;save();load();closeSheet();alert('Dipulihkan ✓ ('+S.tx.length+' transaksi)');go('home')}catch(e){alert('Gagal memulihkan: '+e.message)}}})}
 function secCard(){const c=secGet(),bk=S.bkAt?new Date(S.bkAt):null;
@@ -940,7 +942,8 @@ function secCard(){const c=secGet(),bk=S.bkAt?new Date(S.bkAt):null;
   <div class="g2" style="margin-top:6px"><button class="b p" id="bks">Simpan & cadangkan</button><button class="b" id="bkc">Salin kode Apps Script</button></div>
   <div class="g2" style="margin-top:6px"><button class="b" id="bkt">Tes koneksi</button><button class="b" id="bkr">Pulihkan dari Drive</button></div>
   <div class="kv" style="margin-top:6px"><span>Kunci cadangan</span><span><code id="bkkv">••••••</code> <span class="ac" id="bkks">lihat</span></span></div>
-  <div class="tiny">Kunci ini juga tertulis di kode Apps Script-mu. Dibutuhkan untuk memulihkan data di HP baru.</div>
+  <button class="b" id="bkinfo" style="width:100%;margin-top:6px" ${S.bkUrl?'':'disabled'}>📋 Salin info pemulihan (link + kunci)</button>
+  <div class="tiny">Tempel hasil salinan ke catatan HP / Google Keep / WhatsApp ke diri sendiri. Kalau ganti HP: Atur › Pulihkan dari Drive › tempel teks itu.</div>
   <div class="tiny" style="margin-top:6px">${bk?'Cadangan terakhir: '+fdate(ds(bk))+' '+String(bk.getHours()).padStart(2,'0')+'.'+String(bk.getMinutes()).padStart(2,'0'):'Belum pernah berhasil dicadangkan ke Google Drive'}</div>${S.bkErr?`<div class="st w" style="margin-top:6px">Percobaan terakhir GAGAL (${fdate(ds(new Date(S.bkErr.w)))}): ${esc(S.bkErr.m)}</div>`:''}</div>`}
 function bindSec(){const c=secGet();
  $('sdl').onchange=e=>{const x=secGet();x.delay=+e.target.value;secSet(x)};$('spin').onclick=pinSetup;if($('sbio'))$('sbio').onclick=bioRegister;
@@ -948,7 +951,19 @@ function bindSec(){const c=secGet();
  $('bkks').onclick=()=>{$('bkkv').textContent=bkKey();$('bkks').remove()};if($('soff'))$('soff').onclick=()=>{if(!confirm('Matikan kunci PIN & sidik jari?'))return;const x=secGet();delete x.hash;delete x.salt;delete x.cred;delete x.rhash;delete x.rsalt;secSet(x);set()};
  $('bks').onclick=()=>{S.bkUrl=$('bku').value.trim();save();if(S.bkUrl)backupNow(false);else set()};
  $('bkc').onclick=()=>{const t=bkScript();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('Kode Apps Script tersalin ✓ Tempel di script.google.com (lihat Panduan).'),()=>prompt('Salin kode ini:',t))};
- $('bkt').onclick=()=>{S.bkUrl=$('bku').value.trim()||S.bkUrl;save();bkTest()};$('bkr').onclick=()=>{S.bkUrl=$('bku').value.trim()||S.bkUrl;restoreDrive()}}
+ $('bkinfo').onclick=()=>{const t=recInfo();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('Info pemulihan tersalin ✓\n\nSekarang tempel di catatan HP, Google Keep, atau kirim WhatsApp ke dirimu sendiri.'),()=>prompt('Salin teks ini:',t))};$('bkt').onclick=()=>{S.bkUrl=$('bku').value.trim()||S.bkUrl;save();bkTest()};$('bkr').onclick=()=>{S.bkUrl=$('bku').value.trim()||S.bkUrl;restoreDrive()}}
+
+/* status cadangan di Beranda */
+function bkChip(){const hm=d=>String(d.getHours()).padStart(2,'0')+'.'+String(d.getMinutes()).padStart(2,'0');
+ if(!S.bkUrl)return`<div class="bkc nt" id="bkChip">☁️ Cadangan Google Drive belum dipasang <span>Atur ›</span></div>`;
+ const at=S.bkAt?new Date(S.bkAt):null,er=S.bkErr?new Date(S.bkErr.w):null;
+ if(er&&(!at||er>at))return`<div class="bkc no" id="bkChip">⚠️ Cadangan gagal ${fdate(ds(er))} ${hm(er)} — ketuk untuk cek <span>Atur ›</span></div>`;
+ if(!at)return`<div class="bkc wa" id="bkChip">☁️ Belum ada cadangan yang berhasil <span>Atur ›</span></div>`;
+ const age=(Date.now()-at)/864e5,lbl=ds(at)===today?'hari ini '+hm(at):fdate(ds(at))+' '+hm(at);
+ return`<div class="bkc ${age>3?'wa':'ok'}" id="bkChip">☁️ Tercadang ${lbl}${age>3?' — sudah lama, buka aplikasi saat online':''} <span>✓</span></div>`}
+/* info pemulihan */
+function recInfo(){return'Dompet Digital — info pemulihan data\nLink: '+(S.bkUrl||'')+'\nKunci: '+bkKey()+'\nCara: buka aplikasi › Atur › Pulihkan dari Drive › tempel teks ini.'}
+function parseRec(t){const u=((t.match(/Link:\s*(\S+)/)||[])[1])||(t.match(/https:\/\/script\.google\.com\/\S+?\/exec/)||[])[0],k=((t.match(/Kunci:\s*([A-Za-z0-9]+)/)||t.match(/KUNCI\s*=\s*'([A-Za-z0-9]+)'/)||[])[1]);return{u,k}}
 /* ================= FITUR: ANGGARAN · RUTIN · COCOKKAN SALDO · FOTO STRUK · LAPORAN PDF ================= */
 const ym=d=>d.slice(0,7),ymLab=k=>{const[y,m]=k.split('-');return BULAN[+m-1]+' '+y};
 const monRange=k=>{const[y,m]=k.split('-').map(Number);return{a:k+'-01',b:mEnd(y,m-1)}};

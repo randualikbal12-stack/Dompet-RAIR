@@ -104,8 +104,10 @@ body{font-variant-numeric:tabular-nums}.card{border-radius:16px}.card h3{text-tr
 .sbar{position:sticky;top:calc(58px + env(safe-area-inset-top));z-index:4;background:var(--bg);padding:6px 0}.sbar input{border-radius:22px;padding:10px 16px;min-height:44px}
 details.card summary{cursor:pointer;color:var(--tx2);font-size:13px}
 .top .mb#hideTop{width:36px;height:36px;font-size:16px}
-.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.kp .b{font-size:clamp(12px,3.7vw,15px);overflow-wrap:anywhere}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.kp .b{font-size:clamp(11px,3.3vw,15px);white-space:nowrap;letter-spacing:-.2px}
 .hero2 .hg b{font-size:clamp(11.5px,3.4vw,13.5px);overflow:visible;text-overflow:clip}
+.bkc{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12.5px;padding:8px 12px;border-radius:12px;margin:8px 0 0;cursor:pointer;background:var(--okb);color:var(--ok)}.bkc span{opacity:.8;white-space:nowrap}.bkc.no{background:var(--nob);color:var(--no)}.bkc.wa{background:var(--wab);color:var(--wa)}.bkc.nt{background:var(--soft);color:var(--tx2)}
+textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 10px;width:100%}
 </style>
 <script>
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
