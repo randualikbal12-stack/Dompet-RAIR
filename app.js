@@ -21,13 +21,18 @@ const MAMA_IN=['Uang Kos Mama','Uang Kedai'],MAMA_OUT=['Pengeluaran Uang Kos','P
 let S;
 function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
  if(!S||!S.tx){S={acc:SEED.acc,tx:SEED.tx,next:Math.max(...SEED.tx.map(t=>t.id))+1,price:{...INV.last},rdcur:{},goals:[],seedAt:today}}
- S.price=S.price||{...INV.last};S.rdcur=S.rdcur||{};S.goals=S.goals||[];S.inv=S.inv||{saham:[],rd:[],dep:[]};S.inv.saham=S.inv.saham||[];S.inv.rd=S.inv.rd||[];S.inv.dep=S.inv.dep||[];S.pxUrl=S.pxUrl||'';migrate()}
+ S.price=S.price||{...INV.last};S.rdcur=S.rdcur||{};S.goals=S.goals||[];S.inv=S.inv||{saham:[],rd:[],dep:[]};S.inv.saham=S.inv.saham||[];S.inv.rd=S.inv.rd||[];S.inv.dep=S.inv.dep||[];S.pxUrl=S.pxUrl||'';S.kuliah=S.kuliah||null;migrate();migrate5()}
 const MIG4={"rename": {"from": "Uang dari Disan", "to": "Uang untuk Disan"}, "upd": [{"id": 1591, "d": "2025-12-09", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1612, "d": "2025-12-15", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1832, "d": "2026-02-02", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Dianggap uang untuk Disan: kk Lisa mengganti uang yang dipakai untuk belanja Disan 28 Jan 2026"}}, {"id": 1843, "d": "2026-02-05", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1935, "d": "2026-02-13", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2074, "d": "2026-03-13", "j": 600000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "THR untuk Disan: belum ada catatan kapan uang ini diberikan ke Disan"}}, {"id": 2110, "d": "2026-04-01", "j": 200000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2245, "d": "2026-05-05", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Untuk perbaikan HP Disan: belum ada catatan kapan uang ini dipakai/diberikan"}}, {"id": 2340, "d": "2026-06-05", "j": 400000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2341, "d": "2026-06-05", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2527, "d": "2026-07-10", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2548, "d": "2026-07-16", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2608, "d": "2026-08-03", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2664, "d": "2026-08-14", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Belum ada catatan kapan uang ini diberikan ke Disan"}}, {"id": 2707, "d": "2026-09-01", "j": 350000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2725, "d": "2026-09-06", "j": 50000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1592, "d": "2025-12-10", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 1620, "d": "2025-12-17", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Dikembalikan ke kk Lisa"}}, {"id": 1948, "d": "2026-02-23", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2353, "d": "2026-06-05", "j": 500000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2529, "d": "2026-07-11", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2549, "d": "2026-07-16", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2622, "d": "2026-08-05", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2716, "d": "2026-09-04", "j": 300000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2730, "d": "2026-09-06", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 1827, "d": "2026-01-28", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 1932, "d": "2026-02-11", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2010, "d": "2026-03-03", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2088, "d": "2026-03-18", "j": 50000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2162, "d": "2026-04-08", "j": 150000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2277, "d": "2026-05-11", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2278, "d": "2026-05-11", "j": 150000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2087, "d": "2026-03-16", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2252, "d": "2026-05-06", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 1994, "d": "2026-03-02", "j": 550000, "set": {"j": 450000, "cek": "Dipisah: Rp100.000 untuk belanja Disan dicatat di baris sendiri (Uang untuk Disan)"}}], "add": [{"d": "2026-03-02", "a": "Bank Mandiri", "t": "M", "j": 100000, "tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "ket": "Bagian dari Tf masuk kk lisa Rp550.000: Rp100.000 untuk belanja disan", "tu": null, "cek": "", "kos": ""}, {"d": "2026-09-08", "a": "Uang Kos Mama Cash", "t": "K", "j": 300000, "tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri", "ket": "Top up saldo gopay tabungan, uang kos mama cash Rp300.000 (pasangan catatan GoPay 8 Sep 2026: dari dompet Rp230.500, dari uang kos mama Rp300.000)", "tu": null, "cek": "", "kos": ""}]};
 function migrate(){if(S.mig4)return;const T={};for(const t of S.tx)T[t.id]=t;
  for(const t of S.tx)if(t.kt===MIG4.rename.from)t.kt=MIG4.rename.to;
  for(const u of MIG4.upd){const t=T[u.id];if(t&&t.d===u.d&&t.j===u.j)Object.assign(t,u.set)}
  for(const a of MIG4.add){if(!S.tx.some(t=>t.d===a.d&&t.a===a.a&&t.j===a.j&&t.ket===a.ket))S.tx.push({...a,id:S.next++})}
  S.mig4=1;save()}
+const MIG5={"upd": [{"id": 1994, "d": "2026-03-02", "j": 450000, "set": {"j": 350000, "cek": "Dipisah: Rp100.000 pengganti uang kos (belanja Disan 23 Feb) dan Rp100.000 belanja Disan dicatat sebagai Uang untuk Disan"}}, {"id": 2114, "d": "2026-04-02", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}], "add": [{"d": "2026-03-02", "a": "Bank Mandiri", "t": "M", "j": 100000, "tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "ket": "Bagian dari Tf masuk kk lisa Rp550.000: Rp100.000 pengganti uang kos yg di pinjam untuk belanja disan (23 Feb)", "tu": null, "cek": "", "kos": ""}, {"d": "2026-08-29", "a": "Dompet", "t": "K", "j": 5000, "tj": "Pengeluaran", "sb": "Pengeluaran Gaji", "kt": "Kebutuhan Pribadi & Rumah", "ket": "Beli sabun daia 1 renteng", "tu": null, "cek": "", "kos": ""}, {"d": "2026-08-29", "a": "Dompet", "t": "K", "j": 5000, "tj": "Pengeluaran", "sb": "Pengeluaran Gaji", "kt": "Kebutuhan Pribadi & Rumah", "ket": "Beli shampo 1 renteng", "tu": null, "cek": "", "kos": ""}, {"d": "2026-08-29", "a": "Dompet", "t": "K", "j": 1000, "tj": "Pengeluaran", "sb": "Pengeluaran Gaji", "kt": "Kebutuhan Pribadi & Rumah", "ket": "Beli cutton buds 1 buah", "tu": null, "cek": "", "kos": ""}, {"d": "2026-08-29", "a": "Dompet", "t": "K", "j": 4000, "tj": "Pengeluaran", "sb": "Pengeluaran Gaji", "kt": "Kebutuhan Pribadi & Rumah", "ket": "Beli deodoran 2 buah", "tu": null, "cek": "", "kos": ""}, {"d": "2026-08-31", "a": "Dompet", "t": "K", "j": 54000, "tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri", "ket": "Top up saldo gopay tabungan, pindah sisa uang dompet, ke gopay tabungan", "tu": null, "cek": "", "kos": ""}, {"d": "2026-08-31", "a": "Dompet", "t": "K", "j": 1500, "tj": "Pengeluaran", "sb": "Pengeluaran Gaji", "kt": "Biaya Admin Transaksi", "ket": "Biaya admin: top up saldo gopay tabungan dari uang dompet", "tu": null, "cek": "", "kos": ""}]};
+function migrate5(){if(S.mig5)return;const T={};for(const t of S.tx)T[t.id]=t;
+ for(const u of MIG5.upd){const t=T[u.id];if(t&&t.d===u.d&&t.j===u.j)Object.assign(t,u.set)}
+ for(const a of MIG5.add){if(!S.tx.some(t=>t.d===a.d&&t.a===a.a&&t.j===a.j&&t.ket===a.ket))S.tx.push({...a,id:S.next++})}
+ S.mig5=1;save()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('Penyimpanan HP penuh: '+e.message)}}
 const accNames=()=>S.acc.map(a=>a.n);
 const byId=id=>S.tx.find(t=>t.id===id);
@@ -50,7 +55,7 @@ const mamaInIds=(a,b)=>idsOf(t=>inR(t,a,b)&&t.tj==='Pendapatan'&&(t.sb==='Uang K
 const mamaOutIds=(a,b)=>idsOf(t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&(t.sb==='Pengeluaran Uang Kos'||t.sb==='Pengeluaran Uang Kedai'));
 const accIds=(names,d=today)=>idsOf(t=>t.d<=d&&(names.includes(t.a)||(t.t==='T'&&names.includes(t.tu))));
 function kantongRows(d){return S.acc.filter(a=>a.g==='Titipan Mama').map(a=>`<div class="kv"><span>${esc(a.n)}</span><span class="ac" data-acc="${esc(a.n)}">${rp(bal(a.n,d))}</span></div>`).join('')}
-function kantongSheet(){const M=mama(today);sheet(`<h3>Uang mama yang ada sekarang</h3><div class="tiny">Gabungan saldo semua akun titipan mama, dihitung dari transaksi yang tercatat. Ketuk angka untuk melihat asal saldo akun itu.</div>${kantongRows(today)}<div class="kv"><b>Total</b><b>${rp(M.kantong)}</b></div>`)}
+function kantongSheet(){const M=mama(today),names=S.acc.filter(a=>a.g==='Titipan Mama').map(a=>a.n);why({ids:accIds(names)},'Uang mama yang ada sekarang',{lines:names.map(n=>[n,bal(n),{a:n}]).concat([['= Total',M.kantong,null,1]]),note:'Gabungan saldo semua akun titipan mama, dihitung dari transaksi yang tercatat.'})}
 function mamaSisaSheet(){const z='2000-01-01',M=mama(today),names=S.acc.filter(a=>a.g==='Titipan Mama').map(a=>a.n);
  const lines=[['Uang kos & kedai masuk',M.inn,{ids:mamaInIds(z,today)}],['− Dipakai (pengeluaran kos & kedai)',M.out,{ids:mamaOutIds(z,today)}],['− Disetor ke reksadana uang kos mama (bersih)',M.inv,{ids:tabIds(z,today,true)}]];
  if(S.mamaOpen)lines.push(['+ Uang mama sebelum Feb 2024 (menu Atur)',S.mamaOpen,null]);
@@ -64,9 +69,10 @@ const KOS_RD='Uang Kos Mama';
 const invA=()=>S.inv;
 function allSaham(){return INV.saham.concat(S.inv.saham)}
 function allRd(){return INV.rd.concat(S.inv.rd)}
-function saham(){const pos={};for(const e of allSaham()){const p=pos[e.kode]=pos[e.kode]||{kode:e.kode,blot:0,cost:0,slot:0,div:0,real:0,ev:[],lastBuy:0};p.ev.push(e);
-  if(e.jenis==='Beli'){p.blot+=e.lot;p.cost+=e.total;p.lastBuy=e.harga||p.lastBuy}else if(e.jenis==='Jual'){p.slot+=e.lot;p.real+=e.untung||0}else p.div+=e.total}
- return Object.values(pos).map(p=>{p.lot=p.blot-p.slot;p.modal=p.blot?p.cost*p.lot/p.blot:0;p.harga=S.price[p.kode]||INV.last[p.kode]||p.lastBuy||0;p.nilai=p.lot*100*p.harga;p.pl=p.nilai-p.modal;return p}).sort((a,b)=>b.nilai-a.nilai||a.kode.localeCompare(b.kode))}
+function saham(){const pos={};for(const e of allSaham().slice().sort((a,b)=>a.tgl.localeCompare(b.tgl))){const p=pos[e.kode]=pos[e.kode]||{kode:e.kode,lot:0,cost:0,blot:0,buy:0,slot:0,div:0,real:0,ev:[],lastBuy:0};p.ev.push(e);
+  if(e.jenis==='Beli'){p.lot+=e.lot;p.cost+=e.total;p.blot+=e.lot;p.buy+=e.total;p.lastBuy=e.harga||p.lastBuy}
+  else if(e.jenis==='Jual'){const avg=p.lot?p.cost/p.lot:0;p.cost-=avg*e.lot;p.lot-=e.lot;p.slot+=e.lot;p.real+=e.untung||0;if(p.lot<=1e-9){p.lot=0;p.cost=0}}else p.div+=e.total}
+ return Object.values(pos).map(p=>{p.lot=Math.round(p.lot*100)/100;p.modal=p.cost;p.avg=p.lot?p.cost/(p.lot*100):0;p.harga=S.price[p.kode]||INV.last[p.kode]||p.lastBuy||0;p.nilai=Math.round(p.lot*100*p.harga);p.pl=p.nilai-p.modal;return p}).sort((a,b)=>b.nilai-a.nilai||a.kode.localeCompare(b.kode))}
 function rdGoals(){const g={};const mk=t=>g[t]=g[t]||{tujuan:t,beli:0,jual:0,untung:0,ev:[],prod:{},appNet:0};
  for(const t in INV.cur)mk(t);
  for(const e of allRd()){if(e.tujuan===KOS_RD)continue;const x=mk(e.tujuan);x.ev.push(e);const p=x.prod[e.produk]=x.prod[e.produk]||{produk:e.produk,beli:0,jual:0,last:'',ev:[]};p.ev.push(e);
@@ -171,24 +177,16 @@ function home(){LK={};WK={};const now=new Date(),C=monthCtx(now.getFullYear(),no
  <div class="card"><h3>Saldo per akun</h3>${S.acc.map(x=>({x,v:bal(x.n)})).filter(o=>o.v||o.x.g!=='Usaha').map(({x,v})=>`<div class="row" data-acc="${esc(x.n)}"><div class="l"><div class="t1">${esc(x.n)}</div><div class="t2">${esc(x.g)}</div></div><div class="r">${rp(v)}</div><span class="chev">›</span></div>`).join('')}
   <div class="kv"><b>Total semua akun</b><b class="ac" data-x="${FN(totalAkunSheet)}">${rp(S.acc.reduce((p,x)=>p+bal(x.n),0))}</b></div></div>`}
 function totalAkunSheet(){const rows=S.acc.map(x=>({x,v:bal(x.n)})).filter(o=>o.v);
- sheet(`<h3>Total saldo semua akun</h3><div class="tiny">Ketuk angka untuk melihat asal saldo akun itu.</div>${rows.map(({x,v})=>`<div class="kv"><span>${esc(x.n)}<div class="tiny">${esc(x.g)}</div></span><span class="ac" data-acc="${esc(x.n)}">${rp(v)}</span></div>`).join('')}
- <div class="kv"><b>Total</b><b>${rp(rows.reduce((p,o)=>p+o.v,0))}</b></div><div class="tiny">Termasuk uang titipan (mama, Disan) dan kantong riba, jadi bukan seluruhnya uang pribadimu.</div>`)}
+ why({},'Total saldo semua akun',{lines:rows.map(({x,v})=>[x.n,v,{a:x.n}]).concat([['= Total',rows.reduce((p,o)=>p+o.v,0),null,1]]),note:'Termasuk uang titipan (mama, Disan) dan kantong riba, jadi bukan seluruhnya uang pribadimu.'})}
 function accSheet(n){const x=S.acc.find(a=>a.n===n);if(!x)return;const b=bal(n);const g={M:[],K:[],TI:[],TO:[]};
  for(const t of S.tx){if(t.d>today)continue;if(t.a===n){g[t.t==='M'?'M':t.t==='K'?'K':'TO'].push(t)}else if(t.t==='T'&&t.tu===n)g.TI.push(t)}
- const s=k=>g[k].reduce((p,t)=>p+t.j,0),ids=k=>g[k].map(t=>t.id);const LL=(k,ttl)=>s(k)?L(rp(s(k)),{ids:ids(k),title:n+': '+ttl}):rp(0);
+ const s=k=>g[k].reduce((p,t)=>p+t.j,0),ids=k=>g[k].map(t=>t.id);
  const now=new Date();let mrows='';
  for(let i=0;i<6;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1),a=ds(d),e=mEnd(d.getFullYear(),d.getMonth());let mi=0,mo=0;
-  for(const t of S.tx){if(!inR(t,a,e))continue;const f=flow(t,n);if(t.a!==n&&t.tu!==n)continue;if(f>0)mi+=t.j;else mo+=t.j}
+  for(const t of S.tx){if(!inR(t,a,e)||(t.a!==n&&t.tu!==n))continue;if(flow(t,n)>0)mi+=t.j;else mo+=t.j}
   mrows+=`<tr class="cl" data-l="${LKs({a:n,from:a,to:e,title:n+' · '+BULAN[d.getMonth()]+' '+d.getFullYear()})}"><td>${BLN[d.getMonth()]} ${String(d.getFullYear()).slice(2)}</td><td class="n up">${rp(mi)}</td><td class="n dn">${rp(mo)}</td><td class="n">${rp(bal(n,e<today?e:today))}</td></tr>`}
- sheet(`<h3>${esc(n)}</h3><div class="tiny">${esc(x.g)}${x.ket?' · '+esc(x.ket):''}</div><div class="box">
- <div class="kv"><span>Saldo awal (${fdate(x.od)})</span><span>${rp(x.o)}</span></div>
- <div class="kv"><span>+ Uang masuk</span><span>${LL('M','uang masuk')}</span></div>
- <div class="kv"><span>− Uang keluar</span><span>${LL('K','uang keluar')}</span></div>
- <div class="kv"><span>+ Pindahan masuk dari akun lain</span><span>${LL('TI','pindahan masuk')}</span></div>
- <div class="kv"><span>− Dipindah ke akun lain</span><span>${LL('TO','dipindah keluar')}</span></div>
- <div class="kv"><b>= Saldo sekarang</b><b>${rp(b)}</b></div></div>
- <h4>6 bulan terakhir (ketuk baris untuk transaksinya)</h4><div class="tw"><table><tr><th>Bulan</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Saldo akhir</th></tr>${mrows}</table></div>
- <button class="b p" style="width:100%;margin-top:10px" data-l="${LKs({a:n,title:'Semua transaksi '+n})}">Lihat semua transaksi akun ini</button>`)}
+ why({a:n,to:today},n,{lines:[['Saldo awal ('+fdate(x.od)+')',x.o,null],['+ Uang masuk',s('M'),{ids:ids('M')}],['− Uang keluar',s('K'),{ids:ids('K')}],['+ Pindahan masuk dari akun lain',s('TI'),{ids:ids('TI')}],['− Dipindah ke akun lain',s('TO'),{ids:ids('TO')}],['= Saldo sekarang',b,null,1]],
+  note:esc(x.g)+(x.ket?' · '+esc(x.ket):''),html:`<h4>6 bulan terakhir (ketuk baris untuk transaksinya)</h4><div class="tw"><table><tr><th>Bulan</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Saldo akhir</th></tr>${mrows}</table></div>`})}
 /* ================= TRANSAKSI ================= */
 function opts(list,sel,first){return(first?`<option value="">${first}</option>`:'')+list.map(v=>`<option ${v===sel?'selected':''}>${esc(v)}</option>`).join('')}
 function katList(tj,sb){return[...new Set(S.tx.filter(t=>(!tj||t.tj===tj)&&(!sb||t.sb===sb)).map(t=>t.kt))].sort()}
@@ -309,11 +307,20 @@ function mamaV(){LK={};WK={};const tabs=`<div class="seg" id="mt">${[['mama','Ua
   <tr><td colspan=3 class="tiny">Sisa akhir ${MY-1}</td><td class="n">${rp(prev.sisa)}</td><td></td></tr>
   ${bl.map(x=>{const mm=mama(x.b),inn=income(x.a,x.b,'Uang Kos Mama')+income(x.a,x.b,'Uang Kedai'),out=expense(x.a,x.b,'Pengeluaran Uang Kos')+expense(x.a,x.b,'Pengeluaran Uang Kedai')+tabNet(x.a,x.b,true);
    return`<tr class="cl" data-x="${WKs(...mamaMonthWhy(x))}"><td>${BLN[x.i]}</td><td class="n up">${rp(inn)}</td><td class="n dn">${rp(out)}</td><td class="n">${rp(mm.sisa)}</td><td class="n"><span class="pill ${mm.pribadi>0?'w':''}">${mm.pribadi>0?'Pindahkan':'Aman'}</span></td></tr>`}).join('')}</table></div><div class="tiny" style="margin-top:6px">*Keluar = pengeluaran kos & kedai + setoran bersih ke reksadana uang kos mama.</div></div>`}
- if(MT==='kos'){const byK={},idK={};for(const t of S.tx)if(t.kos&&inR(t,Y0,Y1)){byK[t.kos]=(byK[t.kos]||0)+t.j;(idK[t.kos]=idK[t.kos]||[]).push(t.id)}
+ if(MT==='kos'){const kIn=(a,b)=>income(a,b,'Uang Kos Mama'),kOut=(a,b)=>expense(a,b,'Pengeluaran Uang Kos'),Z='2000-01-01',pe=(MY-1)+'-12-31';
+  let cum=kIn(Z,pe)-kOut(Z,pe)-tabNet(Z,pe,true);const cum0=cum;let tI=0,tO=0,tV=0;
+  const mrow=bl.map(x=>{const i=kIn(x.a,x.b),o=kOut(x.a,x.b),v=tabNet(x.a,x.b,true),sisa=i-o,bel=sisa-v,prev=cum;cum+=bel;tI+=i;tO+=o;tV+=v;
+   const k=WKs({ids:idsOf(t=>inR(t,x.a,x.b)&&(t.sb==='Uang Kos Mama'||t.sb==='Pengeluaran Uang Kos'||isKosRd(t)))},'Uang kos · '+BULAN[x.i]+' '+MY,{lines:[['Uang kos masuk',i,{ids:idsOf(t=>inR(t,x.a,x.b)&&t.tj==='Pendapatan'&&t.sb==='Uang Kos Mama')}],['− Uang kos keluar',o,{ids:idsOf(t=>inR(t,x.a,x.b)&&t.tj==='Pengeluaran'&&t.sb==='Pengeluaran Uang Kos')}],['= Sisa bulan ini',sisa,null,1],['− Masuk ke investasi (reksadana uang kos mama, bersih)',v,{ids:tabIds(x.a,x.b,true)}],['= Belum masuk investasi bulan ini',bel,null,1],['Belum masuk investasi s.d. bulan lalu',prev,null],['= Belum masuk investasi s.d. akhir bulan',cum,null,1]],note:'Angka minus di "belum masuk investasi" artinya bulan itu yang diinvestasikan lebih besar dari sisa bulan itu (memakai sisa bulan-bulan sebelumnya atau pencairan).'});
+   return`<tr class="cl" data-x="${k}"><td>${BLN[x.i]}</td><td class="n up">${rp(i)}</td><td class="n dn">${rp(o)}</td><td class="n">${rp(sisa)}</td><td class="n">${rp(v)}</td><td class="n ${bel<0?'dn':''}">${rp(bel)}</td><td class="n">${rp(cum)}</td></tr>`}).join('');
+  var kosMonth=`<div class="card"><h3>Uang kos per bulan ${MY} (ketuk baris untuk rinciannya)</h3><div class="tw"><table class="sm"><tr><th>Bln</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Sisa</th><th class="n">Ke investasi</th><th class="n">Belum invest</th><th class="n">Kumulatif</th></tr>
+   <tr><td colspan=6 class="tiny">Belum masuk investasi s.d. akhir ${MY-1}</td><td class="n">${rp(cum0)}</td></tr>${mrow}
+   <tr><td><b>Total</b></td><td class="n up"><b>${rp(tI)}</b></td><td class="n dn"><b>${rp(tO)}</b></td><td class="n"><b>${rp(tI-tO)}</b></td><td class="n"><b>${rp(tV)}</b></td><td class="n"><b>${rp(tI-tO-tV)}</b></td><td></td></tr></table></div>
+   <div class="tiny" style="margin-top:6px">Sisa = uang kos masuk − keluar. Ke investasi = disetor ke reksadana uang kos mama dikurangi yang dicairkan. Belum invest = sisa − ke investasi. Kumulatif minus berarti investasi lebih besar dari uang kos yang tercatat masuk sejak Feb 2024 (uang kos sebelum itu belum tercatat).</div></div>`;
+  const byK={},idK={};for(const t of S.tx)if(t.kos&&inR(t,Y0,Y1)){byK[t.kos]=(byK[t.kos]||0)+t.j;(idK[t.kos]=idK[t.kos]||[]).push(t.id)}
   const grp=w=>Object.entries(byK).filter(([k])=>k.startsWith('Kos '+w)).sort();const tot=w=>grp(w).reduce((p,x)=>p+x[1],0);const allIds=w=>grp(w).flatMap(([k])=>idK[k]);
   const outK={};for(const t of S.tx)if(t.sb==='Pengeluaran Uang Kos'&&inR(t,Y0,Y1))outK[t.kt]=(outK[t.kt]||0)+t.j;const rk=tabNet(Y0,Y1,true);
   const kr=(k,lbl)=>`<div class="row" data-x="${WKs({kos:k,from:Y0,to:Y1},k+' · '+MY)}"><div class="l">${lbl}</div><div class="r up">${rp(byK[k]||0)}</div><span class="chev">›</span></div>`;
-  body=`<div class="card"><h3>Kos cowok (5 kamar) — ${MY}</h3>${[1,2,3,4,5,'?'].map(i=>kr('Kos cowok · Kamar '+i,i==='?'?'Kamar belum tercatat':'Kamar '+i)).join('')}
+  body=kosMonth+`<div class="card"><h3>Kos cowok (5 kamar) — ${MY}</h3>${[1,2,3,4,5,'?'].map(i=>kr('Kos cowok · Kamar '+i,i==='?'?'Kamar belum tercatat':'Kamar '+i)).join('')}
    ${grp('cowok').filter(([k])=>!/Kamar [1-5?]$/.test(k)).map(([k])=>kr(k,esc(k.replace('Kos cowok · ','')))).join('')}<div class="kv"><b>Total kos cowok</b><b>${X(rp(tot('cowok')),{ids:allIds('cowok')},'Kos cowok · '+MY)}</b></div></div>
   <div class="card"><h3>Kos cewek (7 kamar) — ${MY}</h3>${[1,2,3,4,5,6,7,'?'].map(i=>kr('Kos cewek · Kamar '+i,i==='?'?'Kamar belum tercatat':'Kamar '+i)).join('')}
    ${grp('cewek').filter(([k])=>!/Kamar [1-7?]$/.test(k)).map(([k])=>kr(k,esc(k.replace('Kos cewek · ','')))).join('')}<div class="kv"><b>Total kos cewek</b><b>${X(rp(tot('cewek')),{ids:allIds('cewek')},'Kos cewek · '+MY)}</b></div></div>
@@ -339,105 +346,98 @@ function mamaV(){LK={};WK={};const tabs=`<div class="seg" id="mt">${[['mama','Ua
  $('main').innerHTML=tabs+body;
  document.querySelectorAll('#mt button').forEach(b=>b.onclick=()=>{MT=b.dataset.t;mamaV()});document.querySelectorAll('#my button').forEach(b=>b.onclick=()=>{MY=+b.dataset.y;mamaV()})}
 /* ================= INVESTASI ================= */
-let IT='saham';
+let IT='all';
 const pxInfo=()=>S.pxAt?`Harga saham otomatis dari Google Sheets · ${fdate(S.pxAt.slice(0,10))} ${S.pxAt.slice(11,16)}`:(S.pxUrl?'Harga saham otomatis: belum pernah berhasil diperbarui':'Harga saham diisi manual (bisa dibuat otomatis di menu Atur)');
-function sahamSum(){const P=saham(),hold=P.filter(p=>p.lot>0),tm=hold.reduce((s,p)=>s+p.modal,0),tn=hold.reduce((s,p)=>s+p.nilai,0);
- sheet(`<h3>Nilai semua saham yang dipegang</h3><div class="tiny">Nilai = lot × 100 lembar × harga terakhir. Ketuk kode saham untuk riwayat & asal uangnya.</div>
- ${hold.map(p=>`<div class="row" data-sk="${esc(p.kode)}"><div class="l"><div class="t1"><b>${esc(p.kode)}</b> · ${p.lot} lot × ${p.harga.toLocaleString('id-ID')}</div><div class="t2">modal ${rp(p.modal)}</div></div><div class="r"><div>${rp(p.nilai)}</div><div class="tiny ${p.pl>=0?'up':'dn'}">${rp(p.pl)}</div></div><span class="chev">›</span></div>`).join('')}
- <div class="box"><div class="kv"><span>Total modal</span><span>${rp(tm)}</span></div><div class="kv"><span>Total nilai sekarang</span><span>${rp(tn)}</span></div><div class="kv"><b>Untung/rugi belum terealisasi</b><b class="${tn-tm>=0?'up':'dn'}">${rp(tn-tm)}</b></div></div><div class="tiny">${esc(pxInfo())}</div>`)}
-function rdSum(){const G=rdGoals(),K=kosRd(),gm=G.reduce((s,g)=>s+g.modal,0),gn=G.reduce((s,g)=>s+g.nilai,0);
- sheet(`<h3>Nilai semua reksadana pribadi</h3><div class="tiny">Ketuk tujuan untuk produk yang dipegang, riwayat & asal uangnya.</div>
- ${G.map(g=>`<div class="row" data-rg="${esc(g.tujuan)}"><div class="l"><div class="t1">${esc(g.tujuan)}</div><div class="t2">modal ${rp(g.modal)}</div></div><div class="r"><div>${rp(g.nilai)}</div><div class="tiny ${g.pl>=0?'up':'dn'}">${rp(g.pl)}</div></div><span class="chev">›</span></div>`).join('')}
- <div class="box"><div class="kv"><span>Total modal</span><span>${rp(gm)}</span></div><div class="kv"><span>Total nilai sekarang</span><span>${rp(gn)}</span></div><div class="kv"><b>Untung/rugi</b><b class="${gn-gm>=0?'up':'dn'}">${rp(gn-gm)}</b></div></div>
- <div class="row" data-rg="${KOS_RD}"><div class="l"><div class="t1">Reksadana uang kos mama (milik mama, tidak dijumlahkan)</div><div class="t2">modal ${rp(K.modal)}</div></div><div class="r">${rp(K.nilai)}</div><span class="chev">›</span></div>`)}
-function invV(){LK={};WK={};const P=saham(),G=rdGoals(),K=kosRd(),D=deps(),hold=P.filter(p=>p.lot>0),sold=P.filter(p=>p.lot<=0);
- const tm=hold.reduce((s,p)=>s+p.modal,0),tn=hold.reduce((s,p)=>s+p.nilai,0),real=P.reduce((s,p)=>s+p.real,0),div=allSaham().filter(e=>e.jenis==='Dividen');
- const gm=G.reduce((s,g)=>s+g.modal,0),gn=G.reduce((s,g)=>s+g.nilai,0),dAkt=D.filter(d=>d.aktif),dNil=dAkt.reduce((s,d)=>s+d.modal,0);
- $('main').innerHTML=`<div class="card"><h3>Ringkasan investasi pribadi</h3><div class="g2">
-  <div class="kp" data-x="${FN(sahamSum)}"><div class="a">Saham (nilai)</div><div class="b">${rp(tn)}</div><div class="tiny ${tn-tm>=0?'up':'dn'}">${rp(tn-tm)} dari modal ${rp(tm)}</div></div>
-  <div class="kp" data-x="${FN(rdSum)}"><div class="a">Reksadana (nilai)</div><div class="b">${rp(gn)}</div><div class="tiny ${gn-gm>=0?'up':'dn'}">${rp(gn-gm)} dari modal ${rp(gm)}</div></div>
-  <div class="kp" data-x="${FN(()=>{IT='dep';invV()})}"><div class="a">Deposito aktif</div><div class="b">${rp(dNil)}</div><div class="tiny">${dAkt.length} deposito</div></div>
-  <div class="kp" data-rg="${KOS_RD}"><div class="a">Reksadana uang kos mama</div><div class="b">${rp(K.nilai)}</div><div class="tiny">milik mama, tidak dijumlahkan</div></div></div>
-  <div class="tiny" style="margin-top:6px">${esc(pxInfo())}${S.pxUrl?` · <span class="ac" id="pxNow">perbarui sekarang</span>`:''}</div>
-  <button class="b p" style="width:100%;margin-top:8px" id="invAdd">+ Catat beli / jual investasi</button></div>
- <div class="seg" id="its">${[['saham','Saham'],['rd','Reksadana'],['dep','Deposito']].map(([k,l])=>`<button data-t="${k}" class="${k===IT?'on':''}">${l}</button>`).join('')}</div>
- <div id="itb"></div>`;
+const nf=n=>Math.round(n).toLocaleString('id-ID'),nf2=n=>(+n).toLocaleString('id-ID',{maximumFractionDigits:2});
+const plc=v=>v>=0?'up':'dn',pls=v=>(v>=0?'+':'')+rp(v);
+const evTx=ev=>ev.map(e=>e.tx).filter(i=>i&&byId(i));
+function invData(){const P=saham(),hold=P.filter(p=>p.lot>0),G=rdGoals(),K=kosRd(),D=deps(),dA=D.filter(d=>d.aktif);
+ const sm=hold.reduce((s,p)=>s+p.modal,0),sn=hold.reduce((s,p)=>s+p.nilai,0),gm=G.reduce((s,g)=>s+g.modal,0),gn=G.reduce((s,g)=>s+g.nilai,0),dn=dA.reduce((s,d)=>s+d.modal,0);
+ return{P,hold,G,K,D,dA,sm,sn,gm,gn,dn,tm:sm+gm+dn,tn:sn+gn+dn}}
+function sahamSum(){const I=invData();
+ why({ids:evTx(I.hold.flatMap(p=>p.ev))},'Nilai semua saham yang dipegang',{lines:[['Total modal (invested)',I.sm,null],['Nilai pasar sekarang',I.sn,null],['= Untung/rugi',I.sn-I.sm,null,1]],
+  html:`<h4>Per saham (ketuk untuk rincian)</h4>`+I.hold.map(p=>`<div class="row" data-sk="${esc(p.kode)}"><div class="l"><div class="t1"><b>${esc(p.kode)}</b> · ${nf2(p.lot)} lot</div><div class="t2">modal ${rp(p.modal)}</div></div><div class="r"><div>${rp(p.nilai)}</div><div class="tiny ${plc(p.pl)}">${pls(p.pl)}</div></div><span class="chev">›</span></div>`).join('')+`<div class="tiny">${esc(pxInfo())}</div>`})}
+function rdSum(){const I=invData();
+ why({ids:evTx(I.G.flatMap(g=>g.ev))},'Nilai semua reksadana pribadi',{lines:[['Total modal',I.gm,null],['Nilai sekarang',I.gn,null],['= Untung/rugi',I.gn-I.gm,null,1]],
+  html:`<h4>Per tujuan (ketuk untuk rincian)</h4>`+I.G.filter(g=>g.modal||g.nilai).map(g=>`<div class="row" data-rg="${esc(g.tujuan)}"><div class="l"><div class="t1">${esc(g.tujuan)}</div><div class="t2">modal ${rp(g.modal)}</div></div><div class="r"><div>${rp(g.nilai)}</div><div class="tiny ${plc(g.pl)}">${pls(g.pl)}</div></div><span class="chev">›</span></div>`).join('')})}
+function portoSum(){const I=invData();
+ why({ids:evTx(I.hold.flatMap(p=>p.ev).concat(I.G.flatMap(g=>g.ev))).concat(I.dA.flatMap(depTx))},'Nilai portofolio pribadi',{lines:[['Saham',I.sn,null],['+ Reksadana',I.gn,null],['+ Deposito aktif',I.dn,null],['= Nilai portofolio',I.tn,null,1],['Total modal',I.tm,null],['= Untung/rugi',I.tn-I.tm,null,1]],
+  note:'Reksadana uang kos mama tidak dijumlahkan karena milik mama.'})}
+function samakanBibit(){const G=rdGoals().filter(g=>g.modal||g.nilai);
+ sheet(`<h3>Samakan nilai dengan Bibit</h3><div class="tiny">Buka aplikasi Bibit › Portofolio, lalu ketik "Nilai Portofolio" tiap tujuan di sini. Modal dihitung otomatis dari riwayat pembelian & penjualan.</div>
+ ${G.map((g,i)=>`<div class="kv" style="align-items:center"><span>${esc(g.tujuan)}<div class="tiny">modal ${rp(g.modal)}</div></span><input type="number" inputmode="numeric" id="sb${i}" value="${Math.round(g.nilai)}" style="width:140px;min-height:34px;padding:4px 8px"></div>`).join('')}
+ <div class="kv" style="align-items:center"><span>Reksadana uang kos mama<div class="tiny">modal ${rp(kosRd().modal)}</div></span><input type="number" inputmode="numeric" id="sbk" value="${Math.round(kosRd().nilai)}" style="width:140px;min-height:34px;padding:4px 8px"></div>
+ <button class="b p" style="width:100%;margin-top:10px" id="sbSave">Simpan</button>`,()=>{$('sbSave').onclick=()=>{G.forEach((g,i)=>{const v=+$('sb'+i).value;if(v>=0)S.rdcur[g.tujuan]=v});const k=+$('sbk').value;if(k>=0)S.rdcur.__kos=k;S.rdAt=today;save();closeSheet();invV()}})}
+function invV(){LK={};WK={};const I=invData(),al=[['Pasar uang',I.gn,'#1D9E75'],['Saham',I.sn,'#7F77DD'],['Deposito',I.dn,'#378ADD']],tot=I.tn||1;
+ const card=(icon,title,sub,nilai,pl,attr)=>`<div class="pc" ${attr}><div class="pi">${icon}</div><div style="flex:1;min-width:0"><div class="t1"><b>${esc(title)}</b></div><div class="tiny">${sub}</div>
+  <div class="pr"><div><div class="tiny">Nilai portofolio</div><b>${rp(nilai)}</b></div><div style="text-align:right"><div class="tiny">Keuntungan</div><b class="${plc(pl)}">${pls(pl)}</b></div></div></div></div>`;
+ $('main').innerHTML=`<div class="card hero"><div class="tiny">Nilai portofolio pribadi</div><div class="big ac" data-x="${FN(portoSum)}">${rp(I.tn)}</div>
+  <div class="${plc(I.tn-I.tm)}" style="font-weight:600">${pls(I.tn-I.tm)} (${pct(I.tm?(I.tn-I.tm)/I.tm:null)})</div>
+  <div class="alloc">${al.map(([l,v,c])=>`<div><div class="ab" style="border-color:${c};color:${c}">${Math.round(v/tot*100)}%</div><div class="tiny">${l}</div></div>`).join('')}</div>
+  <div class="tiny" style="margin-top:6px">${esc(pxInfo())}${S.pxUrl?` · <span class="ac" id="pxNow">perbarui</span>`:''}${S.rdAt?` · nilai reksadana per ${fdate(S.rdAt)}`:INV.curAt?` · nilai reksadana per ${fdate(INV.curAt)}`:''}</div>
+  <div class="g2" style="margin-top:8px"><button class="b p" id="invAdd">+ Catat beli / jual</button><button class="b" id="bibit">Samakan dengan Bibit</button></div></div>
+ <div class="seg" id="its">${[['all','Portofolio'],['saham','Saham'],['rd','Reksadana'],['dep','Deposito']].map(([k,l])=>`<button data-t="${k}" class="${k===IT?'on':''}">${l}</button>`).join('')}</div><div id="itb"></div>`;
  document.querySelectorAll('#its button').forEach(b=>b.onclick=()=>{IT=b.dataset.t;invV()});
- $('invAdd').onclick=()=>{EDIT=null;TPL={mode:'inv',ij:IT==='rd'?'rd':IT==='dep'?'dep':'saham'};go('add')};
+ $('invAdd').onclick=()=>{EDIT=null;TPL={mode:'inv',ij:IT==='rd'?'rd':IT==='dep'?'dep':'saham'};go('add')};$('bibit').onclick=samakanBibit;
  if($('pxNow'))$('pxNow').onclick=()=>refreshPx(false);
- const box=$('itb'),divH=div.filter(e=>!e.riba),divR=div.filter(e=>e.riba),dIds=a=>a.map(e=>e.tx).filter(Boolean);
- if(IT==='saham')box.innerHTML=`<div class="card"><h3>Saham dipegang (ketuk untuk riwayat & asal uang)</h3>${hold.map(p=>`<div class="row" data-sk="${esc(p.kode)}"><div class="l"><div class="t1"><b>${esc(p.kode)}</b> · ${p.lot} lot</div><div class="t2">modal ${rp(p.modal)} · harga ${p.harga.toLocaleString('id-ID')}</div></div><div class="r"><div>${rp(p.nilai)}</div><div class="tiny ${p.pl>=0?'up':'dn'}">${rp(p.pl)} (${pct(p.modal?p.pl/p.modal:null)})</div></div><span class="chev">›</span></div>`).join('')||'<div class="tiny">Belum ada</div>'}</div>
-  <div class="card"><h3>Saham yang sudah dijual semua</h3>${sold.map(p=>`<div class="row" data-sk="${esc(p.kode)}"><div class="l">${esc(p.kode)}</div><div class="r ${p.real>=0?'up':'dn'}">${rp(p.real)}</div><span class="chev">›</span></div>`).join('')}
-   <div class="kv"><b>Total untung terealisasi (semua saham)</b><b>${X(rp(real),{ids:allSaham().filter(e=>e.jenis==='Jual').map(e=>e.tx).filter(Boolean)},'Penjualan saham',{html:`<h4>Untung per penjualan</h4>`+allSaham().filter(e=>e.jenis==='Jual').sort((a,b)=>b.tgl.localeCompare(a.tgl)).map(e=>`<div class="kv"><span>${esc(e.kode)} · ${fdate(e.tgl)} · ${e.lot} lot</span><span class="${e.untung>=0?'up':'dn'}">${e.tx?`<span class="ac" data-tx="${e.tx}">${rp(e.untung)}</span>`:rp(e.untung)}</span></div>`).join('')})}</b></div></div>
-  <div class="card"><h3>Dividen</h3><div class="kv"><span>Dividen halal (pendapatan)</span><span>${X(rp(divH.reduce((s,e)=>s+e.total,0)),{ids:dIds(divH)},'Dividen halal')}</span></div>
-   <div class="kv"><span>Dividen bank (riba, dipisahkan)</span><span>${X(rp(divR.reduce((s,e)=>s+e.total,0)),{ids:dIds(divR)},'Dividen riba')}</span></div>
-   ${div.slice().sort((a,b)=>b.tgl.localeCompare(a.tgl)).map(e=>`<div class="row" ${e.tx?`data-tx="${e.tx}"`:''}><div class="l"><div class="t1">${esc(e.kode)} ${e.riba?'<span class="pill n">riba</span>':''}</div><div class="t2">${fdate(e.tgl)}${e.alokasi?' · '+esc(e.alokasi):''}</div></div><div class="r up">${rp(e.total)}</div></div>`).join('')}</div>`;
- if(IT==='rd')box.innerHTML=`<div class="card"><h3>Reksadana per tujuan (ketuk untuk produk, riwayat & asal uang)</h3>${G.map(g=>`<div class="row" data-rg="${esc(g.tujuan)}"><div class="l"><div class="t1">${esc(g.tujuan)}</div><div class="t2">modal ${rp(g.modal)} · ${g.hold.length?esc(g.produk):'tidak ada produk dipegang'}</div></div><div class="r"><div>${rp(g.nilai)}</div><div class="tiny ${g.pl>=0?'up':'dn'}">${rp(g.pl)}</div></div><span class="chev">›</span></div>`).join('')}</div>
-  <div class="card"><h3>Milik mama</h3><div class="row" data-rg="${KOS_RD}"><div class="l"><div class="t1">Reksadana uang kos mama</div><div class="t2">modal ${rp(K.modal)}</div></div><div class="r"><div>${rp(K.nilai)}</div><div class="tiny ${K.nilai-K.modal>=0?'up':'dn'}">${rp(K.nilai-K.modal)}</div></div><span class="chev">›</span></div></div>`;
+ const box=$('itb');
+ if(IT==='all'){box.innerHTML=`<div class="card"><h3>Portofolio (ketuk kartu untuk rincian)</h3>
+  ${card('📈','Saham',I.hold.length+' saham',I.sn,I.sn-I.sm,`data-x="${FN(()=>{IT='saham';invV()})}"`)}
+  ${I.G.filter(g=>g.modal||g.nilai).map(g=>card('🌱',g.tujuan,(g.hold.length||0)+' produk · '+esc(g.produk||'-'),g.nilai,g.pl,`data-rg="${esc(g.tujuan)}"`)).join('')}
+  ${I.dA.length?card('🏦','Deposito',I.dA.length+' aktif',I.dn,0,`data-x="${FN(()=>{IT='dep';invV()})}"`):''}</div>
+  <div class="card"><h3>Milik mama (tidak dijumlahkan)</h3>${card('🏠','Reksadana uang kos mama','1 produk',I.K.nilai,I.K.nilai-I.K.modal,`data-rg="${KOS_RD}"`)}</div>`}
+ if(IT==='saham'){const sold=I.P.filter(p=>p.lot<=0),real=I.P.reduce((s,p)=>s+p.real,0),div=allSaham().filter(e=>e.jenis==='Dividen'),divH=div.filter(e=>!e.riba),divR=div.filter(e=>e.riba);
+  box.innerHTML=`<div class="card"><div class="g3"><div class="kp" data-x="${FN(sahamSum)}"><div class="a">Invested</div><div class="b">${nf(I.sm)}</div></div><div class="kp" data-x="${FN(sahamSum)}"><div class="a">P&L</div><div class="b ${plc(I.sn-I.sm)}">${(I.sn-I.sm>=0?'+':'')+nf(I.sn-I.sm)}</div><div class="tiny ${plc(I.sn-I.sm)}">${pct(I.sm?(I.sn-I.sm)/I.sm:null)}</div></div><div class="kp" data-x="${FN(sahamSum)}"><div class="a">Total Equity</div><div class="b">${nf(I.sn)}</div></div></div></div>
+  <div class="card sb"><div class="sbh"><div>Kode<br>Lot</div><div>Invested<br>Avg Price</div><div>Market<br>Harga</div><div>P&L<br>Gain</div></div>
+   ${I.hold.map(p=>`<div class="sbr" data-sk="${esc(p.kode)}"><div><b>${esc(p.kode)}</b><br><span class="tiny">${nf2(p.lot)} Lot</span></div><div>${nf(p.modal)}<br><span class="tiny">${nf2(p.avg)}</span></div><div>${nf(p.nilai)}<br><span class="tiny ${p.harga>=p.avg?'up':'dn'}">${nf2(p.harga)}</span></div><div class="${plc(p.pl)}"><b>${(p.pl>=0?'+':'')+nf(p.pl)}</b><br><span class="tiny ${plc(p.pl)}">${pct(p.modal?p.pl/p.modal:null)}</span></div></div>`).join('')}</div>
+  <div class="card"><h3>Saham yang sudah dijual semua</h3>${sold.map(p=>`<div class="row" data-sk="${esc(p.kode)}"><div class="l">${esc(p.kode)}</div><div class="r ${plc(p.real)}">${rp(p.real)}</div><span class="chev">›</span></div>`).join('')}
+   <div class="kv"><b>Total untung terealisasi</b><b>${X(rp(real),{ids:evTx(allSaham().filter(e=>e.jenis==='Jual'))},'Penjualan saham')}</b></div></div>
+  <div class="card"><h3>Dividen</h3><div class="kv"><span>Dividen halal (pendapatan)</span><span>${X(rp(divH.reduce((s,e)=>s+e.total,0)),{ids:evTx(divH)},'Dividen halal')}</span></div>
+   <div class="kv"><span>Dividen bank (riba, dipisahkan)</span><span>${X(rp(divR.reduce((s,e)=>s+e.total,0)),{ids:evTx(divR)},'Dividen riba')}</span></div>
+   ${div.slice().sort((a,b)=>b.tgl.localeCompare(a.tgl)).map(e=>`<div class="row" ${e.tx?`data-tx="${e.tx}"`:''}><div class="l"><div class="t1">${esc(e.kode)} ${e.riba?'<span class="pill n">riba</span>':''}</div><div class="t2">${fdate(e.tgl)}${e.alokasi?' · '+esc(e.alokasi):''}</div></div><div class="r up">${rp(e.total)}</div></div>`).join('')}</div>`}
+ if(IT==='rd')box.innerHTML=`<div class="card"><div class="g3"><div class="kp" data-x="${FN(rdSum)}"><div class="a">Modal</div><div class="b">${nf(I.gm)}</div></div><div class="kp" data-x="${FN(rdSum)}"><div class="a">Keuntungan</div><div class="b ${plc(I.gn-I.gm)}">${(I.gn-I.gm>=0?'+':'')+nf(I.gn-I.gm)}</div></div><div class="kp" data-x="${FN(rdSum)}"><div class="a">Nilai</div><div class="b">${nf(I.gn)}</div></div></div></div>
+  <div class="card"><h3>Per tujuan (ketuk untuk produk, riwayat & asal uang)</h3>${I.G.filter(g=>g.modal||g.nilai).map(g=>card('🌱',g.tujuan,g.hold.length?esc(g.produk):'tidak ada produk dipegang',g.nilai,g.pl,`data-rg="${esc(g.tujuan)}"`)).join('')}</div>
+  <div class="card"><h3>Milik mama</h3>${card('🏠','Reksadana uang kos mama','modal '+rp(I.K.modal),I.K.nilai,I.K.nilai-I.K.modal,`data-rg="${KOS_RD}"`)}</div>`;
  if(IT==='dep'){const bh=idsOf(t=>t.kt==='Hasil investasi: bagi hasil deposito'),rb=idsOf(t=>t.sb==='Dana riba'&&/deposito|bpr|kirana/i.test(t.ket));
   const dr=d=>`<div class="row" data-dp="${d.id}"><div class="l"><div class="t1">${esc(d.bpr)}</div><div class="t2">${fdate(d.aju)} → ${fdate(d.tempo)} · ${d.tenor} bln · ${esc(d.status||'')}</div></div><div class="r">${rp(d.modal)}</div><span class="chev">›</span></div>`;
-  box.innerHTML=`<div class="card"><h3>Deposito aktif</h3>${dAkt.map(dr).join('')||'<div class="tiny">Tidak ada deposito aktif. Semua deposito 2024 sudah cair.</div>'}
+  box.innerHTML=`<div class="card"><h3>Deposito aktif</h3>${I.dA.map(dr).join('')||'<div class="tiny">Tidak ada deposito aktif. Semua deposito 2024 sudah cair.</div>'}
    <div class="kv"><span>Saldo akun Deposito BPR</span><span class="ac" data-acc="Deposito BPR">${rp(bal('Deposito BPR'))}</span></div>
    <div class="kv"><span>Total bagi hasil (halal)</span><span>${X(rp(sum(t=>bh.includes(t.id))),{ids:bh},'Bagi hasil deposito')}</span></div>
    <div class="kv"><span>Bunga deposito konvensional (riba)</span><span>${X(rp(sum(t=>rb.includes(t.id))),{ids:rb},'Bunga deposito (riba)')}</span></div></div>
-  <div class="card"><h3>Riwayat semua deposito (ketuk untuk transaksinya)</h3>${D.slice().reverse().map(dr).join('')}</div>`}}
+  <div class="card"><h3>Riwayat semua deposito</h3>${I.D.slice().reverse().map(dr).join('')}</div>`}}
 function evSrc(e){if(!e.tx)return`<div class="tiny">${e.tgl<'2025-01-01'?'Sebelum 2025 / dari catatan HP (tidak ada transaksi kas)':'Tidak ada transaksi kas (pindah antar produk/tujuan)'}</div>`;
  const t=byId(e.tx);if(!t)return'<div class="tiny">Transaksi kasnya sudah dihapus</div>';let h=`<div class="tiny">Kas: <span class="ac" data-tx="${t.id}">${esc(t.a)} · ${rp(t.j)} · ${fdate(t.d)}</span></div>`;
  if(e.dana&&e.dana.length){h+=`<div class="tiny">Asal dana sebelumnya: `+e.dana.map(i=>{const x=byId(i);return x?`<span class="ac" data-tx="${x.id}">${esc(x.t==='T'?'dari '+x.a:(x.sb==='Pindah akun'?x.ket.slice(0,45):x.sb+': '+x.kt))} ${rp(x.j)} (${fdate(x.d)})</span>`:''}).join(', ')+'</div>'}
  return h+(e.app?'<div class="tiny">Dicatat dari aplikasi</div>':'')}
+function evList(ev,amt,extra){return ev.map(e=>`<div style="padding:8px 0;border-top:1px solid var(--line)"><div><b>${e.jenis}</b> · ${fdate(e.tgl)} ${e.lot?'· '+nf2(e.lot)+' lot':''} <span style="float:right">${e.tx&&byId(e.tx)?`<span class="ac" data-tx="${e.tx}">${rp(amt(e))}</span>`:rp(amt(e))}</span></div>${extra(e)}${evSrc(e)}</div>`).join('')}
 function sahamSheet(k){const p=saham().find(x=>x.kode===k);if(!p)return;const ev=p.ev.slice().sort((a,b)=>b.tgl.localeCompare(a.tgl));
- const by=j=>ev.filter(e=>e.jenis===j),txs=a=>a.map(e=>e.tx).filter(Boolean),S_=a=>a.reduce((s,e)=>s+(e.total||0),0),B=by('Beli'),J=by('Jual'),Dv=by('Dividen');
- sheet(`<h3>Saham ${esc(k)}</h3><div class="box">
- <div class="kv"><span>Total dibeli (${p.blot} lot, termasuk fee)</span><span>${L(rp(S_(B)),{ids:txs(B),title:'Pembelian '+k})}</span></div>
- <div class="kv"><span>Dijual</span><span>${p.slot} lot${J.length?' · '+L(rp(S_(J)),{ids:txs(J),title:'Penjualan '+k}):''}</span></div>
- <div class="kv"><b>Lot dipegang</b><b>${p.lot} lot (${(p.lot*100).toLocaleString('id-ID')} lembar)</b></div>
- ${p.lot>0?`<div class="kv"><span>Modal = ${rp(p.cost)} × ${p.lot}/${p.blot} lot</span><span>${rp(p.modal)}</span></div>
- <div class="kv"><span>Harga terakhir ${S.pxAt&&S.price[k]?'(otomatis)':'(ubah manual)'}</span><span><input type="number" id="hp" value="${p.harga}" style="width:110px;min-height:30px;padding:3px 6px"></span></div>
- <div class="kv"><span>Nilai = ${p.lot*100} × ${p.harga.toLocaleString('id-ID')}</span><span>${rp(p.nilai)}</span></div><div class="kv"><b>Untung/rugi</b><b class="${p.pl>=0?'up':'dn'}">${rp(p.pl)} (${pct(p.modal?p.pl/p.modal:null)})</b></div>`:''}
- <div class="kv"><span>Untung terealisasi dari penjualan</span><span class="${p.real>=0?'up':'dn'}">${J.length?L(rp(p.real),{ids:txs(J),title:'Penjualan '+k}):rp(0)}</span></div>
- <div class="kv"><span>Dividen diterima</span><span>${Dv.length?L(rp(S_(Dv)),{ids:txs(Dv),title:'Dividen '+k}):rp(0)}</span></div></div>
- <h4>Riwayat & asal-usul uang (ketuk untuk transaksinya)</h4>${ev.map(e=>`<div style="padding:8px 0;border-top:1px solid var(--line)">
-  <div><b>${e.jenis}</b> · ${fdate(e.tgl)} ${e.lot?'· '+e.lot+' lot':''} <span style="float:right">${e.tx?`<span class="ac" data-tx="${e.tx}">${rp(e.total)}</span>`:rp(e.total)}</span></div>
-  ${e.jenis==='Beli'?`<div class="tiny">Harga ${(e.harga||0).toLocaleString('id-ID')} · nilai ${rp(e.nilai)} + fee ${rp(e.fee)}${e.sumber?' · sumber: '+esc(e.sumber):''}</div>`:''}
-  ${e.jenis==='Jual'?`<div class="tiny">Harga ${(e.harga||0).toLocaleString('id-ID')} · modal ${rp(e.modal)} → untung <span class="${e.untung>=0?'up':'dn'}">${rp(e.untung)}</span></div>`:''}
-  ${e.jenis==='Dividen'?`<div class="tiny">${e.riba?'Riba — dipisahkan ke Dana riba':'Halal — pendapatan'}${e.alokasi?' · dipakai untuk: '+esc(e.alokasi):''}</div>`:''}${evSrc(e)}</div>`).join('')}`,
- ()=>{if($('hp'))$('hp').onchange=ev=>{S.price[k]=+ev.target.value||0;save();closeSheet();invV()}})}
+ const by=j=>ev.filter(e=>e.jenis===j),S_=a=>a.reduce((s,e)=>s+(e.total||0),0),B=by('Beli'),J=by('Jual'),Dv=by('Dividen');
+ const lines=[['Total dibeli ('+nf2(p.blot)+' lot, termasuk fee)',S_(B),{ids:evTx(B)}],['Dijual ('+nf2(p.slot)+' lot)',S_(J),{ids:evTx(J)}]];
+ if(p.lot>0)lines.push(['Lot dipegang: '+nf2(p.lot)+' lot',p.lot*100,null],['Modal (rata-rata '+nf2(p.avg)+'/lembar)',p.modal,null],['Nilai = '+nf(p.lot*100)+' × '+nf2(p.harga),p.nilai,null],['= Untung/rugi',p.pl,null,1]);
+ lines.push(['Untung terealisasi',p.real,{ids:evTx(J)}],['Dividen diterima',S_(Dv),{ids:evTx(Dv)}]);
+ lines.forEach(l=>{if(/Lot dipegang/.test(l[0]))l[1]=NaN});
+ why({ids:evTx(ev)},'Saham '+k,{lines:lines.filter(l=>!isNaN(l[1])),
+  html:(p.lot>0?`<div class="kv"><span>Harga terakhir ${S.pxAt&&S.price[k]?'(otomatis)':'(ubah manual)'} · ${nf2(p.lot)} lot</span><span><input type="number" id="hp" value="${p.harga}" style="width:110px;min-height:30px;padding:3px 6px"></span></div>`:'')+
+   `<div class="tiny">Modal dihitung seperti Stockbit: harga rata-rata pembelian sejak kamu memegang saham ini; kalau pernah dijual semua, hitungan dimulai lagi dari pembelian berikutnya.</div>
+   <h4>Riwayat & asal-usul uang</h4>`+evList(ev,e=>e.total,e=>e.jenis==='Beli'?`<div class="tiny">Harga ${nf2(e.harga||0)} · nilai ${rp(e.nilai)} + fee ${rp(e.fee)}${e.sumber?' · sumber: '+esc(e.sumber):''}</div>`:e.jenis==='Jual'?`<div class="tiny">Harga ${nf2(e.harga||0)} · modal ${rp(e.modal)} → untung <span class="${plc(e.untung)}">${rp(e.untung)}</span></div>`:`<div class="tiny">${e.riba?'Riba — dipisahkan ke Dana riba':'Halal — pendapatan'}${e.alokasi?' · dipakai untuk: '+esc(e.alokasi):''}</div>`),
+  bind:()=>{if($('hp'))$('hp').onchange=ev=>{S.price[k]=+ev.target.value||0;save();closeSheet();invV()}}})}
 function rdSheet(g){const x=rdGoals().find(z=>z.tujuan===g);if(!x)return;const ev=x.ev.slice().sort((a,b)=>b.tgl.localeCompare(a.tgl));
- const txs=a=>a.flatMap(rdTxIds),B=x.ev.filter(e=>e.jenis==='Beli'),J=x.ev.filter(e=>e.jenis==='Jual'),c=INV.cur[g]||[0,0];
- sheet(`<h3>${esc(g)}</h3><div class="box">
- <div class="kv"><span>Modal di file portofolio</span><span>${rp(c[0])}</span></div>
- ${x.appNet?`<div class="kv"><span>+ Beli − jual yang dicatat di aplikasi</span><span>${L(rp(x.appNet),{ids:x.ev.filter(e=>e.app).map(e=>e.tx).filter(Boolean),title:g+' · dari aplikasi'})}</span></div>`:''}
- <div class="kv"><b>= Modal sekarang</b><b>${rp(x.modal)}</b></div>
- <div class="kv"><span>Nilai sekarang (samakan dengan aplikasi Bibit/Stockbit)</span><span><input type="number" id="rn" value="${Math.round(x.nilai)}" style="width:130px;min-height:30px;padding:3px 6px"></span></div>
- <div class="kv"><b>Untung/rugi</b><b class="${x.pl>=0?'up':'dn'}">${rp(x.pl)}</b></div></div>
- <h4>Produk yang masih dipegang</h4>${x.hold.map(p=>`<div class="row" data-l="${LKs({ids:txs(p.ev),title:g+' · '+p.produk})}"><div class="l"><div class="t1">${esc(p.produk)}</div><div class="t2">beli ${rp(p.beli)} − jual ${rp(p.jual)} · terakhir ${fdate(p.last)}</div></div><div class="r">${rp(p.sisa)}</div><span class="chev">›</span></div>`).join('')||'<div class="tiny">Tidak ada produk yang masih dipegang.</div>'}
- ${Object.values(x.prod).filter(p=>Math.round(p.beli-p.jual)<1000).length?`<h4>Produk yang sudah dijual semua</h4>`+Object.values(x.prod).filter(p=>Math.round(p.beli-p.jual)<1000).map(p=>`<div class="row" data-l="${LKs({ids:txs(p.ev),title:g+' · '+p.produk})}"><div class="l"><div class="t1">${esc(p.produk)}</div><div class="t2">terakhir ${fdate(p.last)}</div></div><div class="r tiny">sudah dijual</div><span class="chev">›</span></div>`).join(''):''}
- <h4>Total riwayat</h4><div class="kv"><span>Total dibeli (modal)</span><span>${L(rp(x.beli),{ids:txs(B),title:g+' · pembelian'})}</span></div>
- <div class="kv"><span>− Total dijual (modal)</span><span>${L(rp(x.jual),{ids:txs(J),title:g+' · penjualan'})}</span></div>
- <div class="kv"><span>= Sisa modal menurut riwayat</span><span>${rp(x.riwayat)}</span></div>
- <div class="kv"><span>Untung yang sudah dicairkan</span><span>${rp(x.untung)}</span></div>
- ${Math.abs(x.riwayat-x.modal)>=1000?`<div class="st w">Modal di file portofolio (${rp(x.modal)}) berbeda ${rp(x.riwayat-x.modal)} dengan riwayat beli − jual (${rp(x.riwayat)}). Kemungkinan ada pembelian/penjualan yang tercatat di salah satunya saja. Cocokkan dengan aplikasi Bibit/Stockbit.</div>`:''}
- <h4>Riwayat & asal-usul uang</h4>${ev.map(e=>`<div style="padding:8px 0;border-top:1px solid var(--line)"><div><b>${e.jenis}</b> · ${fdate(e.tgl)} <span style="float:right">${e.tx?`<span class="ac" data-tx="${e.tx}">${rp(e.jenis==='Beli'?e.modal:e.nilai)}</span>`:rp(e.jenis==='Beli'?e.modal:e.nilai)}</span></div>
-  <div class="tiny">${esc(e.produk)}${e.ket?' · '+esc(e.ket):''}${e.sumber?' · sumber: '+esc(e.sumber):''}${e.alokasi?' · dipakai: '+esc(e.alokasi):''}${e.jenis==='Jual'?' · modal '+rp(e.modal)+' · untung '+rp(e.untung):''}</div>${evSrc(e)}</div>`).join('')}`,
- ()=>{$('rn').onchange=ev=>{S.rdcur[g]=+ev.target.value||0;save();closeSheet();invV()}})}
-function kosRdSheet(){const K=kosRd(),ids=idsOf(isKosRd),dis=sum(t=>isKosRd(t)&&t.t==='K'),cair=sum(t=>isKosRd(t)&&t.t==='M');
- sheet(`<h3>Reksadana uang kos mama</h3><div class="tiny">Uang ini milik mama, tidak dihitung sebagai investasi pribadimu.</div><div class="box">
- <div class="kv"><span>Modal di file portofolio</span><span>${rp(INV.kos[0])}</span></div>
- ${K.ev.length?`<div class="kv"><span>+ Beli − jual dari aplikasi</span><span>${L(rp(K.modal-INV.kos[0]),{ids:K.ev.map(e=>e.tx).filter(Boolean),title:'Reksadana uang kos mama · dari aplikasi'})}</span></div>`:''}
- <div class="kv"><b>= Modal sekarang</b><b>${rp(K.modal)}</b></div>
- <div class="kv"><span>Nilai sekarang</span><span><input type="number" id="kn" value="${Math.round(K.nilai)}" style="width:130px;min-height:30px;padding:3px 6px"></span></div>
- <div class="kv"><b>Untung/rugi</b><b class="${K.nilai-K.modal>=0?'up':'dn'}">${rp(K.nilai-K.modal)}</b></div></div>
- <h4>Semua transaksi kas</h4><div class="kv"><span>Disetor dari uang kos</span><span>${L(rp(dis),{ids:idsOf(t=>isKosRd(t)&&t.t==='K'),title:'Setor reksadana uang kos mama'})}</span></div>
- <div class="kv"><span>Dicairkan</span><span>${L(rp(cair),{ids:idsOf(t=>isKosRd(t)&&t.t==='M'),title:'Pencairan reksadana uang kos mama'})}</span></div>
- <button class="b p" style="width:100%;margin-top:10px" data-l="${LKs({ids,title:'Reksadana uang kos mama'})}">Lihat semua ${ids.length} transaksi</button>`,
- ()=>{$('kn').onchange=ev=>{S.rdcur.__kos=+ev.target.value||0;save();closeSheet();invV()}})}
-function depSheet(id){const d=deps().find(z=>z.id===id);if(!d)return;const ids=depTx(d),tx=ids.map(byId).filter(Boolean).sort((a,b)=>a.d.localeCompare(b.d));
- sheet(`<h3>Deposito ${esc(d.bpr)}</h3><div class="box">
- <div class="kv"><span>Pokok</span><span>${rp(d.modal)}</span></div><div class="kv"><span>Mulai → jatuh tempo</span><span>${fdate(d.aju)} → ${fdate(d.tempo)}</span></div>
- <div class="kv"><span>Tenor</span><span>${d.tenor} bulan</span></div><div class="kv"><span>${d.riba?'Bunga':'Bunga / nisbah'} per tahun</span><span>${((d.bunga||0)*100).toFixed(2)}%${d.riba?' <span class="pill n">riba</span>':''}</span></div>
- ${d.untung?`<div class="kv"><span>Hasil (dari file)</span><span>${rp(d.untung)}</span></div>`:''}<div class="kv"><span>Status</span><span>${esc(d.status||'')}</span></div></div>
- <h4>${d.src==='app'?'Transaksi deposito ini':'Transaksi terkait (dicari dari nama bank)'}</h4>${tx.map(txRow).join('')||'<div class="tiny">Tidak ditemukan transaksi kas</div>'}
- ${ids.length?`<button class="b p" style="width:100%;margin-top:10px" data-l="${LKs({ids,title:'Deposito '+d.bpr})}">Lihat di Riwayat</button>`:''}`)}
+ const txs=a=>a.flatMap(rdTxIds),B=x.ev.filter(e=>e.jenis==='Beli'),J=x.ev.filter(e=>e.jenis==='Jual');
+ why({ids:txs(ev)},g,{lines:[['Total dibeli (modal)',x.beli,{ids:txs(B)}],['− Total dijual (modal)',x.jual,{ids:txs(J)}],['= Modal sekarang',x.modal,null,1],['Nilai sekarang',x.nilai,null],['= Untung/rugi',x.pl,null,1],['Untung yang sudah dicairkan',x.untung,{ids:txs(J)}]],
+  html:`<div class="kv"><span>Ubah nilai sekarang (samakan dengan Bibit)</span><span><input type="number" id="rn" value="${Math.round(x.nilai)}" style="width:130px;min-height:30px;padding:3px 6px"></span></div>
+  <h4>Produk yang masih dipegang</h4>${x.hold.map(p=>`<div class="row" data-l="${LKs({ids:txs(p.ev),title:g+' · '+p.produk})}"><div class="l"><div class="t1">${esc(p.produk)}</div><div class="t2">beli ${rp(p.beli)} − jual ${rp(p.jual)} · terakhir ${fdate(p.last)}</div></div><div class="r">${rp(p.sisa)}</div><span class="chev">›</span></div>`).join('')||'<div class="tiny">Tidak ada produk yang masih dipegang.</div>'}
+  ${Object.values(x.prod).filter(p=>Math.round(p.beli-p.jual)<1000).length?`<h4>Produk yang sudah dijual semua</h4>`+Object.values(x.prod).filter(p=>Math.round(p.beli-p.jual)<1000).map(p=>`<div class="row" data-l="${LKs({ids:txs(p.ev),title:g+' · '+p.produk})}"><div class="l"><div class="t1">${esc(p.produk)}</div><div class="t2">terakhir ${fdate(p.last)}</div></div><div class="r tiny">sudah dijual</div><span class="chev">›</span></div>`).join(''):''}
+  <h4>Riwayat & asal-usul uang</h4>`+evList(ev,e=>e.jenis==='Beli'?e.modal:e.nilai,e=>`<div class="tiny">${esc(e.produk)}${e.ket?' · '+esc(e.ket):''}${e.sumber?' · sumber: '+esc(e.sumber):''}${e.alokasi?' · dipakai: '+esc(e.alokasi):''}${e.jenis==='Jual'?' · modal '+rp(e.modal)+' · untung '+rp(e.untung):''}</div>`),
+  bind:()=>{$('rn').onchange=ev=>{S.rdcur[g]=+ev.target.value||0;S.rdAt=today;save();closeSheet();invV()}}})}
+function kosRdSheet(){const K=kosRd(),ids=idsOf(isKosRd);
+ why({ids},'Reksadana uang kos mama',{lines:[['Modal di file portofolio',INV.kos[0],null],['+ Beli − jual dari aplikasi',K.modal-INV.kos[0],{ids:evTx(K.ev)}],['= Modal sekarang',K.modal,null,1],['Nilai sekarang',K.nilai,null],['= Untung/rugi',K.nilai-K.modal,null,1],
+  ['Disetor dari uang kos (semua waktu)',sum(t=>isKosRd(t)&&t.t==='K'),{ids:idsOf(t=>isKosRd(t)&&t.t==='K')}],['Dicairkan (semua waktu)',sum(t=>isKosRd(t)&&t.t==='M'),{ids:idsOf(t=>isKosRd(t)&&t.t==='M')}]],
+  html:`<div class="kv"><span>Ubah nilai sekarang</span><span><input type="number" id="kn" value="${Math.round(K.nilai)}" style="width:130px;min-height:30px;padding:3px 6px"></span></div>`,note:'Uang ini milik mama, tidak dihitung sebagai investasi pribadimu.',
+  bind:()=>{$('kn').onchange=ev=>{S.rdcur.__kos=+ev.target.value||0;save();closeSheet();invV()}}})}
+function depSheet(id){const d=deps().find(z=>z.id===id);if(!d)return;const ids=depTx(d);
+ why({ids},'Deposito '+d.bpr,{lines:[['Pokok',d.modal,null],...(d.untung?[['Hasil (dari file)',d.untung,null]]:[])],
+  html:`<div class="kv"><span>Mulai → jatuh tempo</span><span>${fdate(d.aju)} → ${fdate(d.tempo)}</span></div><div class="kv"><span>Tenor · bunga/nisbah</span><span>${d.tenor} bln · ${((d.bunga||0)*100).toFixed(2)}%${d.riba?' <span class="pill n">riba</span>':''}</span></div><div class="kv"><span>Status</span><span>${esc(d.status||'')}</span></div>`,
+  note:d.src==='app'?'':'Transaksi dicari dari nama bank di keterangan.'})}
 /* ================= RENCANA ================= */
 function plan(){LK={};WK={};const G=rdGoals(),g=n=>G.find(x=>x.tujuan===n)||{nilai:0,modal:0};
  const e6=[...Array(6)].map((_,i)=>{const d=new Date();d.setMonth(d.getMonth()-1-i);return expense(ds(new Date(d.getFullYear(),d.getMonth(),1)),mEnd(d.getFullYear(),d.getMonth()),'Pengeluaran Gaji')+expense(ds(new Date(d.getFullYear(),d.getMonth(),1)),mEnd(d.getFullYear(),d.getMonth()),'Pengeluaran Jasa')});
@@ -447,23 +447,45 @@ function plan(){LK={};WK={};const G=rdGoals(),g=n=>G.find(x=>x.tujuan===n)||{nil
  const A=M6[5].a,Z=M6[0].b;
  const wI=[{ids:idsOf(t=>inR(t,A,Z)&&t.tj==='Pendapatan'&&(t.sb==='Gaji'||t.sb==='Jasa'))},'Pendapatan pribadi 6 bulan',{lines:M6.map((m,i)=>[m.l,i6[i],{ids:idsOf(t=>inR(t,m.a,m.b)&&t.tj==='Pendapatan'&&(t.sb==='Gaji'||t.sb==='Jasa'))}]).concat([['Jumlah 6 bulan',i6.reduce((a,b)=>a+b,0),null],['= Rata-rata per bulan (÷6)',avgI,null,1]])}];
  const wE=[{ids:idsOf(t=>inR(t,A,Z)&&t.tj==='Pengeluaran'&&(t.sb==='Pengeluaran Gaji'||t.sb==='Pengeluaran Jasa'))},'Pengeluaran pribadi 6 bulan',{lines:M6.map((m,i)=>[m.l,e6[i],{ids:idsOf(t=>inR(t,m.a,m.b)&&t.tj==='Pengeluaran'&&(t.sb==='Pengeluaran Gaji'||t.sb==='Pengeluaran Jasa'))}]).concat([['Jumlah 6 bulan',e6.reduce((a,b)=>a+b,0),null],['= Rata-rata per bulan (÷6)',avgE,null,1]])}];
- const base=[{n:'Dana Darurat',t:Math.round(avgE*6),g:'Dana Darurat',dl:'',note:'Target = 6× rata-rata pengeluaran pribadi bulanan'},{n:'Dana Kuliah',t:36000000,g:'Dana Kuliah',dl:'',note:'Target dari simulasi di file portofoliomu'},{n:'Dana Beli Laptop',t:6000000,g:'Dana Beli Laptop',dl:'',note:''}];
+ const base=[{n:'Dana Darurat',t:Math.round(avgE*6),g:'Dana Darurat',dl:'',note:'Target = 6× rata-rata pengeluaran pribadi bulanan'},{n:'Dana Kuliah',t:0,g:'Dana Kuliah',dl:'',kuliah:1,note:'Target = total biaya kuliah sampai wisuda (lihat rincian di bawah)'},{n:'Dana Beli Laptop',t:6000000,g:'Dana Beli Laptop',dl:'',note:''}];
  const all=[...base.map(b=>({...b,...(S.goals.find(x=>x.n===b.n)||{})})),...S.goals.filter(x=>!base.find(b=>b.n===x.n))];
  const mo=dl=>{if(!dl)return null;const d=pd(dl),n=new Date();return Math.max(1,(d.getFullYear()-n.getFullYear())*12+d.getMonth()-n.getMonth())};
  $('main').innerHTML=`<div class="card"><h3>Kemampuan menabung (6 bulan terakhir)</h3>
   <div class="kv"><span>Rata-rata pendapatan pribadi (gaji + jasa)</span><span>${X(rp(avgI),...wI)}</span></div>
   <div class="kv"><span>Rata-rata pengeluaran pribadi</span><span>${X(rp(avgE),...wE)}</span></div>
   <div class="kv"><b>Bisa ditabung per bulan</b><b class="${sur>=0?'up':'dn'}">${X(rp(sur),{ids:wI[0].ids.concat(wE[0].ids)},'Bisa ditabung per bulan',{lines:[['Rata-rata pendapatan pribadi',avgI,null],['− Rata-rata pengeluaran pribadi',avgE,null],['= Bisa ditabung per bulan',sur,null,1]]})}</b></div></div>
- <div class="card"><h3>Tujuan keuangan (terhubung ke reksadana per tujuan)</h3>${all.map((x,i)=>{const cur=x.g?g(x.g).nilai:(x.got||0),p=x.t?Math.min(1,cur/x.t):0,sisa=Math.max(0,x.t-cur),m=mo(x.dl),need=m?sisa/m:null;
+ <div class="card"><h3>Tujuan keuangan (terhubung ke reksadana per tujuan)</h3>${all.map((x,i)=>{const KU=x.kuliah?kuliahCtx():null;if(KU)x.t=KU.target;const cur=KU?KU.dibayar+KU.dana:x.g?g(x.g).nilai:(x.got||0),p=x.t?Math.min(1,cur/x.t):0,sisa=Math.max(0,x.t-cur),m=mo(x.dl),need=m?sisa/m:null;
   return`<div style="padding:10px 0;border-top:1px solid var(--line)"><div style="display:flex;justify-content:space-between"><b>${esc(x.n)}</b><span class="pill ${p>=1?'':(need!=null&&need>sur?'w':'')}">${p>=1?'Tercapai':need==null?'Atur tenggat':need<=sur?'Sesuai jalur':'Perlu usaha lebih'}</span></div>
   <div class="tiny">${x.g?`<span class="ac" data-rg="${esc(x.g)}">${rp(cur)}</span>`:rp(cur)} dari ${rp(x.t)}${x.g?' · dari reksadana '+esc(x.g):''}${x.note?' · '+esc(x.note):''}</div><div class="bar"><i style="width:${p*100}%"></i></div>
   <div class="tiny" style="margin-top:4px">${need!=null?'Perlu '+rp(need)+'/bulan sampai '+fdate(x.dl):'Belum ada tenggat'} · <span class="ac" data-gi="${i}">ubah</span></div></div>`}).join('')}
   <button class="b" style="width:100%;margin-top:8px" id="gAdd">+ Tambah tujuan</button></div>
-`;
+ ${kuliahCard()}`;
  const edit=x=>{sheet(`<h3>${x?'Ubah':'Tambah'} tujuan</h3><div class="fl"><input class="w2" id="gn" placeholder="Nama" value="${esc(x?.n||'')}"><input type="number" id="gt" placeholder="Target (Rp)" value="${x?.t||''}"><input type="date" id="gd" value="${x?.dl||''}">
   <select class="w2" id="gg">${opts(rdGoals().map(z=>z.tujuan),x?.g,'Tidak terhubung ke reksadana')}</select><button class="b p w2" id="gs">Simpan</button></div>`,()=>{
   $('gs').onclick=()=>{const o={n:$('gn').value.trim(),t:+$('gt').value||0,dl:$('gd').value,g:$('gg').value||''};if(!o.n)return;S.goals=S.goals.filter(z=>z.n!==(x?.n||o.n));S.goals.push(o);save();closeSheet();plan()}})};
- document.querySelectorAll('[data-gi]').forEach(s=>s.onclick=()=>edit(all[+s.dataset.gi]));$('gAdd').onclick=()=>edit(null)}
+ bindKuliah();document.querySelectorAll('[data-gi]').forEach(s=>s.onclick=()=>edit(all[+s.dataset.gi]));$('gAdd').onclick=()=>edit(null)}
+/* ---------- rencana biaya kuliah ---------- */
+const KULIAH0=[{n:'Biaya S1 Keperawatan',t:18000000,ids:[1305,1306,2663]},{n:'Biaya Ners Keperawatan',t:18000000,ids:[]},{n:'Joki skripsi',t:4000000,ids:[2486]},{n:'Uang ujian skripsi',t:250000,ids:[2573]},{n:'Travel jemput baju kampus',t:11000,ids:[2621]}];
+function kuliahItems(){return S.kuliah||KULIAH0}
+function kuliahCtx(){const it=kuliahItems().map(x=>{const ids=(x.ids||[]).filter(i=>byId(i)),paid=ids.reduce((s,i)=>s+byId(i).j,0)+(x.manual||0);return{...x,ids,paid,sisa:Math.max(0,x.t-paid)}});
+ const g=rdGoals().find(z=>z.tujuan==='Dana Kuliah')||{nilai:0,modal:0};const target=it.reduce((s,x)=>s+x.t,0),dibayar=it.reduce((s,x)=>s+Math.min(x.paid,x.t),0),sisa=it.reduce((s,x)=>s+x.sisa,0);
+ return{it,target,dibayar,sisa,dana:g.nilai,modal:g.modal,lebih:g.nilai-sisa}}
+function kuliahCard(){const K=kuliahCtx();
+ return`<div class="card"><h3>Rencana biaya kuliah sampai wisuda</h3>
+ ${K.it.map((x,i)=>`<div class="row" style="cursor:default"><div class="l"><div class="t1">${esc(x.n)}</div><div class="t2">biaya ${rp(x.t)} · dibayar ${x.ids.length?L(rp(x.paid),{ids:x.ids,title:'Pembayaran '+x.n}):rp(x.paid)} · <span class="ac" data-ku="${i}">ubah</span></div></div><div class="r ${x.sisa?'':'up'}">${x.sisa?'sisa '+rp(x.sisa):'Lunas ✓'}</div></div>`).join('')}
+ <div class="box"><div class="kv"><span>Total biaya sampai wisuda</span><span>${rp(K.target)}</span></div>
+ <div class="kv"><span>− Sudah dibayar</span><span>${L(rp(K.dibayar),{ids:K.it.flatMap(x=>x.ids),title:'Pembayaran biaya kuliah'})}</span></div>
+ <div class="kv"><b>= Sisa biaya yang harus disiapkan</b><b>${rp(K.sisa)}</b></div>
+ <div class="kv"><span>Dana Kuliah sekarang (nilai reksadana)</span><span class="ac" data-rg="Dana Kuliah">${rp(K.dana)}</span></div>
+ <div class="kv"><b>${K.lebih>=0?'Lebih':'Kurang'}</b><b class="${K.lebih>=0?'up':'dn'}">${rp(Math.abs(K.lebih))}</b></div></div>
+ <div class="st ${K.lebih>=0?'ok':'w'}">${K.lebih>=0?'Dana Kuliah sudah cukup untuk sisa biaya ✓':'Dana Kuliah masih kurang '+rp(-K.lebih)}</div>
+ <button class="b" style="width:100%;margin-top:8px" data-ku="new">+ Tambah biaya</button></div>`}
+function bindKuliah(){document.querySelectorAll('[data-ku]').forEach(b=>b.onclick=()=>{const list=kuliahItems().map(x=>({...x})),i=b.dataset.ku,x=i==='new'?{n:'',t:0,ids:[],manual:0}:list[+i];
+ sheet(`<h3>${i==='new'?'Tambah':'Ubah'} biaya kuliah</h3><div class="fl"><label class="lb w2">Nama biaya<input id="kn1" value="${esc(x.n)}"></label><label class="lb">Biaya (Rp)<input type="number" id="kt1" value="${x.t||''}"></label>
+ <label class="lb">Sudah dibayar di luar catatan (Rp)<input type="number" id="km1" value="${x.manual||''}"></label><div class="w2 tiny">Pembayaran yang tercatat di aplikasi: ${x.ids&&x.ids.length?x.ids.map(id=>byId(id)?`<span class="ac" data-tx="${id}">${fdate(byId(id).d)} ${rp(byId(id).j)}</span>`:'').join(', '):'belum ada'}</div>
+ <button class="b p" id="ks1">Simpan</button>${i==='new'?'':'<button class="b d" id="kd1">Hapus</button>'}</div>`,()=>{
+ $('ks1').onclick=()=>{const o={...x,n:$('kn1').value.trim(),t:+$('kt1').value||0,manual:+$('km1').value||0};if(!o.n)return;if(i==='new')list.push(o);else list[+i]=o;S.kuliah=list;save();closeSheet();plan()};
+ if($('kd1'))$('kd1').onclick=()=>{if(!confirm('Hapus biaya ini?'))return;list.splice(+i,1);S.kuliah=list;save();closeSheet();plan()}})})}
 /* ================= CATAT ================= */
 let EDIT=null,TPL=null,AM='biasa',IJ='saham',JN='Beli';
 function add(){LK={};WK={};if(TPL&&TPL.mode==='inv')AM='inv';else if(TPL||EDIT)AM='biasa';
@@ -551,7 +573,7 @@ function invForm(){const P=TPL&&TPL.mode==='inv'?TPL:null;if(P){IJ=P.ij||IJ;JN=P
  function pv(){const n=id=>$(id)?+$(id).value||0:0,a=$('ia').value;let h='';
   if(IJ==='saham'){const k=($('ik').value||'').trim().toUpperCase(),p=saham().find(x=>x.kode===k);
    if(JN==='Beli'){const v=n('il')*100*n('ih');h=`<div class="kv"><span>Nilai = ${n('il')} lot × 100 × ${n('ih').toLocaleString('id-ID')}</span><span>${rp(v)}</span></div><div class="kv"><span>+ Fee</span><span>${rp(n('if'))}</span></div><div class="kv"><b>Uang keluar dari ${esc(a)}</b><b>${rp(v+n('if'))}</b></div>${p?`<div class="tiny">Sekarang kamu memegang ${p.lot} lot ${k}.</div>`:''}`}
-   if(JN==='Jual'){const v=n('il')*100*n('ih'),tot=v-n('if'),md=p&&p.blot?p.cost/p.blot*n('il'):0;h=`<div class="kv"><span>Nilai jual</span><span>${rp(v)}</span></div><div class="kv"><span>− Fee</span><span>${rp(n('if'))}</span></div><div class="kv"><b>Uang masuk ke ${esc(a)}</b><b>${rp(tot)}</b></div><div class="kv"><span>Modal rata-rata ${n('il')} lot</span><span>${rp(md)}</span></div><div class="kv"><b>Untung/rugi</b><b class="${tot-md>=0?'up':'dn'}">${rp(tot-md)}</b></div><div class="tiny">${p?`Lot ${k} yang dipegang: ${p.lot}`:'Kode ini belum pernah dibeli.'}</div>`}
+   if(JN==='Jual'){const v=n('il')*100*n('ih'),tot=v-n('if'),md=p&&p.lot?p.cost/p.lot*n("il"):0;h=`<div class="kv"><span>Nilai jual</span><span>${rp(v)}</span></div><div class="kv"><span>− Fee</span><span>${rp(n('if'))}</span></div><div class="kv"><b>Uang masuk ke ${esc(a)}</b><b>${rp(tot)}</b></div><div class="kv"><span>Modal rata-rata ${n('il')} lot</span><span>${rp(md)}</span></div><div class="kv"><b>Untung/rugi</b><b class="${tot-md>=0?'up':'dn'}">${rp(tot-md)}</b></div><div class="tiny">${p?`Lot ${k} yang dipegang: ${p.lot}`:'Kode ini belum pernah dibeli.'}</div>`}
    if(JN==='Dividen'){h=`<div class="kv"><b>Dicatat sebagai</b><b>${$('ir').checked?'Pindah Uang › Dana riba › Dividen bank':'Pendapatan › Gaji › Hasil investasi: dividen saham'}</b></div>`}}
   if(IJ==='rd'){const t=$('it').value==='__new'?($('itn').value||'tujuan baru'):$('it').value,g=G.find(x=>x.tujuan===t),pr=($('ip').value||'').trim();
    const pp=g?Object.values(g.prod).find(x=>x.produk.toLowerCase()===pr.toLowerCase()):null,sisa=pp?Math.round(pp.beli-pp.jual):0;
@@ -576,7 +598,7 @@ function invSave(){const n=id=>$(id)?+$(id).value||0:0,d=$('id').value,a=$('ia')
   else{const lot=n('il'),h=n('ih'),fee=n('if');if(!(lot>0&&h>0))return alert('Isi jumlah lot dan harga.');const nilai=lot*100*h;
    if(JN==='Beli'){const total=nilai+fee;const t=mk({t:'K',j:Math.round(total),tj:'Tabungan',sb:'Saham',kt:'Disetor',ket:ket||`Beli saham ${k} ${lot} lot @${h.toLocaleString('id-ID')} (fee ${rp(fee)})`});
     S.inv.saham.push({jenis:'Beli',tgl:d,kode:k,lot,harga:h,nilai,fee,total,tx:t.id,app:1});if(!S.price[k])S.price[k]=h;msg=`Beli ${k} ${lot} lot, ${rp(total)}`}
-   else{const p=saham().find(x=>x.kode===k);if(!p||p.lot<lot)return alert(`Lot ${k} yang dipegang hanya ${p?p.lot:0}.`);const total=nilai-fee,modal=p.cost/p.blot*lot;
+   else{const p=saham().find(x=>x.kode===k);if(!p||p.lot<lot)return alert(`Lot ${k} yang dipegang hanya ${p?p.lot:0}.`);const total=nilai-fee,modal=p.cost/p.lot*lot;
     const t=mk({t:'M',j:Math.round(total),tj:'Tabungan',sb:'Saham',kt:'Dicairkan',ket:ket||`Jual saham ${k} ${lot} lot @${h.toLocaleString('id-ID')} (fee ${rp(fee)})`});
     S.inv.saham.push({jenis:'Jual',tgl:d,kode:k,lot,harga:h,nilai,fee,total,modal,untung:total-modal,tx:t.id,app:1});msg=`Jual ${k} ${lot} lot, untung ${rp(total-modal)}`}}}
  if(IJ==='rd'){let tuj=$('it').value;if(tuj==='__new')tuj=($('itn').value||'').trim();if(!tuj)return alert('Isi nama tujuan.');const prod=($('ip').value||'').trim();if(!prod)return alert('Isi nama produk reksadana.');
