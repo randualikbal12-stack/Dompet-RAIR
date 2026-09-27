@@ -108,12 +108,15 @@ details.card summary{cursor:pointer;color:var(--tx2);font-size:13px}
 .hero2 .hg b{font-size:clamp(11.5px,3.4vw,13.5px);overflow:visible;text-overflow:clip}
 .bkc{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12.5px;padding:8px 12px;border-radius:12px;margin:8px 0 0;cursor:pointer;background:var(--okb);color:var(--ok)}.bkc span{opacity:.8;white-space:nowrap}.bkc.no{background:var(--nob);color:var(--no)}.bkc.wa{background:var(--wab);color:var(--wa)}.bkc.nt{background:var(--soft);color:var(--tx2)}
 textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 10px;width:100%}
+#backB{font-size:26px;line-height:1;padding-bottom:3px}
+table.bkt{font-size:12.5px}table.bkt td{vertical-align:top}table.bkt td.kt{white-space:normal;min-width:120px;font-size:12px;line-height:1.35}table.bkt td.n{white-space:nowrap;padding-left:6px}
+table.bkt tr.bdh td{background:var(--soft);font-weight:600;font-size:12px;padding:6px 4px;border-top:0}table.bkt tr.sa td{background:var(--acc2)}table.bkt tr.tot td{font-weight:700;border-top:2px solid var(--line)}
 </style>
 <script>
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
 </script>
 </head><body>
-<header><div class="top"><button id="menuB" class="mb" aria-label="Buka menu">☰</button><b id="ttl">Beranda</b><button id="hideTop" class="mb" aria-label="Sembunyikan saldo">👁</button><span id="net" class="pill">…</span></div></header>
+<header><div class="top"><button id="menuB" class="mb" aria-label="Buka menu">☰</button><button id="backB" class="mb" aria-label="Kembali" style="display:none">‹</button><b id="ttl">Beranda</b><button id="hideTop" class="mb" aria-label="Sembunyikan saldo">👁</button><span id="net" class="pill">…</span></div></header>
 <div id="scrim"></div><nav id="nav"></nav>
 <button id="fab" aria-label="Catat transaksi">＋</button><div id="print"></div>
 <main id="main"></main>
