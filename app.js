@@ -22,7 +22,7 @@ const MAMA_IN=['Uang Kos Mama','Uang Kedai'],MAMA_OUT=['Pengeluaran Uang Kos','P
 let S;
 function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
  if(!S||!S.tx){S={acc:SEED.acc,tx:SEED.tx,next:Math.max(...SEED.tx.map(t=>t.id))+1,price:{...INV.last},rdcur:{},goals:[],seedAt:today}}
- S.price=S.price||{...INV.last};S.rdcur=S.rdcur||{};S.goals=S.goals||[];S.inv=S.inv||{saham:[],rd:[],dep:[]};S.inv.saham=S.inv.saham||[];S.inv.rd=S.inv.rd||[];S.inv.dep=S.inv.dep||[];S.pxUrl=S.pxUrl||'';S.kuliah=S.kuliah||null;migrate();migrate5();if(!S.mig6){S.rdcur={};S.mig6=1;save()}migrate7();migrate8();migrate9();migrate10();migrate11();migrate12();migrate13();migrate14();migrate15();if(!S.mig16){const b=S.acc.find(a=>a.n==='Bank BRI');if(b)b.tutup=1;S.mig16=1;save()}}
+ S.price=S.price||{...INV.last};S.rdcur=S.rdcur||{};S.goals=S.goals||[];S.inv=S.inv||{saham:[],rd:[],dep:[]};S.inv.saham=S.inv.saham||[];S.inv.rd=S.inv.rd||[];S.inv.dep=S.inv.dep||[];S.pxUrl=S.pxUrl||'';S.kuliah=S.kuliah||null;migrate();migrate5();if(!S.mig6){S.rdcur={};S.mig6=1;save()}migrate7();migrate8();migrate9();migrate10();migrate11();migrate12();migrate13();migrate14();migrate15();if(!S.mig16){const b=S.acc.find(a=>a.n==='Bank BRI');if(b)b.tutup=1;S.mig16=1;save()}migrate17();migrate18()}
 const MIG4={"rename": {"from": "Uang dari Disan", "to": "Uang untuk Disan"}, "upd": [{"id": 1591, "d": "2025-12-09", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1612, "d": "2025-12-15", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1832, "d": "2026-02-02", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Dianggap uang untuk Disan: kk Lisa mengganti uang yang dipakai untuk belanja Disan 28 Jan 2026"}}, {"id": 1843, "d": "2026-02-05", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1935, "d": "2026-02-13", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2074, "d": "2026-03-13", "j": 600000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "THR untuk Disan: belum ada catatan kapan uang ini diberikan ke Disan"}}, {"id": 2110, "d": "2026-04-01", "j": 200000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2245, "d": "2026-05-05", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Untuk perbaikan HP Disan: belum ada catatan kapan uang ini dipakai/diberikan"}}, {"id": 2340, "d": "2026-06-05", "j": 400000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2341, "d": "2026-06-05", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2527, "d": "2026-07-10", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2548, "d": "2026-07-16", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2608, "d": "2026-08-03", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2664, "d": "2026-08-14", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Belum ada catatan kapan uang ini diberikan ke Disan"}}, {"id": 2707, "d": "2026-09-01", "j": 350000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2725, "d": "2026-09-06", "j": 50000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1592, "d": "2025-12-10", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 1620, "d": "2025-12-17", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Dikembalikan ke kk Lisa"}}, {"id": 1948, "d": "2026-02-23", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2353, "d": "2026-06-05", "j": 500000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2529, "d": "2026-07-11", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2549, "d": "2026-07-16", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2622, "d": "2026-08-05", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2716, "d": "2026-09-04", "j": 300000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2730, "d": "2026-09-06", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 1827, "d": "2026-01-28", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 1932, "d": "2026-02-11", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2010, "d": "2026-03-03", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2088, "d": "2026-03-18", "j": 50000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2162, "d": "2026-04-08", "j": 150000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2277, "d": "2026-05-11", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2278, "d": "2026-05-11", "j": 150000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2087, "d": "2026-03-16", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2252, "d": "2026-05-06", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 1994, "d": "2026-03-02", "j": 550000, "set": {"j": 450000, "cek": "Dipisah: Rp100.000 untuk belanja Disan dicatat di baris sendiri (Uang untuk Disan)"}}], "add": [{"d": "2026-03-02", "a": "Bank Mandiri", "t": "M", "j": 100000, "tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "ket": "Bagian dari Tf masuk kk lisa Rp550.000: Rp100.000 untuk belanja disan", "tu": null, "cek": "", "kos": ""}, {"d": "2026-09-08", "a": "Uang Kos Mama Cash", "t": "K", "j": 300000, "tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri", "ket": "Top up saldo gopay tabungan, uang kos mama cash Rp300.000 (pasangan catatan GoPay 8 Sep 2026: dari dompet Rp230.500, dari uang kos mama Rp300.000)", "tu": null, "cek": "", "kos": ""}]};
 function migrate(){if(S.mig4)return;const T={};for(const t of S.tx)T[t.id]=t;
  for(const t of S.tx)if(t.kt===MIG4.rename.from)t.kt=MIG4.rename.to;
@@ -59,6 +59,11 @@ const MIG14={"ket": [{"id": 470, "d": "2024-12-05", "j": 300000, "set": {"ket": 
 function migrate14(){if(S.mig14)return;const T={};for(const t of S.tx)T[t.id]=t;for(const u of MIG14.ket.concat(MIG14.cat)){const t=T[u.id];if(t&&t.d===u.d&&t.j===u.j)Object.assign(t,u.set)}S.notes=(S.notes||[]).concat(MIG14.notes);S.mig14=1;save()}
 const MIG15=[{"id": 619, "d": "2025-02-10", "j": 2500000, "set": {"tj": "Tabungan", "sb": "Reksadana", "kt": "Disetor"}}, {"id": 624, "d": "2025-02-10", "j": 2500000, "set": {"tj": "Pendapatan", "sb": "Gaji", "kt": "Lain-lain"}}, {"id": 1726, "d": "2026-01-05", "j": 300000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Kos", "kt": "Uang Masak / Dapur"}}, {"id": 1811, "d": "2026-01-28", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2239, "d": "2026-05-03", "j": 2000000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Kos", "kt": "Kebutuhan & perbaikan kosan"}}, {"id": 2496, "d": "2026-07-06", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Kos", "kt": "Uang Masak / Dapur"}}, {"id": 2612, "d": "2026-08-03", "j": 5000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Kos", "kt": "Pengeluaran kos lain-lain"}}, {"id": 2624, "d": "2026-08-05", "j": 400000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Kos", "kt": "Uang Masak / Dapur"}}];
 function migrate15(){if(S.mig15)return;const T={};for(const t of S.tx)T[t.id]=t;for(const u of MIG15){const t=T[u.id];if(t&&t.d===u.d&&t.j===u.j)Object.assign(t,u.set)}S.mig15=1;save()}
+const MIG17=[{"id": 1832, "d": "2026-02-02", "j": 100000, "set": {"cek": ""}}, {"id": 2074, "d": "2026-03-13", "j": 600000, "set": {"cek": ""}}, {"id": 2245, "d": "2026-05-05", "j": 150000, "set": {"cek": ""}}, {"id": 2664, "d": "2026-08-14", "j": 150000, "set": {"cek": ""}}];
+function migrate17(){if(S.mig17)return;const T={};for(const t of S.tx)T[t.id]=t;for(const u of MIG17){const t=T[u.id];if(t&&t.d===u.d&&t.j===u.j)Object.assign(t,u.set)}S.mig17=1;save()}
+const MIG18={"upd": [{"id": 1592, "d": "2025-12-10", "j": 100000, "set": {"t": "T", "tu": "Uang Disan", "tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2716, "d": "2026-09-04", "j": 300000, "set": {"t": "T", "tu": "Uang Disan", "tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2730, "d": "2026-09-06", "j": 100000, "set": {"t": "T", "tu": "Uang Disan", "tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}], "add": [{"d": "2025-12-10", "a": "Uang Disan", "t": "K", "j": 100000, "tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan", "ket": "Kasih uang blanja disan"}, {"d": "2026-09-04", "a": "Uang Disan", "t": "K", "j": 150000, "tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan", "ket": "Kasih uang belanja disan"}, {"d": "2026-09-06", "a": "Uang Disan", "t": "K", "j": 250000, "tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan", "ket": "Kasih uang beli celana disan ke disti"}]};
+function migrate18(){if(S.mig18)return;const T={};for(const t of S.tx)T[t.id]=t;let ok=0;for(const u of MIG18.upd){const t=T[u.id];if(t&&t.d===u.d&&t.j===u.j&&t.tj==='Pengeluaran'){Object.assign(t,u.set);ok++}}
+ if(ok===MIG18.upd.length)for(const o of MIG18.add){if(!S.tx.some(t=>t.d===o.d&&t.a===o.a&&t.j===o.j&&t.ket===o.ket))S.tx.push({id:S.next++,tu:null,cek:'',kos:'',...o})}S.mig18=1;save()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('Penyimpanan HP penuh: '+e.message)}}
 const accNames=()=>S.acc.map(a=>a.n);
 const byId=id=>S.tx.find(t=>t.id===id);
@@ -189,9 +194,10 @@ function why(f,title,o={}){const res=S.tx.filter(t=>match(t,f)).sort((p,q)=>q.d.
  const vv=(v,b)=>b?`<b>${rp(v)}</b>`:rp(v);
  let h=`<h3>${esc(title)}</h3>`;
  if(o.lines)h+=`<div class="box">${o.lines.map(([l,v,f2,b])=>`<div class="kv"><span>${b?'<b>'+esc(l)+'</b>':esc(l)}</span><span>${f2&&Math.round(v)!==0?`<span class="ac" data-l="${LKs({...f2,title:f2.title||(title+' · '+l.replace(/^[−+=] /,''))})}">${vv(v,b)}</span>`:vv(v,b)}</span></div>`).join('')}</div>`;
+ if(o.inv)h+=invMonthly(o.inv,title);
  if(o.html)h+=o.html;
  if(o.note)h+=`<div class="tiny" style="margin:6px 0">${o.note}</div>`;
- if(o.inv){h+=invMonthly(o.inv,title);h+=`<div class="tiny" style="margin-top:6px">Tabel hanya berisi pembelian & penjualan ${esc(title)}. Untuk melacak asal uangnya, ketuk "📒 Lacak asal uangnya di Buku Akun" di riwayat: di sana terlihat uang masuk dari akun mana, akun demi akun (Dompet → GoPay → Kantong Utama → Kantong Stockbit).</div>`;if(res.length)h+=`<button class="b" style="width:100%;margin-top:8px" data-l="${LKs({...clean(f),title})}">Lihat ${res.length} transaksi pembelian/penjualan</button>`;return sheet(h,o.bind)}
+ if(o.inv){h+=`<div class="tiny" style="margin-top:6px">Tabel hanya berisi pembelian & penjualan ${esc(title)}. Untuk melacak asal uangnya, ketuk "📒 Lacak asal uangnya di Buku Akun" di riwayat: di sana terlihat uang masuk dari akun mana, akun demi akun (Dompet → GoPay → Kantong Utama → Kantong Stockbit).</div>`;if(res.length)h+=`<button class="b" style="width:100%;margin-top:8px" data-l="${LKs({...clean(f),title})}">Lihat ${res.length} transaksi pembelian/penjualan</button>`;return sheet(h,o.bind)}
  if(!o.noTx&&res.length){const mg=grp(t=>t.d.slice(0,7)),byDay=mg.length<=1,rows=byDay?grp(t=>t.d):mg;rows.sort((a,b)=>b[0].localeCompare(a[0]));
   const n0=v=>v?Math.round(v).toLocaleString('id-ID'):'-',hasT=rows.some(([,z])=>z.T),shown=rows.slice(0,36);let sM=0,sK=0,sT=0;
   const tr=shown.map(([k,z])=>{sM+=z.M;sK+=z.K;sT+=z.T;return`<tr class="cl" data-l="${LKs({ids:z.ids,title:title+' · '+(byDay?fdate(k):BULAN[+k.slice(5)-1]+' '+k.slice(0,4))})}"><td style="white-space:nowrap">${byDay?k.slice(8)+' '+BLN[+k.slice(5,7)-1]:BLN[+k.slice(5)-1]+' '+k.slice(2,4)}</td><td class="n up">${n0(z.M)}</td><td class="n dn">${n0(z.K)}</td>${hasT?`<td class="n">${n0(z.T)}</td>`:''}<td class="n"><b>${(z.M-z.K)?Math.round(z.M-z.K).toLocaleString('id-ID'):'0'}</b></td></tr>`}).join('');
@@ -214,17 +220,18 @@ function appBack(){if(typeof locked!=='undefined'&&locked)return true;
 try{history.replaceState({dd:0},'');history.pushState({dd:1},'')}catch(e){}
 addEventListener('popstate',()=>{if(appBack()){try{history.pushState({dd:1},'')}catch(e){}}else{history.back()}});
 /* ================= BERANDA ================= */
-function monthCtx(y,m){const a=ds(new Date(y,m,1)),b=mEnd(y,m),ttl=BULAN[m]+' '+y;
- const inc=SUMBER.Pendapatan.map(x=>[x,income(a,b,x)]).filter(x=>x[1]),exp=SUMBER.Pengeluaran.map(x=>[x,expense(a,b,x)]).filter(x=>x[1]);
- const tb=tabNet(a,b),tI=inc.reduce((p,x)=>p+x[1],0),tE0=exp.reduce((p,x)=>p+x[1],0),tE=tE0+tb;
- const idI=idsOf(t=>inR(t,a,b)&&t.tj==='Pendapatan'&&t.t==='M'),idE=idsOf(t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&t.t==='K'),idT=tabIds(a,b);
+const PRIB_IN=['Gaji','Jasa'],PRIB_OUT=['Pengeluaran Gaji','Pengeluaran Jasa'];
+function monthCtx(y,m,pers){const a=ds(new Date(y,m,1)),b=mEnd(y,m),ttl=BULAN[m]+' '+y;
+ const inc=(pers?PRIB_IN:SUMBER.Pendapatan).map(x=>[x,income(a,b,x)]).filter(x=>x[1]),exp=(pers?PRIB_OUT:SUMBER.Pengeluaran).map(x=>[x,expense(a,b,x)]).filter(x=>x[1]);
+ const tb=pers?0:tabNet(a,b),tI=inc.reduce((p,x)=>p+x[1],0),tE0=exp.reduce((p,x)=>p+x[1],0),tE=tE0+tb;
+ const idI=idsOf(t=>inR(t,a,b)&&t.tj==='Pendapatan'&&t.t==='M'&&(!pers||PRIB_IN.includes(t.sb))),idE=idsOf(t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&t.t==='K'&&(!pers||PRIB_OUT.includes(t.sb))),idT=pers?[]:tabIds(a,b);
  const dis=sum(t=>idT.includes(t.id)&&t.t==='K'),cair=sum(t=>idT.includes(t.id)&&t.t==='M');
  const fI=()=>[{ids:idI},'Pendapatan · '+ttl,{lines:inc.map(([x,v])=>[x,v,{tj:'Pendapatan',sb:x,tipe:'M',from:a,to:b}]).concat([['= Total pendapatan',tI,null,1]])}];
- const fE=()=>[{ids:idE.concat(idT)},'Pengeluaran · '+ttl,{lines:exp.map(([x,v])=>[x,v,{tj:'Pengeluaran',sb:x,tipe:'K',from:a,to:b}]).concat(tb?[['+ Tabungan bersih (disetor − dicairkan)',tb,{ids:idT}]]:[],[['= Total pengeluaran',tE,null,1]]),note:'Tabungan bersih ikut dihitung sebagai pengeluaran supaya uang yang ditabung tidak terlihat sebagai sisa uang.'}];
+ const fE=()=>[{ids:idE.concat(idT)},'Pengeluaran · '+ttl,{lines:exp.map(([x,v])=>[x,v,{tj:'Pengeluaran',sb:x,tipe:'K',from:a,to:b}]).concat(tb?[['+ Tabungan bersih (disetor − dicairkan)',tb,{ids:idT}]]:[],[['= Total pengeluaran',tE,null,1]]),note:pers?'Hanya uang pribadi (gaji & jasa). Uang amanah (kos mama, Disan, riba) dan investasi tidak dihitung.':'Tabungan bersih ikut dihitung sebagai pengeluaran supaya uang yang ditabung tidak terlihat sebagai sisa uang.'}];
  const fS=()=>[{ids:idI.concat(idE,idT)},'Selisih · '+ttl,{lines:[['Pendapatan',tI,{ids:idI}],['− Pengeluaran (termasuk tabungan bersih)',tE,{ids:idE.concat(idT)}],['= Selisih',tI-tE,null,1]]}];
  const fT=()=>[{ids:idT},'Tabungan bersih · '+ttl,{lines:[['Disetor ke tabungan/investasi',dis,{ids:tabIds(a,b,false,'K')}],['− Dicairkan',cair,{ids:tabIds(a,b,false,'M')}],['= Tabungan bersih',tb,null,1]],note:'Reksadana uang kos mama tidak dihitung di sini karena itu uang mama.'}];
  return{a,b,ttl,inc,exp,tb,tI,tE,fI,fE,fS,fT}}
-const HOME_CARDS=[['bulan','Ringkasan bulan ini'],['tren','Tren 6 bulan'],['tagihan','Tagihan & rutin'],['anggaran','Anggaran'],['pendapatan','Pendapatan'],['pengeluaran','Pengeluaran'],['mama','Uang mama'],['akun','Saldo per akun']];
+const HOME_CARDS=[['bulan','Ringkasan bulan ini'],['tren','Tren 6 bulan'],['tagihan','Tagihan & rutin'],['anggaran','Anggaran'],['pendapatan','Pendapatan'],['pengeluaran','Pengeluaran'],['akun','Saldo per akun']];
 function homeCfg(){const c=S.homeCfg=S.homeCfg||{order:[],col:{}};const ids=HOME_CARDS.map(x=>x[0]);c.order=c.order.filter(x=>ids.includes(x)).concat(ids.filter(x=>!c.order.includes(x)));return c}
 function asetData(){const I=invData(),g=G=>S.acc.filter(a=>G.includes(a.g)).reduce((p,a)=>p+bal(a.n),0);
  const kas=g(['Pribadi']),rdn=g(['Investasi (kas RDN)']),pi=g(['Piutang']),ut=g(['Pinjaman Mama (dompet)']);const ur=utangRiba();return{I,kas,rdn,pi,ut,ur,tot:kas+rdn+I.tn+pi+ut-ur}}
@@ -233,29 +240,33 @@ function asetSheet(){const A=asetData(),acc=G=>({ids:[],a:undefined});
   html:`<h4>Rincian akun</h4>${S.acc.filter(a=>['Pribadi','Investasi (kas RDN)','Piutang','Pinjaman Mama (dompet)'].includes(a.g)&&bal(a.n)).map(a=>`<div class="row" data-acc="${esc(a.n)}"><div class="l">${esc(a.n)}<div class="t2">${esc(a.g)}</div></div><div class="r">${rp(bal(a.n))}</div><span class="chev">›</span></div>`).join('')}
   <div class="row" data-x="${FN(portoSum)}"><div class="l">Portofolio investasi<div class="t2">Nilai pasar saham + reksadana + deposito aktif</div></div><div class="r">${rp(A.I.tn)}</div><span class="chev">›</span></div>`,
   note:'Tidak termasuk uang titipan mama, uang Disan, dan kantong uang riba karena bukan milikmu.'})}
+function pribSheet(){const L=S.acc.filter(a=>a.g==='Pribadi');
+ why({ids:[]},'Uang pribadi (kas & bank)',{noTx:1,lines:L.map(a=>[a.n+(a.tutup?' (rekening ditutup)':''),bal(a.n),null]).concat([['= Total uang pribadi',L.reduce((p,a)=>p+bal(a.n),0),null,1]]),
+  html:`<h4>Buka akun</h4>${L.map(a=>`<div class="row" data-acc="${esc(a.n)}"><div class="l">${esc(a.n)}</div><div class="r">${rp(bal(a.n))}</div><span class="chev">›</span></div>`).join('')}`,
+  note:'Hanya akun pribadi. Uang amanah (kos mama, Disan, riba), kas RDN & investasi, dan piutang tidak dihitung. Total aset pribadi (termasuk investasi) ada di menu Investasi.'})}
 let SHARE=false;try{SHARE=localStorage.getItem('dd-share')==='1'}catch(e){}
 function setShare(v){SHARE=v;try{localStorage.setItem('dd-share',v?'1':'0')}catch(e){}go(V==='set'?'set':'home')}
 function exitShare(){if(secGet().hash){window._afterUnlock=()=>setShare(false);lockNow()}else setShare(false)}
-function home(){LK={};WK={};const now=new Date(),C=monthCtx(now.getFullYear(),now.getMonth()),M=mama(today),A=asetData(),cfg=homeCfg();
+function home(){LK={};WK={};const now=new Date(),C=monthCtx(now.getFullYear(),now.getMonth(),1),M=mama(today),A=asetData(),cfg=homeCfg();
  const kp=(lbl,v,c,k)=>`<div class="kp" data-x="${k}"><div class="a">${lbl}</div><div class="b ${c}">${rp(v)}</div></div>`;
  const row=(lbl,v,c,k)=>`<div class="row" data-x="${k}"><div class="l">${lbl}</div><div class="r ${c}">${rp(v)}</div><span class="chev">›</span></div>`;
  const pl=A.I.tn-A.I.tm,sel=C.tI-C.tE;
  const B={
   bulan:{t:'Bulan ini — '+C.ttl,b:`<div class="g3">${kp('Pendapatan',C.tI,'up',WKs(...C.fI()))}${kp('Pengeluaran',C.tE,'dn',WKs(...C.fE()))}${kp('Selisih',sel,sel<0?'dn':'up',WKs(...C.fS()))}</div><div class="tiny" style="margin-top:6px">Ketuk angka mana saja untuk melihat asal-usulnya.</div>`},
-  tren:{t:'Tren 6 bulan',b:`<div class="ch sm"><canvas id="ctr"></canvas></div><div class="tiny">Hijau = pendapatan, merah = pengeluaran (termasuk tabungan bersih). Ketuk bulan untuk rinciannya.</div>`},
+  tren:{t:'Tren 6 bulan',b:`<div class="ch sm"><canvas id="ctr"></canvas></div><div class="tiny">Hijau = pendapatan pribadi, merah = pengeluaran pribadi (gaji & jasa). Ketuk bulan untuk rinciannya.</div>`},
   tagihan:rutHome(),anggaran:budHome(),
-  pendapatan:{t:'Pendapatan · '+C.ttl,b:C.inc.map(([x,v])=>row(x,v,'up',WKs({tj:'Pendapatan',sb:x,tipe:'M',from:C.a,to:C.b},x+' · '+C.ttl))).join('')||'<div class="tiny">Belum ada</div>'},
-  pengeluaran:{t:'Pengeluaran · '+C.ttl,b:C.exp.map(([x,v])=>row(x,v,'dn',WKs({tj:'Pengeluaran',sb:x,tipe:'K',from:C.a,to:C.b},x+' · '+C.ttl))).join('')+(C.tb?row('Tabungan bersih (disetor − dicairkan)',C.tb,'',WKs(...C.fT())):'')+(!C.exp.length&&!C.tb?'<div class="tiny">Belum ada</div>':'')},
+  pendapatan:{t:'Pendapatan pribadi · '+C.ttl,b:C.inc.map(([x,v])=>row(x,v,'up',WKs({tj:'Pendapatan',sb:x,tipe:'M',from:C.a,to:C.b},x+' · '+C.ttl))).join('')||'<div class="tiny">Belum ada</div>'},
+  pengeluaran:{t:'Pengeluaran pribadi · '+C.ttl,b:C.exp.map(([x,v])=>row(x,v,'dn',WKs({tj:'Pengeluaran',sb:x,tipe:'K',from:C.a,to:C.b},x+' · '+C.ttl))).join('')+(C.tb?row('Tabungan bersih (disetor − dicairkan)',C.tb,'',WKs(...C.fT())):'')+(!C.exp.length&&!C.tb?'<div class="tiny">Belum ada</div>':'')},
   mama:{t:'Uang mama',b:`<div class="g2"><div class="kp" data-x="${FN(mamaSisaSheet)}"><div class="a">Sisa uang mama (hitungan)</div><div class="b">${rp(M.sisa)}</div></div><div class="kp" data-x="${FN(kantongSheet)}"><div class="a">Ada di Kantong/Cash Uang Kos Mama</div><div class="b">${rp(M.kantong)}</div></div></div>
   <div class="st ${M.pribadi>0?'w':'ok'}">${M.pribadi>0?'Masih ada '+rp(M.pribadi)+' uang mama di akun pribadimu — pindahkan ke Kantong Uang Kos Mama':'Aman ✓ Tidak ada uang mama di akun pribadimu'}</div>`},
-  akun:{t:'Saldo per akun',b:S.acc.map(x=>({x,v:bal(x.n)})).filter(o=>o.v||o.x.g!=='Usaha').map(({x,v})=>`<div class="row" data-acc="${esc(x.n)}"><div class="l"><div class="t1">${esc(x.n)}</div><div class="t2">${esc(x.g)}${x.tutup?' · <b>Rekening ditutup</b>':''}</div></div><div class="r">${rp(v)}</div><span class="chev">›</span></div>`).join('')+`<div class="kv"><b>Total semua akun</b><b class="ac" data-x="${FN(totalAkunSheet)}">${rp(S.acc.reduce((p,x)=>p+bal(x.n),0))}</b></div>`}};
+  akun:{t:'Saldo akun pribadi',b:S.acc.filter(x=>x.g==='Pribadi').map(x=>({x,v:bal(x.n)})).map(({x,v})=>`<div class="row" data-acc="${esc(x.n)}"><div class="l"><div class="t1">${esc(x.n)}</div><div class="t2">${esc(x.g)}${x.tutup?' · <b>Rekening ditutup</b>':''}</div></div><div class="r">${rp(v)}</div><span class="chev">›</span></div>`).join('')+`<div class="kv"><b>Total uang pribadi</b><b class="ac" data-x="${FN(pribSheet)}">${rp(A.kas)}</b></div><div class="tiny">Akun amanah (uang kos mama, Disan, riba) & investasi ada di menu Amanah dan Investasi.</div>`}};
  if(SHARE){const ids=['bulan','tren','pendapatan','pengeluaran'];
   $('main').innerHTML=`<div class="bkc nt" id="shOff">👥 Mode tunjukkan ke orang — hanya pemasukan & pengeluaran yang tampil <span>Keluar ›</span></div>`+ids.map(id=>`<div class="card hc" data-hid="${id}"><h3 class="hh3">${B[id].t}</h3><div class="hb">${B[id].b}</div></div>`).join('');
   $('shOff').onclick=exitShare;trenChart();return}
- $('main').innerHTML=`${bkChip()}<div class="hero2"><div class="hh"><span>Total aset pribadi</span><span><button class="eyeb" id="shareB" aria-label="Mode tunjukkan ke orang" title="Mode tunjukkan ke orang">👥</button><button class="eyeb" id="hideB" aria-label="Sembunyikan saldo">${HIDE?'🙈':'👁'}</button></span></div>
-  <div class="hv" data-x="${FN(asetSheet)}">${rp(A.tot)}</div>
-  <div class="hs"><span class="${sel<0?'dn':'up'}" data-x="${WKs(...C.fS())}">${sel<0?'▼':'▲'} ${rp(Math.abs(sel))} <small>bulan ini</small></span><span class="${pl<0?'dn':'up'}" data-x="${FN(portoSum)}">${pl<0?'▼':'▲'} ${rp(Math.abs(pl))} <small>investasi</small></span></div>
-  <div class="hg"><div data-acc-g="kas" data-x="${FN(asetSheet)}"><small>Kas & bank</small><b>${rp(A.kas+A.rdn)}</b></div><div data-go="inv"><small>Investasi</small><b>${rp(A.I.tn)}</b></div><div data-go="mama"><small>Amanah</small><b>${rp(M.kantong)}</b></div></div></div>
+ $('main').innerHTML=`${bkChip()}<div class="hero2"><div class="hh"><span>Uang pribadi (kas & bank)</span><span><button class="eyeb" id="shareB" aria-label="Mode tunjukkan ke orang" title="Mode tunjukkan ke orang">👥</button><button class="eyeb" id="hideB" aria-label="Sembunyikan saldo">${HIDE?'🙈':'👁'}</button></span></div>
+  <div class="hv" data-x="${FN(pribSheet)}">${rp(A.kas)}</div>
+  <div class="hs"><span class="${sel<0?'dn':'up'}" data-x="${WKs(...C.fS())}">${sel<0?'▼':'▲'} ${rp(Math.abs(sel))} <small>selisih bulan ini</small></span></div>
+  <div class="hg" style="grid-template-columns:1fr 1fr"><div data-x="${WKs(...C.fI())}"><small>Pendapatan bulan ini</small><b>${rp(C.tI)}</b></div><div data-x="${WKs(...C.fE())}"><small>Pengeluaran bulan ini</small><b>${rp(C.tE)}</b></div></div></div>
  <div class="qa">${[['add','➕','Catat'],['trx','📋','Transaksi'],['rep','📊','Laporan'],['inv','📈','Investasi'],['bud','💰','Anggaran'],['rec','⚖️','Cocokkan']].map(([v,i,l])=>`<button data-qa="${v}"><span>${i}</span>${l}</button>`).join('')}</div>
  ${cfg.order.filter(id=>B[id]).map(id=>`<div class="card hc${cfg.col[id]?' col':''}" data-hid="${id}"><h3 class="hh3" data-hc="${id}">${B[id].t}<span class="cv">⌄</span></h3><div class="hb">${B[id].b}</div></div>`).join('')}
  <button class="b" id="homeSet" style="width:100%;margin:4px 0 70px">⚙️ Atur tampilan Beranda</button>`;
@@ -263,7 +274,7 @@ function home(){LK={};WK={};const now=new Date(),C=monthCtx(now.getFullYear(),no
  document.querySelectorAll('[data-qa]').forEach(b=>b.onclick=()=>{EDIT=null;TPL=null;if(b.dataset.qa==='trx')F={};go(b.dataset.qa)});
  document.querySelectorAll('[data-hc]').forEach(h=>h.onclick=e=>{if(e.target.closest('[data-x],[data-go]'))return;const id=h.dataset.hc;cfg.col[id]=!cfg.col[id];save();h.parentElement.classList.toggle('col',!!cfg.col[id]);if(id==='tren'&&!cfg.col[id])trenChart()});
  $('homeSet').onclick=homeSetSheet;$('shareB').onclick=e=>{e.stopPropagation();if(confirm('Aktifkan mode tunjukkan ke orang?\n\nBeranda hanya menampilkan pemasukan & pengeluaran. Total aset, investasi, saldo akun, dan uang Amanah disembunyikan.'+(secGet().hash?'\nUntuk keluar dari mode ini perlu PIN / sidik jari.':'')))setShare(true)};if($('bkChip'))$('bkChip').onclick=()=>go('set');if(!cfg.col.tren)trenChart()}
-function trenChart(){const c=$('ctr');if(!c)return;if(charts.tr)charts.tr.destroy();const now=new Date(),L=[];for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);L.push(monthCtx(d.getFullYear(),d.getMonth()))}
+function trenChart(){const c=$('ctr');if(!c)return;if(charts.tr)charts.tr.destroy();const now=new Date(),L=[];for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);L.push(monthCtx(d.getFullYear(),d.getMonth(),1))}
  const cs=getComputedStyle(document.documentElement),col=n=>cs.getPropertyValue(n).trim();
  charts.tr=new Chart(c,{type:'bar',data:{labels:L.map(x=>x.ttl.slice(0,3)),datasets:[{label:'Pendapatan',data:L.map(x=>HIDE?0:x.tI),backgroundColor:col('--ok')},{label:'Pengeluaran',data:L.map(x=>HIDE?0:x.tE),backgroundColor:col('--no')}]},
   options:{scales:{y:{ticks:{callback:v=>HIDE?'':Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'jt':(v/1e3).toFixed(0)+'rb'}}}}});
@@ -553,7 +564,7 @@ function samakanBibit(){const G=rdGoals().filter(g=>g.modal||g.nilai);
 function invV(){LK={};WK={};const I=invData(),al=[['Pasar uang',I.gn,'#1D9E75'],['Saham',I.sn,'#7F77DD'],['Deposito',I.dn,'#378ADD']],tot=I.tn||1;
  const card=(icon,title,sub,nilai,pl,attr)=>`<div class="pc" ${attr}><div class="pi">${icon}</div><div style="flex:1;min-width:0"><div class="t1"><b>${esc(title)}</b></div><div class="tiny">${sub}</div>
   <div class="pr"><div><div class="tiny">Nilai portofolio</div><b>${rp(nilai)}</b></div><div style="text-align:right"><div class="tiny">Keuntungan</div><b class="${plc(pl)}">${pls(pl)}</b></div></div></div></div>`;
- $('main').innerHTML=`<div class="card hero"><div class="tiny">Nilai portofolio pribadi</div><div class="big ac" data-x="${FN(portoSum)}">${rp(I.tn)}</div>
+ const AS=asetData();$('main').innerHTML=`<div class="card hero"><div class="tiny">Total aset pribadi</div><div class="big ac" data-x="${FN(asetSheet)}">${rp(AS.tot)}</div><div class="tiny">Kas & bank ${rp(AS.kas)} · Kas RDN ${rp(AS.rdn)} · Portofolio ${rp(AS.I.tn)}${AS.pi?' · Piutang '+rp(AS.pi):''}${AS.ur?' · − Utang uang riba '+rp(AS.ur):''} · ketuk angka untuk rincian</div></div><div class="card hero"><div class="tiny">Nilai portofolio pribadi</div><div class="big ac" data-x="${FN(portoSum)}">${rp(I.tn)}</div>
   <div class="${plc(I.tn-I.tm)}" style="font-weight:600">${pls(I.tn-I.tm)} (${pct(I.tm?(I.tn-I.tm)/I.tm:null)})</div>
   <div class="alloc">${al.map(([l,v,c])=>`<div><div class="ab" style="border-color:${c};color:${c}">${Math.round(v/tot*100)}%</div><div class="tiny">${l}</div></div>`).join('')}</div>
   <div class="tiny" style="margin-top:6px">${esc(pxInfo())}${S.pxUrl?` · <span class="ac" id="pxNow">perbarui</span>`:''}${S.rdAt?` · nilai reksadana per ${fdate(S.rdAt)}`:INV.curAt?` · nilai reksadana per ${fdate(INV.curAt)}`:''}</div>
@@ -713,6 +724,11 @@ function txForm(){const t=EDIT?byId(EDIT):null,P=t||TPL||null;TPL=null;const tip
   if(tp==='T'&&$('atu').value===$('aa').value)return alert('Akun tujuan harus berbeda.');
   if($('asb').value==='Uang Kos Mama'&&$('akt').value==='Uang kos anak kos'&&!$('akos').value&&!confirm('Kos/kamar belum dipilih. Simpan tanpa kamar?'))return;
   const o={d,a:$('aa').value,t:tp,j,tj:$('atj').value,sb:$('asb').value,kt:$('akt').value.trim()||(tp==='T'?'Pindah antar akun sendiri':'Lain-lain'),ket:$('aket').value.trim(),tu:tp==='T'?$('atu').value:null,cek:t?t.cek:'',kos:$('asb').value==='Uang Kos Mama'?$('akos').value:''};
+  const INVSB={'Reksadana':'rd','Reksadana uang kos mama':'rd','Saham':'saham'};
+  if(!t&&o.tj==='Tabungan'&&INVSB[o.sb]&&(o.kt==='Disetor'||o.kt==='Dicairkan'||tp!=='T')){
+   if(confirm(`Transaksi ${o.sb} (${tp==='M'?'dicairkan/dijual':'dibeli/disetor'}) harus dicatat lewat Catat › Investasi supaya nilai investasinya ikut ${tp==='M'?'berkurang':'bertambah'}.\n\nPindah ke form Investasi sekarang? (tanggal, akun, jumlah & keterangan ikut dibawa)`)){
+    TPL={mode:'inv',ij:INVSB[o.sb],jn:tp==='M'?'Jual':'Beli',pre:{d:o.d,a:o.a,j:o.j,ket:o.ket}};return add()}
+   if(!confirm('Simpan hanya sebagai uang masuk/keluar di akun (nilai investasi TIDAK berubah)?'))return}
   const rid=P&&P.rutin||t&&t.rutin;if(rid)o.rutin=rid;const fl=$('afoto').files[0];
   let tt;if(t){Object.assign(t,o);tt=t}else{tt={id:S.next++,...o};S.tx.push(tt)}
   const fin=()=>{save();const wasEdit=!!t;EDIT=null;alert('Tersimpan ✓');if(wasEdit)go('trx');else if(rid)go('rut');else add()};
@@ -728,7 +744,7 @@ const HINT={Pendapatan:'Pendapatan = uang yang benar-benar jadi milikmu atau mil
  'Pindah akun':'Memindahkan uangmu sendiri antar akun. Pakai tombol "Pindah akun" di atas supaya cukup satu catatan.','Utang & piutang':'Piutang Keluar = kamu meminjamkan; Piutang Kembali = dikembalikan; Utang Diterima = kamu meminjam; Bayar Utang = kamu melunasi.',
  'Pinjam uang mama':'Pinjam dari Mama = kamu memakai uang mama sementara; Bayar Utang ke Mama = mengembalikannya.','Titipan orang lain':'Uang orang lain yang lewat akunmu (masuk lalu diserahkan).','Jula-jula':'Setoran arisan/jula-jula.'};
 /* ---------- form investasi ---------- */
-function invForm(){const P=TPL&&TPL.mode==='inv'?TPL:null;if(P){IJ=P.ij||IJ;JN=P.jn||JN;TPL=null}
+function invForm(){const P=TPL&&TPL.mode==='inv'?TPL:null;const PRE=P&&P.pre;if(P){IJ=P.ij||IJ;JN=P.jn||JN;TPL=null}
  const JL={saham:['Beli','Jual','Dividen'],rd:['Beli','Jual'],dep:['Setor','Cairkan','Bagi hasil / bunga']};if(!JL[IJ].includes(JN))JN=JL[IJ][0];
  const kodes=[...new Set(allSaham().map(e=>e.kode))].sort(),prods=[...new Set(allRd().map(e=>e.produk))].sort(),G=rdGoals(),Dall=S.inv.dep,dAkt=Dall.filter(d=>d.status==='Aktif');
  const defA={saham:'Jago - Kantong Stockbit',rd:JN==='Beli'?'Jago - Kantong Stockbit':'Jago - Kantong Utama',dep:'Bank Mandiri'}[IJ];
@@ -779,6 +795,7 @@ function invForm(){const P=TPL&&TPL.mode==='inv'?TPL:null;if(P){IJ=P.ij||IJ;JN=P
    if(JN==='Cairkan')h=`<div class="kv"><b>Pindah dari Deposito BPR ke ${esc(a)}</b><b>${rp(n('ij2'))}</b></div>`;
    if(JN==='Bagi hasil / bunga'){const d=Dall.find(x=>x.id===($('idp')||{}).value),rb=d?d.riba:($('ir')&&$('ir').checked);h=`<div class="kv"><b>Masuk ke ${esc(a)}</b><b>${rp(n('ij2'))}</b></div><div class="tiny">Dicatat sebagai ${rb?'Pindah Uang › Dana riba › Bunga bank (riba)':'Pendapatan › Gaji › Hasil investasi: bagi hasil deposito'}</div>`}}
   $('ipv').innerHTML=h}
+ if(PRE){const sv=(i,v)=>{if($(i)&&v!=null)$(i).value=v};sv('id',PRE.d);sv('ia',PRE.a);sv('iket',PRE.ket);if(IJ==='rd'&&JN==='Beli')sv('ij2',PRE.j);if(IJ==='rd'&&JN==='Jual')sv('inv',PRE.j);if(IJ==='saham'&&JN==='Dividen')sv('ij2',PRE.j)}
  pv();$('isave').onclick=invSave}
 const INVHINT={sahamBeli:'Uang keluar = nilai saham + fee. Tercatat sebagai Tabungan › Saham › Disetor dan masuk ke riwayat saham.',sahamJual:'Uang masuk = nilai jual − fee. Untung dihitung dari modal rata-rata.',sahamDividen:'Dividen saham bank konvensional (BBRI, BBCA, dll.) otomatis dicentang sebagai riba.',
  rdBeli:'Nilai reksadana tujuan ini ikut bertambah. Samakan nilainya dengan Bibit/Stockbit kapan saja lewat menu Investasi.',rdJual:'Kalau produknya non-syariah, pindahkan untungnya ke Kantong Uang Riba lewat transaksi biasa (Pindah akun).',
@@ -822,9 +839,25 @@ function set(){LK={};WK={};const held=saham().filter(p=>p.lot>0).map(p=>p.kode);
   <div class="fl" style="margin-top:8px"><input id="nn" placeholder="Nama akun baru"><select id="ng">${opts(['Pribadi','Titipan Mama','Titipan Disan','Investasi','Dana Riba'])}</select><input type="number" id="no" placeholder="Saldo awal"><button class="b" id="nadd">Tambah akun</button></div></div>
  <div class="card"><h3>Uang mama sebelum Februari 2024</h3><div class="tiny">Kalau ada uang kos mama yang kamu pegang sebelum Februari 2024, isi di sini supaya status lunas tepat.</div>
   <input type="number" id="mo" value="${S.mamaOpen||0}" style="margin-top:6px"></div>
+ <div class="card" id="xlcard"><h3>Aplikasi ⇄ Excel / Google Sheets</h3>
+  <div class="tiny">Kolomnya sama persis dengan sheet <b>Transaksi</b> di Excel (kolom B sampai L): Tanggal · Akun · Tipe · Akun Tujuan · Jumlah · Tujuan · Sumber · Kategori · Keterangan · Perlu Dicek · Kos/Kamar. Tanggal dd/mm/yyyy.</div>
+  <button class="b w2" id="xlDl" style="width:100%;margin-top:8px">📊 Unduh Laporan Excel (lengkap)</button>
+  <div class="tiny">Membuat file Excel lengkap (semua sheet & rumus seperti laporanmu) dari data terbaru di aplikasi. Tidak perlu salin-tempel.${S.xlDlAt?' Terakhir dibuat '+fdate(S.xlDlAt.slice(0,10))+'.':''}</div>
+  <h4 style="margin:12px 0 4px">☁️ Google Sheets (otomatis)</h4>
+  <div class="tiny">${S.bkUrl?'Setiap cadangan otomatis terkirim, tab <b>Transaksi (dari aplikasi)</b> di spreadsheet <b>Dompet Digital - Data</b> (folder "Dompet Digital Cadangan" di Google Drive) ikut diperbarui. Transaksi baru yang kamu ketik di tab <b>Input baru</b> bisa diambil ke aplikasi dengan tombol di bawah.':'Pasang dulu cadangan otomatis Google Drive di menu Atur supaya fitur ini aktif.'}</div>
+  <div class="fl" style="margin-top:6px"><button class="b" id="gsOut">⬆️ Kirim ke Google Sheets sekarang</button><button class="b" id="gsIn">☁️ Ambil baris baru dari Google Sheets</button><button class="b w2" id="gsOpen">Buka Google Sheets</button></div>
+  <h4 style="margin:12px 0 4px">1. Aplikasi → Excel (salin-tempel)</h4>
+  <div class="fl"><label class="lb">Sejak tanggal<input type="date" id="xlFrom" value="${S.xlLast?S.xlLast:today.slice(0,8)+'01'}"></label><label class="lb">Sampai<input type="date" id="xlTo" value="${today}"></label></div>
+  <div class="tiny" id="xlInfo"></div>
+  <button class="b w2" id="xlCopy" style="width:100%;margin-top:6px">📋 Salin transaksi untuk ditempel di Excel / Google Sheets</button>
+  <h4 style="margin:12px 0 4px">2. Excel / Google Sheets → Aplikasi</h4>
+  <textarea id="xlPaste" rows="4" placeholder="Tempel di sini baris yang disalin dari sheet Transaksi Excel / Google Sheets (kolom B sampai L)" style="width:100%"></textarea>
+  <div class="tiny" id="xlPv"></div>
+  <button class="b w2" id="xlIn" style="width:100%;margin-top:6px">⬇️ Masukkan ke aplikasi</button></div>
  <div class="card"><h3>Data</h3><div class="fl">
   <button class="b w2" id="exc">Ekspor untuk Excel (CSV)</button><button class="b" id="bak">Cadangkan (JSON)</button><label class="b" style="text-align:center">Pulihkan<input type="file" id="res" accept=".json" style="display:none"></label>
   <label class="b w2" style="text-align:center">Impor CSV transaksi baru<input type="file" id="imp" accept=".csv" style="display:none"></label>
+  <button class="b w2" id="toXg">📖 Panduan pindah data Aplikasi ⇄ Excel ⇄ Google Sheets</button>
   <button class="b w2 d" id="rst">Kembalikan ke data awal (hapus semua perubahan)</button></div>
   <div class="tiny" style="margin-top:6px">Data tersimpan di HP ini saja. Cadangkan secara rutin ke Google Drive. ${S.tx.length} transaksi.</div></div>`;
  bindSec();bindTheme();
@@ -834,10 +867,35 @@ function set(){LK={};WK={};const held=saham().filter(p=>p.lot>0).map(p=>p.kode);
  $('mo').onchange=e=>{S.mamaOpen=+e.target.value||0;save()};
  const dl=(txt,name,type)=>{const u=URL.createObjectURL(new Blob([txt],{type})),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)};
  $('exc').onclick=()=>{const rows=[['Tanggal','Akun','Tipe','Akun Tujuan','Jumlah','Tujuan','Sumber','Kategori','Keterangan','Perlu Dicek','Kos / Kamar']];
-  S.tx.slice().sort((a,b)=>a.d.localeCompare(b.d)||a.id-b.id).forEach(t=>rows.push([t.d,t.a,{M:'Masuk',K:'Keluar',T:'Pindah'}[t.t],t.tu||'',t.j,t.tj,t.sb,t.kt,t.ket,t.cek,t.kos||'']));dl(Papa.unparse(rows),'dompet-digital-transaksi.csv','text/csv')};
+  S.tx.slice().sort((a,b)=>a.d.localeCompare(b.d)||a.id-b.id).forEach(t=>rows.push([fdx(t.d),t.a,{M:'Masuk',K:'Keluar',T:'Pindah'}[t.t],t.tu||'',t.j,t.tj,t.sb,t.kt,t.ket,t.cek,t.kos||'']));dl(Papa.unparse(rows),'dompet-digital-transaksi.csv','text/csv')};
+ const fdx=d=>d.slice(8,10)+'/'+d.slice(5,7)+'/'+d.slice(0,4),TIP={M:'Masuk',K:'Keluar',T:'Pindah'};
+ const xlRows=()=>{const a=$('xlFrom').value||'0000',b=$('xlTo').value||'9999';return S.tx.filter(t=>t.d>=a&&t.d<=b).sort(txCmp)};
+ const xlInfo=()=>{const L=xlRows();$('xlInfo').innerHTML=`${L.length} transaksi akan disalin${S.xlLast?' · terakhir disalin sampai '+fdx(S.xlLast):''}`};xlInfo();$('xlFrom').onchange=xlInfo;$('xlTo').onchange=xlInfo;
+ $('xlCopy').onclick=()=>{const L=xlRows();if(!L.length)return alert('Tidak ada transaksi di rentang tanggal itu.');
+  const cl=v=>String(v==null?'':v).replace(/[\t\r\n]+/g,' ');
+  const txt=L.map(t=>[fdx(t.d),t.a,TIP[t.t],t.tu||'',t.j,t.tj,t.sb,t.kt,t.ket,t.cek||'',t.kos||''].map(cl).join('\t')).join('\n');
+  const done=()=>{S.xlLast=$('xlTo').value||today;save();xlInfo();alert(L.length+' transaksi tersalin ✓\n\nBuka Excel → sheet Transaksi → ketuk sel kolom B di baris kosong pertama di bawah data terakhir → Tempel.')};
+  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(done,()=>{$('xlPaste').value=txt;$('xlPaste').select();alert('HP tidak mengizinkan salin otomatis. Teksnya sudah ditaruh di kotak "Excel → Aplikasi": tekan lama di kotak itu → Pilih semua → Salin, lalu kosongkan kotaknya.')})};
+ const pdt=v=>{v=String(v||'').trim();let m=v.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);if(m)return`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;m=v.match(/^(\d{4})-(\d{2})-(\d{2})/);return m?m[0]:null};
+ const xlParse=()=>{const out=[],bad=[];const seen=new Set(S.tx.map(t=>[t.d,t.a,t.t,t.j,t.ket].join('|')));let dup=0;
+  for(const [i,line] of $('xlPaste').value.split(/\r?\n/).entries()){if(!line.trim())continue;const c=line.split('\t');if(/^tanggal$/i.test((c[0]||'').trim()))continue;
+   const d=pdt(c[0]),a=(c[1]||'').trim(),tp={masuk:'M',keluar:'K',pindah:'T',transfer:'T'}[(c[2]||'').trim().toLowerCase()],j=+String(c[4]||'').replace(/[^0-9]/g,'');
+   if(!d||!a||!tp||!(j>0)){bad.push(i+1);continue}
+   if(!S.acc.find(x=>x.n===a)||(tp==='T'&&!S.acc.find(x=>x.n===(c[3]||'').trim()))){bad.push(i+1+' (akun "'+(tp==='T'&&S.acc.find(x=>x.n===a)?(c[3]||'').trim():a)+'" tidak ada)');continue}
+   const o={d,a,t:tp,j,tu:tp==='T'?c[3].trim():null,tj:(c[5]||'').trim()||(tp==='M'?'Pendapatan':tp==='K'?'Pengeluaran':'Pindah Uang'),sb:(c[6]||'').trim()||(tp==='M'?'Gaji':tp==='K'?'Pengeluaran Gaji':'Pindah akun'),kt:(c[7]||'').trim()||'Lain-lain',ket:(c[8]||'').trim(),cek:(c[9]||'').trim(),kos:(c[10]||'').trim()};
+   const k=[o.d,o.a,o.t,o.j,o.ket].join('|');if(seen.has(k)){dup++;continue}seen.add(k);out.push(o)}
+  return{out,bad,dup}};
+ $('xlPaste').oninput=()=>{const r=xlParse();$('xlPv').innerHTML=$('xlPaste').value.trim()?`${r.out.length} transaksi baru siap dimasukkan${r.dup?` · ${r.dup} sudah ada di aplikasi (dilewati)`:''}${r.bad.length?` · <span class="dn">baris tidak terbaca: ${r.bad.slice(0,8).join(', ')}</span>`:''}`:''};
+ $('xlIn').onclick=()=>{const r=xlParse();if(!r.out.length)return alert(r.dup?'Semua baris sudah ada di aplikasi.':'Tidak ada baris yang terbaca. Pastikan menyalin kolom B sampai L dari sheet Transaksi.');
+  if(!confirm(`Masukkan ${r.out.length} transaksi ke aplikasi?${r.dup?`\n${r.dup} baris dilewati karena sudah ada.`:''}${r.bad.length?`\n${r.bad.length} baris tidak terbaca dan dilewati.`:''}`))return;
+  for(const o of r.out)S.tx.push({id:S.next++,...o});save();$('xlPaste').value='';
+  if(S.gsPulled){delete S.gsPulled;save();if(confirm(r.out.length+' transaksi masuk ✓\n\nKosongkan tab "Input baru" di Google Sheets supaya tidak terambil lagi? (datanya sudah masuk aplikasi & akan muncul di tab "Transaksi (dari aplikasi)" setelah cadangan berikutnya)'))gsClear().then(()=>backupNow(true))}else alert(r.out.length+' transaksi masuk ✓');set()};
+ $('xlDl').onclick=xlDownload;$('gsIn').onclick=gsPull;$('gsOut').onclick=()=>S.bkUrl?backupNow(false):alert('Pasang dulu cadangan otomatis Google Drive.');
+ $('gsOpen').onclick=async()=>{if(!S.bkUrl)return alert('Pasang dulu cadangan otomatis Google Drive.');try{const j=await (await fetch(bkU('&ss=1&t='+Date.now()),{cache:'no-store'})).json();if(j.url)window.open(j.url,'_blank');else throw 0}catch(e){alert('Belum bisa membuka. Pastikan kode Apps Script sudah versi terbaru (Atur › Salin kode Apps Script → tempel → Terapkan versi baru), lalu tekan "Kirim ke Google Sheets sekarang" sekali.')}};
+ $('toXg').onclick=()=>{go('guide');setTimeout(()=>{const x=$('xlguide');if(x)x.scrollIntoView()},100)};
  $('bak').onclick=()=>dl(JSON.stringify(S),'dompet-digital-cadangan-'+today+'.json','application/json');
  $('res').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.tx)throw 0;S=x;save();alert('Dipulihkan ✓');go('home')}catch(_){alert('File tidak valid')}};r.readAsText(f)};
- $('imp').onchange=e=>{const f=e.target.files[0];if(!f)return;Papa.parse(f,{header:true,skipEmptyLines:true,complete:({data})=>{let n=0;for(const r of data){const d=(r.Tanggal||'').trim(),j=+String(r.Jumlah||r.Nominal||'').replace(/[^0-9]/g,'');if(!/^\d{4}-\d{2}-\d{2}$/.test(d)||!(j>0))continue;
+ $('imp').onchange=e=>{const f=e.target.files[0];if(!f)return;Papa.parse(f,{header:true,skipEmptyLines:true,complete:({data})=>{let n=0;for(const r of data){const d=pdt(r.Tanggal)||'',j=+String(r.Jumlah||r.Nominal||'').replace(/[^0-9]/g,'');if(!/^\d{4}-\d{2}-\d{2}$/.test(d)||!(j>0))continue;
   const tp={masuk:'M',keluar:'K',transfer:'T',pindah:'T'}[String(r.Tipe||'').toLowerCase().trim()];if(!tp)continue;
   S.tx.push({id:S.next++,d,a:(r.Akun||'Dompet').trim(),t:tp,j,tj:r.Tujuan||(tp==='M'?'Pendapatan':tp==='K'?'Pengeluaran':'Pindah Uang'),sb:r.Sumber||(tp==='M'?'Gaji':tp==='K'?'Pengeluaran Gaji':'Pindah akun'),kt:r.Kategori||'Lain-lain',ket:r.Keterangan||'',tu:tp==='T'?(r['Akun Tujuan']||'').trim():null,cek:'Diimpor dari CSV',kos:r['Kos / Kamar']||''});n++}
   save();alert(n+' transaksi diimpor');set()}})};
@@ -920,7 +978,42 @@ function guide(){LK={};WK={};const grups=[...new Set(GUIDE.map(x=>x.g))];
  const top=o=>Object.entries(o).sort((a,b)=>b[1]-a[1])[0][0];
  const tree={};for(const o of Object.values(combos)){((tree[o.tj]=tree[o.tj]||{})[o.sb]=tree[o.tj][o.sb]||[]).push(o)}
  window._CB=combos;
- $('main').innerHTML=`<div class="card"><h3>Cara mencatat transaksi (langkah umum)</h3><ol class="ol">
+ $('main').innerHTML=`<div class="card" id="xlguide"><h3>📑 Pindah data Aplikasi ⇄ Excel ⇄ Google Sheets</h3>
+ <div class="tiny">Menu: <b>Atur › Aplikasi ⇄ Excel</b>. Kolom yang dipindah sama persis dengan sheet <b>Transaksi</b> Excel, kolom <b>B sampai L</b>: Tanggal · Akun · Tipe · Akun Tujuan · Jumlah · Tujuan · Sumber · Kategori · Keterangan · Perlu Dicek · Kos/Kamar.</div>
+ <h4>⭐ Cara paling mudah: Unduh Laporan Excel</h4><ol class="ol">
+  <li>Buka <b>Atur › Aplikasi ⇄ Excel / Google Sheets</b> → tekan <b>📊 Unduh Laporan Excel (lengkap)</b>.</li>
+  <li>File <b>Laporan_Keuangan_Pro_(tanggal).xlsx</b> tersimpan di folder <b>Download</b>. Isinya semua sheet & rumus laporanmu, dengan data terbaru dari aplikasi. Saat pertama dibuka, Excel menghitung ulang rumus, tunggu sebentar.</li>
+  <li>Mau dibuka di Google Sheets? Unggah file itu ke Google Drive → Buka dengan Google Spreadsheet.</li>
+  <li>Catatan: sheet <b>Investasi Saham</b> & <b>Investasi Reksadana</b> berisi data per tanggal file laporan terakhir dibuat bersama Claude; transaksi, saldo, laporan, uang kos, Disan & riba selalu terbaru.</li></ol>
+ <h4>☁️ Aplikasi ⇄ Google Sheets (otomatis)</h4><ol class="ol">
+  <li><b>Sekali saja:</b> perbarui kode Apps Script: Atur › <b>Salin kode Apps Script</b> → buka script.google.com, proyek cadangan-mu → hapus semua kode lama → tempel → Simpan → <b>Terapkan › Kelola deployment › ✏️ › Versi: Versi baru › Terapkan</b>. Google akan minta izin baru (untuk Google Sheets) → izinkan.</li>
+  <li><b>Aplikasi → Google Sheets:</b> otomatis setiap cadangan terkirim, atau tekan <b>⬆️ Kirim ke Google Sheets sekarang</b>. Datanya ada di spreadsheet <b>Dompet Digital - Data</b>, tab <b>Transaksi (dari aplikasi)</b> (folder "Dompet Digital Cadangan" di Google Drive). Tab ini ditimpa setiap kali kirim, jadi jangan diketik manual.</li>
+  <li><b>Google Sheets → Aplikasi:</b> ketik transaksi baru di tab <b>Input baru</b> (kolom sama: Tanggal dd/mm/yyyy · Akun · Tipe · Akun Tujuan · Jumlah · Tujuan · Sumber · Kategori · Keterangan · Perlu Dicek · Kos/Kamar). Lalu di aplikasi tekan <b>☁️ Ambil baris baru dari Google Sheets</b> → cek ringkasannya → <b>Masukkan ke aplikasi</b>. Setelah itu aplikasi menawarkan mengosongkan tab Input baru supaya tidak terambil dua kali.</li></ol>
+ <h4>A. Salin-tempel: aplikasi ke Excel</h4><ol class="ol">
+  <li>Buka <b>Atur › Aplikasi ⇄ Excel</b>.</li>
+  <li>Isi <b>Sejak tanggal</b> = hari setelah transaksi terakhir yang sudah ada di Excel (aplikasi mengingat tanggal terakhir kamu menyalin), dan <b>Sampai</b> = hari ini.</li>
+  <li>Tekan <b>📋 Salin transaksi untuk ditempel di Excel</b>.</li>
+  <li>Buka file Excel → sheet <b>Transaksi</b> → gulir ke bawah sampai <b>baris kosong pertama</b> di bawah data terakhir → ketuk sel di <b>kolom B</b> baris itu.</li>
+  <li>Tekan lama → <b>Tempel</b>. Data masuk ke kolom B–L. Kolom No, ✓ dan rumus lain terisi sendiri, saldo & laporan ikut terhitung.</li>
+  <li>Cek: di Dashboard / Saldo Akun, saldo tiap akun harus sama dengan di aplikasi.</li></ol>
+ <h4>B. Salin-tempel: Excel ke aplikasi</h4><ol class="ol">
+  <li>Di Excel sheet <b>Transaksi</b>, pilih baris-baris baru mulai <b>kolom B sampai L</b> (tanpa judul kolom) → <b>Salin</b>.</li>
+  <li>Buka aplikasi → <b>Atur › Aplikasi ⇄ Excel</b> → tempel di kotak <b>Excel → Aplikasi</b>.</li>
+  <li>Di bawah kotak muncul jumlah transaksi baru. Transaksi yang sudah ada di aplikasi (tanggal, akun, tipe, jumlah & keterangan sama) <b>otomatis dilewati</b>, jadi tidak dobel.</li>
+  <li>Tekan <b>⬇️ Masukkan ke aplikasi</b>.</li></ol>
+ <h4>C. Excel ⇄ Google Sheets</h4><ol class="ol">
+  <li><b>Excel → Google Sheets:</b> unggah file Excel ke Google Drive → buka dengan <b>Google Sheets</b> (ketuk file → Buka dengan → Google Spreadsheet). Semua sheet & rumus ikut.</li>
+  <li><b>Google Sheets → Excel:</b> di Google Sheets ketuk <b>⋮ › Bagikan & ekspor › Simpan sebagai Excel (.xlsx)</b>, lalu buka file itu di Excel.</li>
+  <li><b>Aplikasi → Google Sheets:</b> sama seperti ke Excel: tekan <b>📋 Salin</b> di aplikasi, lalu tempel di sheet <b>Transaksi</b> Google Sheets, kolom B, baris kosong paling bawah.</li>
+  <li><b>Google Sheets → Aplikasi:</b> pilih baris baru kolom B–L di Google Sheets → Salin → tempel di kotak <b>Excel → Aplikasi</b> di aplikasi → Masukkan.</li>
+  <li>Pakai <b>satu file utama</b> saja (Excel <i>atau</i> Google Sheets) untuk ditambah data, supaya tidak ada dua versi yang berbeda. Yang satunya cukup hasil konversi terbaru.</li></ol>
+ <h4>Aturan penting</h4><ul class="ol">
+  <li>Tanggal pakai format <b>dd/mm/yyyy</b>.</li>
+  <li>Nama akun harus sama persis dengan di aplikasi (mis. <i>Jago - Kantong Utama</i>). Kalau beda, baris itu dilewati dan diberi tahu nomornya.</li>
+  <li>Tipe: <b>Masuk</b>, <b>Keluar</b>, atau <b>Pindah</b> (Pindah wajib isi Akun Tujuan).</li>
+  <li>Beli/jual <b>saham & reksadana</b> tetap dicatat lewat <b>Catat › Investasi</b> di aplikasi supaya nilai investasinya ikut berubah; setelah itu baru disalin ke Excel.</li>
+  <li>Sebelum memasukkan data dari Excel, tekan <b>Cadangkan (JSON)</b> dulu untuk jaga-jaga.</li></ul></div>
+<div class="card"><h3>Cara mencatat transaksi (langkah umum)</h3><ol class="ol">
   <li>Buka menu <b>Catat</b>. Pilih <b>Transaksi biasa</b> untuk uang masuk/keluar sehari-hari, atau <b>Investasi</b> untuk saham, reksadana, deposito.</li>
   <li>Pilih jenisnya: <b>Uang masuk</b>, <b>Uang keluar</b>, atau <b>Pindah akun</b> (memindahkan uangmu sendiri antar akun).</li>
   <li>Isi <b>Tanggal</b> dan <b>Jumlah</b>.</li>
@@ -1034,13 +1127,27 @@ function forgotPin(){const c=secGet();const L=$('lock');
 document.addEventListener('visibilitychange',()=>{if(document.hidden){hiddenAt=Date.now();autoBackup(true)}else{const c=secGet();if(c.hash&&!locked&&Date.now()-hiddenAt>=(c.delay??60)*1000)lockNow()}});
 /* cadangan otomatis ke Google Drive (Apps Script milik user) */
 function bkKey(){const c=secGet();if(!c.bk){c.bk=b64(crypto.getRandomValues(new Uint8Array(18))).replace(/[^A-Za-z0-9]/g,'');secSet(c)}return c.bk}
-function bkScript(){return`var KUNCI='${bkKey()}';var FOLDER='Dompet Digital Cadangan';
+function bkScript(){return`var KUNCI='${bkKey()}';var FOLDER='Dompet Digital Cadangan';var SS_NAMA='Dompet Digital - Data';
+var HEAD=['Tanggal','Akun','Tipe','Akun Tujuan','Jumlah','Tujuan','Sumber','Kategori','Keterangan','Perlu Dicek','Kos / Kamar'];
 function folder_(){var f=DriveApp.getFoldersByName(FOLDER);return f.hasNext()?f.next():DriveApp.createFolder(FOLDER)}
+function ss_(){var p=PropertiesService.getScriptProperties(),id=p.getProperty('SS');if(id){try{return SpreadsheetApp.openById(id)}catch(e){}}
+ var s=SpreadsheetApp.create(SS_NAMA);p.setProperty('SS',s.getId());DriveApp.getFileById(s.getId()).moveTo(folder_());return s}
+function tab_(s,n){var t=s.getSheetByName(n);if(!t){t=s.insertSheet(n);t.getRange(1,1,1,HEAD.length).setValues([HEAD]).setFontWeight('bold');t.setFrozenRows(1)}return t}
+function mirror_(txt){var d=JSON.parse(txt);if(!d.tx)return;var s=ss_(),t=tab_(s,'Transaksi (dari aplikasi)');tab_(s,'Input baru');var d0=s.getSheetByName('Sheet1')||s.getSheetByName('Lembar1');if(d0&&s.getSheets().length>2)s.deleteSheet(d0);
+ var TIP={M:'Masuk',K:'Keluar',T:'Pindah'};var L=d.tx.slice().sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:a.id-b.id});
+ var rows=L.map(function(x){var p=x.d.split('-');return[new Date(+p[0],+p[1]-1,+p[2]),x.a,TIP[x.t],x.t==='T'?(x.tu||''):'',x.j,x.tj,x.sb,x.kt,x.ket||'',x.cek||'',x.kos||'']});
+ if(t.getMaxRows()>1)t.getRange(2,1,t.getMaxRows()-1,HEAD.length).clearContent();if(rows.length){t.getRange(2,1,rows.length,HEAD.length).setValues(rows);t.getRange(2,1,rows.length,1).setNumberFormat('dd/mm/yyyy');t.getRange(2,5,rows.length,1).setNumberFormat('#,##0')}}
 function doPost(e){if(e.parameter.k!==KUNCI)return ContentService.createTextOutput('ditolak');var f=folder_();var n='dompet-digital-'+Utilities.formatDate(new Date(),'Asia/Jakarta','yyyy-MM-dd')+'.json';
  var ex=f.getFilesByName(n);while(ex.hasNext())ex.next().setTrashed(true);f.createFile(n,e.postData.contents,'application/json');
- var a=[],it=f.getFiles();while(it.hasNext())a.push(it.next());a.sort(function(x,y){return y.getDateCreated()-x.getDateCreated()});for(var i=60;i<a.length;i++)a[i].setTrashed(true);return ContentService.createTextOutput('ok')}
-function doGet(e){if(e.parameter.k!==KUNCI)return ContentService.createTextOutput('{"error":"ditolak"}');var f=folder_(),it=f.getFiles(),b=null;while(it.hasNext()){var x=it.next();if(!b||x.getDateCreated()>b.getDateCreated())b=x}
- if(e.parameter.cek)return ContentService.createTextOutput(JSON.stringify({file:b?b.getName():null,waktu:b?b.getDateCreated().toISOString():null})).setMimeType(ContentService.MimeType.JSON);
+ var a=[],it=f.getFiles();while(it.hasNext()){var z=it.next();if(z.getMimeType()==='application/json')a.push(z)}a.sort(function(x,y){return y.getDateCreated()-x.getDateCreated()});for(var i=60;i<a.length;i++)a[i].setTrashed(true);
+ try{mirror_(e.postData.contents)}catch(err){}return ContentService.createTextOutput('ok')}
+function out_(o){return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON)}
+function doGet(e){if(e.parameter.k!==KUNCI)return ContentService.createTextOutput('{"error":"ditolak"}');
+ if(e.parameter.input){var t=tab_(ss_(),'Input baru'),n=t.getLastRow();return out_({rows:n>1?t.getRange(2,1,n-1,HEAD.length).getDisplayValues().filter(function(r){return r.join('').trim()}):[]})}
+ if(e.parameter.clear){var t2=tab_(ss_(),'Input baru');if(t2.getLastRow()>1)t2.getRange(2,1,t2.getLastRow()-1,HEAD.length).clearContent();return out_({ok:1})}
+ if(e.parameter.ss){var s=ss_();return out_({url:s.getUrl()})}
+ var f=folder_(),it=f.getFiles(),b=null;while(it.hasNext()){var x=it.next();if(x.getMimeType()!=='application/json')continue;if(!b||x.getDateCreated()>b.getDateCreated())b=x}
+ if(e.parameter.cek)return out_({file:b?b.getName():null,waktu:b?b.getDateCreated().toISOString():null});
  return ContentService.createTextOutput(b?b.getBlob().getDataAsString():'{}').setMimeType(ContentService.MimeType.JSON)}`}
 let bkBusy=false;
 const bkU=(x)=>S.bkUrl.trim()+(S.bkUrl.includes('?')?'&':'?')+'k='+encodeURIComponent(bkKey())+(x||'');
@@ -1236,6 +1343,60 @@ function themeCard(){const t=themeGet();return`<div class="card"><h3>Tampilan</h
 function bindTheme(){document.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{try{localStorage.setItem('dd-theme',b.dataset.th)}catch(e){}themeApply(b.dataset.th);set()});
  $('thh').onchange=e=>{HIDE=e.target.checked;try{localStorage.setItem('dd-hide',HIDE?'1':'0')}catch(x){}set()};$('thb').onclick=homeSetSheet;$('thsh').onchange=e=>{if(e.target.checked)setShare(true);else{e.target.checked=true;exitShare()}}}
 themeApply(themeGet());
+/* ===== Unduh Laporan Excel: isi template laporan dengan data terbaru dari aplikasi ===== */
+const CRCT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc32=b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRCT[(c^b[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0};
+async function zStream(data,ds){const s=new Blob([data]).stream().pipeThrough(ds);return new Uint8Array(await new Response(s).arrayBuffer())}
+async function unzip(buf){const u=new Uint8Array(buf),dv=new DataView(buf);let e=u.length-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw new Error('File template rusak');
+ const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);const files={},order=[];const td=new TextDecoder();
+ for(let i=0;i<n;i++){const m=dv.getUint16(p+10,true),cs=dv.getUint32(p+20,true),fl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true);
+  const name=td.decode(u.subarray(p+46,p+46+fl));p+=46+fl+xl+cl;
+  const ds=lo+30+dv.getUint16(lo+26,true)+dv.getUint16(lo+28,true),raw=u.subarray(ds,ds+cs);
+  files[name]=m===0?raw.slice():await zStream(raw,new DecompressionStream('deflate-raw'));order.push(name)}
+ return{files,order}}
+async function zip(files,order){const te=new TextEncoder(),parts=[],cen=[];let off=0;
+ for(const name of order){const data=files[name],nb=te.encode(name),crc=crc32(data),comp=await zStream(data,new CompressionStream('deflate-raw'));
+  const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(8,8,true);h.setUint32(14,crc,true);h.setUint32(18,comp.length,true);h.setUint32(22,data.length,true);h.setUint16(26,nb.length,true);
+  parts.push(new Uint8Array(h.buffer),nb,comp);
+  const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(10,8,true);c.setUint32(16,crc,true);c.setUint32(20,comp.length,true);c.setUint32(24,data.length,true);c.setUint16(28,nb.length,true);c.setUint32(42,off,true);
+  cen.push(new Uint8Array(c.buffer),nb);off+=30+nb.length+comp.length}
+ const cs=cen.reduce((s,x)=>s+x.length,0),e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,order.length,true);e.setUint16(10,order.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+ return new Blob([...parts,...cen,new Uint8Array(e.buffer)],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
+const xesc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,'');
+const xserial=d=>{const[y,m,dd]=d.split('-').map(Number);return Math.round((Date.UTC(y,m-1,dd)-Date.UTC(1899,11,30))/864e5)};
+/* isi sel kosong bergaya <c r="B16" s="124" t="n"></c> dengan nilai */
+function xFill(xml,cells){return xml.replace(/<c r="([A-Z]+)(\d+)"( s="\d+")?( t="n")?><\/c>|<c r="([A-Z]+)(\d+)"( s="\d+")?( t="n")?\/>/g,(all,c1,r1,s1,t1,c2,r2,s2)=>{const col=c1||c2,row=r1||r2,s=s1||s2||'';const v=cells[col+row];
+  if(v==null||v==='')return all;if(typeof v==='number')return`<c r="${col}${row}"${s}><v>${v}</v></c>`;return`<c r="${col}${row}"${s} t="inlineStr"><is><t xml:space="preserve">${xesc(v)}</t></is></c>`})}
+function sheetPath(files,name){const td=new TextDecoder(),wb=td.decode(files['xl/workbook.xml']),rel=td.decode(files['xl/_rels/workbook.xml.rels']);
+ const m=wb.match(new RegExp('<sheet [^>]*name="'+name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'"[^>]*r:id="(rId\\d+)"'));if(!m)return null;
+ const t=rel.match(new RegExp('Target="([^"]+)"[^>]*Id="'+m[1]+'"'))||rel.match(new RegExp('Id="'+m[1]+'"[^>]*Target="([^"]+)"'));return t?t[1].replace(/^\//,''):null}
+async function xlDownload(){if(!('CompressionStream' in window)||!('DecompressionStream' in window))return alert('Browser HP ini belum mendukung pembuatan file Excel. Perbarui Chrome ke versi terbaru.');
+ const btn=$('xlDl');if(btn){btn.disabled=true;btn.textContent='⏳ Membuat file Excel…'}
+ try{const r=await fetch('./laporan-template.xlsx');if(!r.ok)throw new Error('Template tidak bisa diambil (buka aplikasi sekali saat online)');
+  const {files,order}=await unzip(await r.arrayBuffer());const td=new TextDecoder(),te=new TextEncoder();
+  const put=(name,cells)=>{const p=sheetPath(files,name);if(!p)throw new Error('Sheet '+name+' tidak ada di template');files[p]=te.encode(xFill(td.decode(files[p]),cells))};
+  const TIP={M:'Masuk',K:'Keluar',T:'Pindah'},C={},over=[];
+  for(const t of S.tx){const r=15+t.id;if(r>5015){over.push(t);continue}
+   Object.assign(C,{['B'+r]:xserial(t.d),['C'+r]:t.a,['D'+r]:TIP[t.t],['E'+r]:t.t==='T'?t.tu||'':'',['F'+r]:t.j,['G'+r]:t.tj,['H'+r]:t.sb,['I'+r]:t.kt,['J'+r]:t.ket||'',['K'+r]:t.cek||'',['L'+r]:t.kos||''})}
+  if(over.length)throw new Error('Nomor transaksi melebihi 5000 baris template. Minta template baru.');
+  put('Transaksi',C);
+  const A={};S.acc.slice(0,100).forEach((a,i)=>{const r=5+i;A['A'+r]=a.n;A['B'+r]=a.g||'';A['C'+r]=+a.o||0;if(a.od)A['D'+r]=xserial(a.od)});put('Akun',A);
+  const N={};(S.notes||[]).slice().sort((p,q)=>p.d.localeCompare(q.d)).slice(0,1000).forEach((x,i)=>{const r=5+i;N['A'+r]=xserial(x.d);N['B'+r]=x.a;N['C'+r]=x.ket});put('Catatan',N);
+  const blob=await zip(files,order),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='Laporan_Keuangan_Pro_'+today+'.xlsx';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000);
+  S.xlDlAt=new Date().toISOString();save();alert('File Excel dibuat ✓\n\nBuka file "Laporan_Keuangan_Pro_'+today+'.xlsx" di folder Download. Saat pertama dibuka Excel menghitung ulang semua rumus, tunggu sebentar.')}
+ catch(e){alert('Gagal membuat file Excel: '+e.message)}
+ if(btn){btn.disabled=false;btn.textContent='📊 Unduh Laporan Excel (lengkap)'}}
+
+/* ===== Google Sheets lewat Apps Script ===== */
+async function gsPull(){if(!S.bkUrl)return alert('Pasang dulu cadangan otomatis Google Drive (Atur › Cadangan otomatis).');
+ const btn=$('gsIn');if(btn){btn.disabled=true;btn.textContent='⏳ Mengambil dari Google Sheets…'}
+ try{const r=await fetch(bkU('&input=1&t='+Date.now()),{cache:'no-store'});const t=await r.text();let j;try{j=JSON.parse(t)}catch(_){throw new Error(bkWhy(t))}
+  if(j.error)throw new Error(j.error==='ditolak'?bkWhy('ditolak'):j.error);if(!j.rows)throw new Error('Kode Apps Script masih versi lama. Salin ulang kode dari Atur, tempel di Apps Script, lalu Terapkan › Kelola deployment › ✏️ › Versi baru.');
+  const box=$('xlPaste');box.value=j.rows.map(r=>r.map(v=>String(v==null?'':v).replace(/[\t\r\n]+/g,' ')).join('\t')).join('\n');box.dispatchEvent(new Event('input'));
+  if(!j.rows.length)alert('Tab "Input baru" di Google Sheets masih kosong.');else{alert(j.rows.length+' baris diambil dari tab "Input baru" Google Sheets.\nPeriksa ringkasannya di bawah kotak, lalu tekan "Masukkan ke aplikasi".');S.gsPulled=1}}
+ catch(e){alert('Gagal mengambil dari Google Sheets: '+e.message)}
+ if(btn){btn.disabled=false;btn.textContent='☁️ Ambil baris baru dari Google Sheets'}}
+async function gsClear(){if(!S.bkUrl)return;try{await fetch(bkU('&clear=1&t='+Date.now()),{cache:'no-store'})}catch(e){}}
 /* ================= MULAI ================= */
 load();save();netS();nav();home();if(secGet().hash)lockNow();setTimeout(autoPx,800);setTimeout(autoBackup,3000);setTimeout(rutNotify,2000);
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
