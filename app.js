@@ -277,6 +277,8 @@ function rdTxIds(e){return[e.tx].filter(i=>i&&byId(i))}
 /* uang riba: pinjaman & penggantian */
 const RIBA='Kantong Uang Riba',RB_LOAN=['Pinjam dari uang riba','Kelebihan ganti dikembalikan'];
 const ribaLoan=t=>t.a===RIBA&&(t.t==='K'||t.t==='T')&&(RB_LOAN.includes(t.kt)||t.tj==='Pengeluaran');
+/* belanja yang dibayar langsung dari Kantong Uang Riba = pinjaman sekaligus pengeluaran */
+const rbx=t=>t.tj==='Pengeluaran'&&t.a===RIBA&&t.t==='K';
 const ribaRepay=t=>t.kt==='Ganti uang riba'&&((t.a===RIBA&&t.t==='M')||(t.t==='T'&&t.tu===RIBA));
 function utangRiba(d=today){return sum(t=>t.d<=d&&ribaLoan(t))-sum(t=>t.d<=d&&ribaRepay(t))}
 function ribaLoans(){const L=S.tx.filter(t=>t.d<=today&&ribaLoan(t)).sort((a,b)=>a.d.localeCompare(b.d)||a.id-b.id).map(t=>({t,sisa:t.j}));
@@ -354,7 +356,7 @@ function why(f,title,o={}){const res=S.tx.filter(t=>match(t,f)).sort((p,q)=>q.d.
   h+=`<h4>Rincian per ${byDay?'tanggal':'bulan'} (Rp, ketuk baris untuk transaksinya)</h4><div class="tw"><table class="sm"><tr><th>${byDay?'Tgl':'Bulan'}</th><th class="n">Masuk</th><th class="n">Keluar</th>${hasT?'<th class="n">Pindah</th>':''}<th class="n">Selisih</th></tr>${tr}<tr><td><b>Total</b></td><td class="n up"><b>${n0(sM)}</b></td><td class="n dn"><b>${n0(sK)}</b></td>${hasT?`<td class="n"><b>${n0(sT)}</b></td>`:''}<td class="n"><b>${Math.round(sM-sK).toLocaleString('id-ID')}</b></td></tr></table></div>${rows.length>36?'<div class="tiny">Ditampilkan 36 bulan terakhir</div>':''}`}
  if(!o.noTx){
  h+=`<h4>Dari ${res.length} transaksi</h4>`+[['Uang masuk','M','up'],['Uang keluar','K','dn'],['Pindah antar akun','T','']].filter(x=>T[x[1]]).map(([l,k,c])=>`<div class="kv"><span>${l}</span><span class="ac ${c}" data-l="${LKs({...clean(f),tipe:k,title:title+' · '+l})}">${rp(T[k])}</span></div>`).join('');
- h+=list('Menurut tujuan › sumber › kategori',grp(t=>`${t.tj} › ${t.sb} › ${t.kt}`).sort((a,b)=>tot(b[1])-tot(a[1])));
+ h+=list('Menurut tujuan › sumber › kategori',grp(t=>rbx(t)?'Pindah Uang › Pinjam uang riba › Pinjam dari uang riba':`${t.tj} › ${t.sb} › ${t.kt}`).sort((a,b)=>tot(b[1])-tot(a[1])));
  h+=list('Menurut akun',grp(t=>t.t==='T'?t.a+' → '+t.tu:t.a).sort((a,b)=>tot(b[1])-tot(a[1])));
  h+=res.length?`<h4>Transaksi terbesar (ketuk untuk detail)</h4>`+res.slice().sort((a,b)=>b.j-a.j).slice(0,5).map(txRow).join(''):'<div class="empty">Tidak ada transaksi</div>';
  if(res.length)h+=`<button class="b p" style="width:100%;margin-top:10px" data-l="${LKs({...clean(f),title})}">Lihat semua ${res.length} transaksi di Riwayat</button>`}
@@ -488,7 +490,7 @@ function trx(){LK={};WK={};const f=F,fc=clean(F),ft=F.title||'Hasil pencarian';c
  document.querySelectorAll('#aggSeg button').forEach(b=>b.onclick=()=>{agg=b.dataset.g;trx()});
  if($('more'))$('more').onclick=()=>{page++;trx()}}
 function txRow(t){const c=t.t==='M'?'up':t.t==='K'?'dn':'';const s=t.t==='M'?'+':t.t==='K'?'−':'';
- return`<div class="row" data-tx="${t.id}"><div class="l"><div class="t1">${esc(t.ket||t.kt)}</div><div class="t2">${fdate(t.d)} · ${esc(t.a)}${t.t==='T'?' → '+esc(t.tu):''} · ${esc(t.sb)} › ${esc(t.kt)}${t.kos?' · '+esc(t.kos):''}${t.tj==='Pengeluaran'&&ribaLoan(t)?' · pinjam uang riba':''}${t.cek?' · ⚠️':''}</div></div><div class="r ${c}">${s}${rp(t.j)}</div></div>`}
+ return`<div class="row" data-tx="${t.id}"><div class="l"><div class="t1">${esc(t.ket||t.kt)}</div><div class="t2">${fdate(t.d)} · ${esc(t.a)}${t.t==='T'?' → '+esc(t.tu):''} · ${rbx(t)?'Pinjam uang riba › Pinjam dari uang riba · pengeluaran: '+esc(t.kt):esc(t.sb)+' › '+esc(t.kt)}${t.kos?' · '+esc(t.kos):''}${t.cek?' · ⚠️':''}</div></div><div class="r ${c}">${s}${rp(t.j)}</div></div>`}
 function invLinks(id){const out=[];for(const e of allSaham())if(e.tx===id)out.push(`<span class="ac" data-sk="${esc(e.kode)}">${e.jenis} saham ${esc(e.kode)} (${fdate(e.tgl)})</span>`);
  for(const e of allRd())if(e.tx===id)out.push(`<span class="ac" data-rg="${esc(e.tujuan)}">${e.jenis} reksadana ${esc(e.tujuan)} (${fdate(e.tgl)})</span>`);
  for(const d of S.inv.dep)if((d.tx||[]).includes(id))out.push(`<span class="ac" data-dp="${d.id}">Deposito ${esc(d.bpr)}</span>`);return out}
@@ -506,6 +508,7 @@ function detail(id){const t=byId(id);if(!t)return;const inv=invLinks(id);
  ${t.t==='T'?`<div class="kv"><span>Pindah</span><span><b>${esc(t.a)}</b> → <b>${esc(t.tu)}</b></span></div>`:''}${t.ket2?`<div class="tiny" style="margin:4px 0">Catatan di akun tujuan: ${esc(t.ket2)}</div>`:''}
  <div class="kv"><span>Jumlah</span><span class="${t.t==='M'?'up':t.t==='K'?'dn':''}">${{M:'Masuk ',K:'Keluar ',T:'Pindah '}[t.t]}${rp(t.j)}</span></div>
 
+ ${rbx(t)?`<div class="kv"><span>Status</span><span><b>Pinjam dari uang riba</b> (sekaligus pengeluaran)</span></div>`:''}
  <div class="kv"><span>Sumber</span><span>${L(esc(t.sb),{tj:t.tj,sb:t.sb,title:t.sb})}</span></div>
  <div class="kv"><span>Kategori</span><span>${L(esc(t.kt),{tj:t.tj,sb:t.sb,kt:t.kt,title:t.kt})}</span></div>
  ${t.kos?`<div class="kv"><span>Kos / kamar</span><span>${L(esc(t.kos),{kos:t.kos,title:t.kos})}</span></div>`:''}
@@ -530,7 +533,7 @@ function buku(){LK={};WK={};if(!S.acc.some(a=>a.n===BA.a))BA.a=S.acc[0].n;const[
  const flushTo=d=>{for(const x of [...new Set(NT.map(q=>q.d))].sort())if(x<d&&x>cur&&!L.some(t=>t.d===x&&flow(t,n))){rows+=hdr(x)}};
  for(const t of L){const f=flow(t,n);if(!f)continue;if(t.d!==cur){flushTo(t.d);cur=t.d;rows+=hdr(t.d)}
   run+=f*t.j;if(f>0)tin+=t.j;else tout+=t.j;
-  rows+=`<tr class="cl" data-tx="${t.id}"><td class="kt">${esc(t.ket||t.kt)}<div class="tiny">${esc(t.kt)}${t.t==='T'?' · '+(f>0?'dari '+esc(t.a):'ke '+esc(t.tu)):''}</div></td><td class="n up">${f>0?nf(t.j):''}</td><td class="n dn">${f<0?nf(t.j):''}</td><td class="n">${rp(run).replace('Rp','')}</td></tr>`}
+  rows+=`<tr class="cl" data-tx="${t.id}"><td class="kt">${esc(t.ket||t.kt)}<div class="tiny">${rbx(t)?'Pinjam dari uang riba · ':''}${esc(t.kt)}${t.t==='T'?' · '+(f>0?'dari '+esc(t.a):'ke '+esc(t.tu)):''}</div></td><td class="n up">${f>0?nf(t.j):''}</td><td class="n dn">${f<0?nf(t.j):''}</td><td class="n">${rp(run).replace('Rp','')}</td></tr>`}
  flushTo('9999');
  const accs=S.acc.filter(a=>a.n===n||bal(a.n)||S.tx.some(t=>t.a===a.n||t.tu===a.n));
  $('main').innerHTML=`<div class="card"><div class="seg"><button id="bkDaftar">Daftar & cari</button><button class="on">Buku akun</button></div>
