@@ -17,12 +17,12 @@ const TUJ=['Pendapatan','Pengeluaran','Tabungan','Pindah Uang'];
 const KOSL=['Kos cowok · Kamar 1','Kos cowok · Kamar 2','Kos cowok · Kamar 3','Kos cowok · Kamar 4','Kos cowok · Kamar 5','Kos cowok · Kamar ?','Kos cewek · Kamar 1','Kos cewek · Kamar 2','Kos cewek · Kamar 3','Kos cewek · Kamar 4','Kos cewek · Kamar 5','Kos cewek · Kamar 6','Kos cewek · Kamar 7','Kos cewek · Kamar ?','Sewa lapak pasar','Penggantian / lainnya'];
 const SUMBER={Pendapatan:['Gaji','Jasa','Uang Kos Mama','Uang Kedai','Uang Disan'],
   Pengeluaran:['Pengeluaran Gaji','Pengeluaran Jasa','Pengeluaran Uang Kos','Pengeluaran Uang Kedai','Pengeluaran Uang Disan'],
-  Tabungan:['Saham','Reksadana','Deposito','Jula-jula','Reksadana uang kos mama'],'Pindah Uang':['Pindah akun','Dana riba','Utang & piutang','Pinjam uang mama','Pinjam uang riba','Pinjam uang kos','Titipan orang lain']};
+  Tabungan:['Saham','Reksadana','Deposito','Jula-jula','Reksadana uang kos mama'],'Pindah Uang':['Pindah akun','Dana riba','Utang & piutang','Pinjam uang mama','Pinjam uang riba','Pinjam uang kos','Pinjam uang Randu','Titipan orang lain']};
 const MAMA_IN=['Uang Kos Mama','Uang Kedai'],MAMA_OUT=['Pengeluaran Uang Kos','Pengeluaran Uang Kedai'];
 let S;
 function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
  if(!S||!S.tx){S={acc:SEED.acc,tx:SEED.tx,next:Math.max(...SEED.tx.map(t=>t.id))+1,price:{...INV.last},rdcur:{},goals:[],seedAt:today}}
- S.price=S.price||{...INV.last};S.rdcur=S.rdcur||{};S.goals=S.goals||[];S.inv=S.inv||{saham:[],rd:[],dep:[]};S.inv.saham=S.inv.saham||[];S.inv.rd=S.inv.rd||[];S.inv.dep=S.inv.dep||[];S.pxUrl=S.pxUrl||'';S.kuliah=S.kuliah||null;migrate();migrate5();if(!S.mig6){S.rdcur={};S.mig6=1;save()}migrate7();migrate8();migrate9();migrate10();migrate11();migrate12();migrate13();migrate14();migrate15();if(!S.mig16){const b=S.acc.find(a=>a.n==='Bank BRI');if(b)b.tutup=1;S.mig16=1;save()}migrate17();migrate18();migrate19();migrate20();if(!window.NO21)migrate21();migrate22();migrate23();migrate24();migrate25();migrate26();migrate27();migrate28();migrate29();migrate30();migrate31();migrate32()}
+ S.price=S.price||{...INV.last};S.rdcur=S.rdcur||{};S.goals=S.goals||[];S.inv=S.inv||{saham:[],rd:[],dep:[]};S.inv.saham=S.inv.saham||[];S.inv.rd=S.inv.rd||[];S.inv.dep=S.inv.dep||[];S.pxUrl=S.pxUrl||'';S.kuliah=S.kuliah||null;migrate();migrate5();if(!S.mig6){S.rdcur={};S.mig6=1;save()}migrate7();migrate8();migrate9();migrate10();migrate11();migrate12();migrate13();migrate14();migrate15();if(!S.mig16){const b=S.acc.find(a=>a.n==='Bank BRI');if(b)b.tutup=1;S.mig16=1;save()}migrate17();migrate18();migrate19();migrate20();if(!window.NO21)migrate21();migrate22();migrate23();migrate24();migrate25();migrate26();migrate27();migrate28();migrate29();migrate30();migrate31();migrate32();migrate33();migrate34()}
 const MIG4={"rename": {"from": "Uang dari Disan", "to": "Uang untuk Disan"}, "upd": [{"id": 1591, "d": "2025-12-09", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1612, "d": "2025-12-15", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1832, "d": "2026-02-02", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Dianggap uang untuk Disan: kk Lisa mengganti uang yang dipakai untuk belanja Disan 28 Jan 2026"}}, {"id": 1843, "d": "2026-02-05", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1935, "d": "2026-02-13", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2074, "d": "2026-03-13", "j": 600000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "THR untuk Disan: belum ada catatan kapan uang ini diberikan ke Disan"}}, {"id": 2110, "d": "2026-04-01", "j": 200000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2245, "d": "2026-05-05", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Untuk perbaikan HP Disan: belum ada catatan kapan uang ini dipakai/diberikan"}}, {"id": 2340, "d": "2026-06-05", "j": 400000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2341, "d": "2026-06-05", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2527, "d": "2026-07-10", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2548, "d": "2026-07-16", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2608, "d": "2026-08-03", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2664, "d": "2026-08-14", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Belum ada catatan kapan uang ini diberikan ke Disan"}}, {"id": 2707, "d": "2026-09-01", "j": 350000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2725, "d": "2026-09-06", "j": 50000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1592, "d": "2025-12-10", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 1620, "d": "2025-12-17", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Dikembalikan ke kk Lisa"}}, {"id": 1948, "d": "2026-02-23", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2353, "d": "2026-06-05", "j": 500000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2529, "d": "2026-07-11", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2549, "d": "2026-07-16", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2622, "d": "2026-08-05", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2716, "d": "2026-09-04", "j": 300000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2730, "d": "2026-09-06", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 1827, "d": "2026-01-28", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 1932, "d": "2026-02-11", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2010, "d": "2026-03-03", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2088, "d": "2026-03-18", "j": 50000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2162, "d": "2026-04-08", "j": 150000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2277, "d": "2026-05-11", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2278, "d": "2026-05-11", "j": 150000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2087, "d": "2026-03-16", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2252, "d": "2026-05-06", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 1994, "d": "2026-03-02", "j": 550000, "set": {"j": 450000, "cek": "Dipisah: Rp100.000 untuk belanja Disan dicatat di baris sendiri (Uang untuk Disan)"}}], "add": [{"d": "2026-03-02", "a": "Bank Mandiri", "t": "M", "j": 100000, "tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "ket": "Bagian dari Tf masuk kk lisa Rp550.000: Rp100.000 untuk belanja disan", "tu": null, "cek": "", "kos": ""}, {"d": "2026-09-08", "a": "Uang Kos Mama Cash", "t": "K", "j": 300000, "tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri", "ket": "Top up saldo gopay tabungan, uang kos mama cash Rp300.000 (pasangan catatan GoPay 8 Sep 2026: dari dompet Rp230.500, dari uang kos mama Rp300.000)", "tu": null, "cek": "", "kos": ""}]};
 function migrate(){if(S.mig4)return;const T={};for(const t of S.tx)T[t.id]=t;
  for(const t of S.tx)if(t.kt===MIG4.rename.from)t.kt=MIG4.rename.to;
@@ -219,6 +219,20 @@ function migrate31(){if(S.mig31||window.NO31)return;const RB='Kantong Uang Riba'
   if(dk){x.tj='Pengeluaran';if(x.sb!=='Pengeluaran Uang Kos'){x.sb=PG;x.kt='Pinjam dari uang riba'}}else if(KT.includes(x.kt))x.sb=PG}
  S.mig31=1;save()}
 function migrate32(){if(S.mig32||window.NO32)return;for(const x of S.tx)if(x.a==='Kantong Uang Riba'&&x.t==='K'&&!x.tu&&x.tj==='Pengeluaran'&&x.sb==='Pengeluaran Uang Kos')x.kt='Pinjam dari uang riba';S.mig32=1;save()}
+function migrate33(){if(S.mig33||window.NO33)return;S.txMap=S.txMap||{};const k=S.tx.find(x=>x.a==='Uang Kos Mama Cash'&&x.d==='2026-09-06'&&x.t==='K'&&x.j===300000&&x.tj==='Pindah Uang'&&!x.tu),m=S.tx.find(x=>x.a==='Dompet'&&x.d==='2026-09-07'&&x.t==='M'&&x.j===300000&&x.tj==='Pindah Uang'&&!x.tu);
+ if(k&&m){k.t='T';k.tu='Dompet';k.sb='Pinjam uang kos';k.kt='Pinjam dari uang kos';k.lunas=1;if(m.ket&&m.ket!==k.ket)k.ket2=m.ket;S.txMap[m.id]=k.id;S.tx=S.tx.filter(x=>x!==m)}S.mig33=1;save()}
+function migrate34(){if(S.mig34||window.NO34)return;S.txMap=S.txMap||{};const RB='Kantong Uang Riba',KC='Uang Kos Mama Cash',DP='Dompet',KM='Jago - Uang Kos Mama',G='GoPay Tabungan',RJ='Pinjam uang Randu',RK=['Pinjam dari uang riba','Ganti uang riba','Kelebihan ganti dikembalikan'],PA='Pindah antar akun sendiri';
+ for(const x of S.tx){const kt=x.ket||'';
+  if(x.tj==='Pindah Uang'&&RK.includes(x.kt)&&x.sb==='Pengeluaran Gaji')x.sb='Pindah akun';
+  if(x.t==='T'&&x.tu===RB&&x.tj==='Pindah Uang'&&x.kt===PA&&(/bunga/i.test(kt)||(x.j<5000&&/^\s*pindah ke kantong pengeluaran (uang )?riba\s*$/i.test(kt)))&&!/dividen|keuntungan|cashback|pinjam/i.test(kt)){const k=/stoc?kbit/i.test(kt)?'kantong stockbit':{'Jago - Kantong Utama':'kantong utama','Jago - Kantong Stockbit':'kantong stockbit',[KM]:'kantong uang kos mama',[G]:'gopay tabungan'}[x.a];if(k)x.kt='Bunga bank jago '+k}
+  if(x.t==='M'&&x.a===RB&&!x.tu&&x.tj==='Pindah Uang'&&x.kt===PA&&/gopay/i.test(kt)&&/bunga/i.test(kt))x.kt='Bunga bank jago gopay tabungan'}
+ const f=(a,d,t,j,tu)=>S.tx.find(x=>x.a===a&&x.d===d&&x.t===t&&x.j===j&&(t==='T'?x.tu===tu:!x.tu));let k,m;
+ if((k=f(DP,'2026-07-12','T',5000,KC))){k.sb=RJ;k.kt='Pinjam dari uang Randu'}
+ k=f(KC,'2026-08-03','K',5000);m=f(DP,'2026-08-03','M',5000);if(k&&m&&k.tj==='Pengeluaran'){k.t='T';k.tu=DP;k.tj='Pindah Uang';k.sb=RJ;k.kt='Ganti uang Randu';if(m.ket&&m.ket!==k.ket)k.ket2=m.ket;S.txMap[m.id]=k.id;S.tx=S.tx.filter(x=>x!==m)}
+ k=f(DP,'2026-04-30','K',10000);if(k&&k.sb==='Pengeluaran Uang Kos'){S.tx.push({id:S.next++,d:k.d,a:KC,t:'K',j:10000,tj:'Pengeluaran',sb:'Pengeluaran Uang Kos',kt:k.kt,ket:'Beli kepala cok raun sumur bor',tu:null,cek:'',kos:k.kos||''});k.t='T';k.tu=KC;k.tj='Pindah Uang';k.sb=RJ;k.kt='Pinjam dari uang Randu'}
+ if((k=f(KM,'2026-05-12','T',10000,G))&&/randu/i.test(k.ket||'')){k.sb=RJ;k.kt='Ganti uang Randu'}
+ k=S.tx.find(x=>x.a===DP&&x.d==='2025-09-10'&&x.t==='K'&&x.j===10000&&x.sb==='Pengeluaran Gaji'&&/stop ?kontak/i.test(x.ket||''));if(k){k.sb='Pengeluaran Uang Kos';k.kt='Kebutuhan & perbaikan kosan'}
+ S.mig34=1;save()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('Penyimpanan HP penuh: '+e.message)}}
 const accNames=()=>S.acc.map(a=>a.n);
 const byId=id=>S.tx.find(t=>t.id===id)||(S.txMap&&S.txMap[id]!=null?S.tx.find(t=>t.id===S.txMap[id]):undefined);
@@ -302,7 +316,7 @@ function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title
 const flow=(t,a)=>t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
 let V='home',charts={};
-const VIEWS=[['home','Beranda','🏠'],['trx','Transaksi','📋'],['buku','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['add','Catat','➕'],['guide','Panduan','📖'],['set','Atur','⚙️']];
+const VIEWS=[['home','Beranda','🏠'],['trx','Transaksi','📋'],['buku','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
  $('nav').innerHTML=`<div class="dh"><b>Dompet Digital</b><div class="tiny">Menu</div></div>`+VIEWS.map(([k,l,i])=>`<button data-v="${k}" class="${k===V?'on':''}"><span class="ic">${i}</span>${l}${k==='rut'&&rutDue().length?`<span class="bdg">${rutDue().length}</span>`:''}</button>`).join('');
  $('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{drawer(false);if(b.dataset.v==='trx'&&V!=='trx')F={};if(b.dataset.v==='add'){EDIT=null;TPL=null}go(b.dataset.v)});
@@ -314,7 +328,7 @@ $('fab').onclick=()=>{EDIT=null;TPL=null;go('add')};
  addEventListener('touchend',e=>{if(x0===null)return;const t=e.changedTouches[0],dx=t.clientX-x0,dy=Math.abs(t.clientY-y0);if(dy<60){if(dx>60)drawer(true);else if(dx<-60)drawer(false)}x0=null},{passive:true})})();
 let NAVS=[];
 function go(v,opt){if(!(opt&&opt.nopush)&&(v!==V||window._prevF)){const open=$('sheet').style.display==='flex';NAVS.push({v:V,F:window._prevF||{...F},sh:open?SH.slice():null,wk:{...WK},lk:{...LK},y:scrollY});if(NAVS.length>60)NAVS.shift()}
- window._prevF=null;closeSheet();V=v;nav();Object.values(charts).forEach(c=>c.destroy&&c.destroy());charts={};({home,trx,rep,mama:mamaV,inv:invV,plan,add,guide,set,bud:budV,rut:rutV,rec:recV,buku})[v]();window.scrollTo(0,0)}
+ window._prevF=null;closeSheet();V=v;nav();Object.values(charts).forEach(c=>c.destroy&&c.destroy());charts={};({home,trx,rep,mama:mamaV,inv:invV,plan,add,guide,set,bud:budV,rut:rutV,rec:recV,buku,warn:warnV})[v]();window.scrollTo(0,0)}
 /* jendela kecil bertumpuk (bisa kembali) */
 let SH=[];
 function sheet(html,bind){if($('sheet').style.display!=='flex')SH=[];SH.push({html,bind});rs()}
@@ -455,7 +469,7 @@ function accSheet(n){const x=S.acc.find(a=>a.n===n);if(!x)return;const b=bal(n);
   note:esc(x.g)+(x.ket?' · '+esc(x.ket):''),html:`<button class="b p" style="width:100%;margin:6px 0" data-x="${FN(()=>{BA.a=n;BA.m=today.slice(0,7);go('buku')})}">📒 Buka Buku Akun ${esc(n)}</button><h4>6 bulan terakhir (ketuk baris untuk transaksinya)</h4><div class="tw"><table><tr><th>Bulan</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Saldo akhir</th></tr>${mrows}</table></div>`})}
 /* ================= TRANSAKSI ================= */
 function opts(list,sel,first){return(first?`<option value="">${first}</option>`:'')+list.map(v=>`<option ${v===sel?'selected':''}>${esc(v)}</option>`).join('')}
-function katList(tj,sb){return[...new Set((sb==='Pinjam uang kos'?['Pinjam dari uang kos','Ganti uang kos']:[]).concat(S.tx.filter(t=>(!tj||t.tj===tj)&&(!sb||t.sb===sb)).map(t=>t.kt)))].sort()}
+function katList(tj,sb){return[...new Set((sb==='Pinjam uang kos'?['Pinjam dari uang kos','Ganti uang kos']:sb==='Pinjam uang Randu'?['Pinjam dari uang Randu','Ganti uang Randu']:sb==='Pindah akun'?['Pindah antar akun sendiri','Pinjam dari uang riba','Ganti uang riba','Bunga bank jago kantong utama','Bunga bank jago kantong stockbit','Bunga bank jago kantong uang kos mama','Bunga bank jago gopay tabungan','Bunga bank jago kantong pengeluaran uang riba']:[]).concat(S.tx.filter(t=>(!tj||t.tj===tj)&&(!sb||t.sb===sb)).map(t=>t.kt)))].sort()}
 function trx(){LK={};WK={};const f=F,fc=clean(F),ft=F.title||'Hasil pencarian';const res=S.tx.filter(t=>match(t,f)).sort((p,q)=>q.d.localeCompare(p.d)||q.id-p.id);
  const sIn=res.reduce((s,t)=>s+(t.t==='M'?t.j:0),0),sOut=res.reduce((s,t)=>s+(t.t==='K'?t.j:0),0),sTr=res.reduce((s,t)=>s+(t.t==='T'?t.j:0),0);
  const g={};for(const t of res){const k=agg==='hari'?t.d:agg==='bulan'?t.d.slice(0,7):t.d.slice(0,4);const o=g[k]=g[k]||[0,0];if(t.t==='M')o[0]+=t.j;else if(t.t==='K')o[1]+=t.j}
@@ -523,7 +537,8 @@ function detail(id){const t=byId(id);if(!t)return;const inv=invLinks(id);
  ${t.cek?`<div class="st w">⚠️ ${esc(t.cek)}</div>`:''}
  ${t.foto?'<div id="ftv" style="margin-top:8px">Memuat foto…</div>':''}
  <div class="g2" style="margin-top:12px"><button class="b" id="edT">Ubah</button><button class="b d" id="delT">Hapus</button></div>
- <button class="b" id="rutT" style="width:100%;margin-top:6px">🔁 Jadikan transaksi rutin</button>`,()=>{if(t.foto)fotoView(id);$('rutT').onclick=()=>rutForm(null,t);
+ <button class="b" id="rutT" style="width:100%;margin-top:6px">🔁 Jadikan transaksi rutin</button>
+ <button class="b" id="wrnT" style="width:100%;margin-top:6px">⚠️ ${t.cek?'Ubah / hapus':'Tambah'} peringatan</button>`,()=>{if(t.foto)fotoView(id);$('wrnT').onclick=()=>warnEdit(id,()=>{closeSheet();go(V)});$('rutT').onclick=()=>rutForm(null,t);
  $('edT').onclick=()=>{if(appInv(id))return alert('Ini transaksi investasi yang dicatat lewat Catat › Investasi. Untuk mengubahnya, hapus transaksi ini lalu catat ulang, supaya data investasinya ikut benar.');closeSheet();EDIT=id;TPL=null;go('add')};
  $('delT').onclick=()=>{if(!confirm('Hapus transaksi ini?'+(appInv(id)?' Data investasi yang terkait juga ikut dihapus.':'')))return;const extra=unlinkInv(id);S.tx=S.tx.filter(x=>x.id!==id&&!extra.includes(x.id));if(t.foto)fotoDel(id).catch(()=>{});save();closeSheet();go(V)}})}
 
@@ -532,7 +547,7 @@ let BA={a:'Jago - Kantong Utama',m:today.slice(0,7)};const HARI=['Minggu','Senin
 function buku(){LK={};WK={};if(!S.acc.some(a=>a.n===BA.a))BA.a=S.acc[0].n;const[y,mm]=BA.m.split('-').map(Number),a0=BA.m+'-01',a1=mEnd(y,mm-1),prev=ds(new Date(y,mm-1,0)),n=BA.a;
  const open=bal(n,prev),L=S.tx.filter(t=>inR(t,a0,a1)&&(t.a===n||t.tu===n)).sort(txCmp);
  let run=open,tin=0,tout=0,rows='',cur='';const nf=v=>v?rp(v).replace('Rp',''):'';
- const NT=(S.notes||[]).filter(x=>x.a===n&&x.d>=a0&&x.d<=a1);const ntRow=d=>NT.filter(x=>x.d===d).map(x=>`<tr class="note"><td colspan="4">📝 <i>${esc(x.ket)}</i></td></tr>`).join('');
+ const NT=(S.notes||[]).filter(x=>x.a===n&&x.d>=a0&&x.d<=a1);const ntRow=d=>NT.filter(x=>x.d===d).map(x=>`<tr class="note cl" data-nt="${S.notes.indexOf(x)}"><td colspan="4">📝 <i>${esc(x.ket)}</i> <span class="ac tiny">ubah</span></td></tr>`).join('');
  const hdr=d=>{const dd=pd(d),dl=L.filter(x=>x.d===d),di=dl.reduce((p,x)=>p+(flow(x,n)>0?x.j:0),0),dk=dl.reduce((p,x)=>p+(flow(x,n)<0?x.j:0),0);return `<tr class="bdh"><td colspan="4">${HARI[dd.getDay()]}, ${fdate(d)}<span class="tiny">${di||dk?' · ':''}${di?'+'+nf(di):''}${di&&dk?' ':''}${dk?'−'+nf(dk):''}</span></td></tr>`+ntRow(d)};
  const flushTo=d=>{for(const x of [...new Set(NT.map(q=>q.d))].sort())if(x<d&&x>cur&&!L.some(t=>t.d===x&&flow(t,n))){rows+=hdr(x)}};
  for(const t of L){const f=flow(t,n);if(!f)continue;if(t.d!==cur){flushTo(t.d);cur=t.d;rows+=hdr(t.d)}
@@ -542,7 +557,7 @@ function buku(){LK={};WK={};if(!S.acc.some(a=>a.n===BA.a))BA.a=S.acc[0].n;const[
  const accs=S.acc.filter(a=>a.n===n||bal(a.n)||S.tx.some(t=>t.a===a.n||t.tu===a.n));
  $('main').innerHTML=`<div class="card"><div class="seg"><button id="bkDaftar">Daftar & cari</button><button class="on">Buku akun</button></div>
   <label class="lb" style="margin-top:8px">Akun<select id="baA">${opts(accs.map(a=>a.n),n)}</select></label>
-  <div class="mnav"><button class="b" id="baP">‹</button><input type="month" id="baM" value="${BA.m}" style="width:auto;text-align:center"><button class="b" id="baN">›</button></div></div>
+  <div class="mnav"><button class="b" id="baP">‹</button><input type="month" id="baM" value="${BA.m}" style="width:auto;text-align:center"><button class="b" id="baN">›</button></div><button class="b" data-nt="-1" style="width:100%;margin-top:6px">📝 Tambah catatan di akun ini</button></div>
  <div class="card bk"><h3>${esc(n)} · ${BULAN[mm-1]} ${y}</h3>
   <div class="tw"><table class="bkt"><tr><th>Keterangan</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Saldo</th></tr>
   <tr class="sa"><td>Saldo awal (akhir ${BULAN[(mm+10)%12]})</td><td></td><td></td><td class="n"><b>${rp(open).replace('Rp','')}</b></td></tr>
@@ -619,7 +634,7 @@ function mamaV(){LK={};WK={};const tabs=`<div class="seg" id="mt">${[['mama','Ua
   const grp=w=>Object.entries(byK).filter(([k])=>k.startsWith('Kos '+w)).sort();const tot=w=>grp(w).reduce((p,x)=>p+x[1],0);const allIds=w=>grp(w).flatMap(([k])=>idK[k]);
   const outK={};for(const t of S.tx)if(t.sb==='Pengeluaran Uang Kos'&&inR(t,Y0,Y1))outK[t.kt]=(outK[t.kt]||0)+t.j;const rk=tabNet(Y0,Y1,true);
   const kr=(k,lbl)=>`<div class="row" data-x="${FN(()=>kamarSheet(k))}"><div class="l">${lbl}</div><div class="r up">${rp(byK[k]||0)}</div><span class="chev">›</span></div>`;
-  body=kosLoanCard()+kosBayarCard(MY)+kosMonth+`<div class="card"><h3>Kos cowok (5 kamar) — ${MY}</h3>${[1,2,3,4,5,'?'].map(i=>kr('Kos cowok · Kamar '+i,i==='?'?'Kamar belum tercatat':'Kamar '+i)).join('')}
+  body=kosLoanCard()+rdLoanCard()+kosBayarCard(MY)+kosMonth+`<div class="card"><h3>Kos cowok (5 kamar) — ${MY}</h3>${[1,2,3,4,5,'?'].map(i=>kr('Kos cowok · Kamar '+i,i==='?'?'Kamar belum tercatat':'Kamar '+i)).join('')}
    ${grp('cowok').filter(([k])=>!/Kamar [1-5?]$/.test(k)).map(([k])=>kr(k,esc(k.replace('Kos cowok · ','')))).join('')}<div class="kv"><b>Total kos cowok</b><b>${X(rp(tot('cowok')),{ids:allIds('cowok')},'Kos cowok · '+MY)}</b></div></div>
   <div class="card"><h3>Kos cewek (7 kamar) — ${MY}</h3>${[1,2,3,4,5,6,7,'?'].map(i=>kr('Kos cewek · Kamar '+i,i==='?'?'Kamar belum tercatat':'Kamar '+i)).join('')}
    ${grp('cewek').filter(([k])=>!/Kamar [1-7?]$/.test(k)).map(([k])=>kr(k,esc(k.replace('Kos cewek · ','')))).join('')}<div class="kv"><b>Total kos cewek</b><b>${X(rp(tot('cewek')),{ids:allIds('cewek')},'Kos cewek · '+MY)}</b></div></div>
@@ -650,7 +665,7 @@ function mamaV(){LK={};WK={};const tabs=`<div class="seg" id="mt">${[['mama','Ua
    ${open.map(x=>`<div class="row" data-tx="${x.t.id}"><div class="l"><div class="t1">${esc(x.t.ket||x.t.kt)}</div><div class="t2">${fdate(x.t.d)} · dipinjam ${rp(x.t.j)}</div></div><div class="r dn">${rp(x.sisa)}</div><span class="chev">›</span></div>`).join('')}
    <div class="kv"><span>Total pernah dipinjam</span><span class="ac" data-x="${WKs({ids:S.tx.filter(ribaLoan).map(t=>t.id)},'Semua pinjaman uang riba',{sumT:'Total dipinjam'})}">${rp(sum(t=>t.d<=today&&ribaLoan(t)))}</span></div>
    <div class="kv"><span>Total sudah diganti</span><span class="ac" data-x="${WKs({ids:S.tx.filter(ribaRepay).map(t=>t.id)},'Semua penggantian uang riba',{sumT:'Total diganti'})}">${rp(sum(t=>t.d<=today&&ribaRepay(t)))}</span></div>
-   <div class="tiny" style="margin-top:6px">Pinjam: catat dari <b>Kantong Uang Riba</b> › Sumber <b>Pengeluaran Gaji</b> › Kategori <b>Pinjam dari uang riba</b>. Ganti: pindah ke Kantong Uang Riba › Kategori <b>Ganti uang riba</b>. Belanja yang dibayar langsung dari Kantong Uang Riba dihitung sebagai pinjaman sekaligus pengeluaran (satu catatan).</div></div>
+   <div class="tiny" style="margin-top:6px">Pinjam lewat kantong lain: Pindah akun dari <b>Kantong Uang Riba</b> › Kategori <b>Pinjam dari uang riba</b>. Ganti: Pindah akun ke Kantong Uang Riba › Kategori <b>Ganti uang riba</b> (keduanya pindah akun, tidak dihitung pengeluaran). Belanja yang dibayar langsung dari Kantong Uang Riba dicatat sebagai pengeluaran dengan Kategori <b>Pinjam dari uang riba</b>, dan dihitung pengeluaran satu kali saja.</div></div>
   <div class="card"><h3>Pinjaman uang riba per periode</h3><div class="seg" id="rbp">${['hari','bulan','tahun'].map(p=>`<button data-p="${p}" class="${p===RBP?'on':''}">Per ${p}</button>`).join('')}</div>
    ${ribaPeriodTable()}</div>
   <div class="card"><h3>Per bulan · ${MY} (ketuk baris)</h3><div class="tw"><table class="sm"><tr><th>Bln</th><th class="n">Riba bersih</th><th class="n">Pinjam</th><th class="n">Ganti</th><th class="n">Utang</th></tr>
@@ -743,7 +758,7 @@ function invV(){LK={};WK={};const I=invData(),al=[['Pasar uang',I.gn,'#1D9E75'],
   box.innerHTML=`<div class="card"><div class="g3"><div class="kp" data-x="${FN(sahamSum)}"><div class="a">Invested</div><div class="b">${nf(I.sm)}</div></div><div class="kp" data-x="${FN(sahamSum)}"><div class="a">P&L</div><div class="b ${plc(I.sn-I.sm)}">${(I.sn-I.sm>=0?'+':'')+nf(I.sn-I.sm)}</div><div class="tiny ${plc(I.sn-I.sm)}">${pct(I.sm?(I.sn-I.sm)/I.sm:null)}</div></div><div class="kp" data-x="${FN(sahamSum)}"><div class="a">Total Equity</div><div class="b">${nf(I.sn)}</div></div></div></div>
   <div class="card sb"><div class="sbh"><div>Kode<br>Lot</div><div>Invested<br>Avg Price</div><div>Market<br>Harga</div><div>P&L<br>Gain</div></div>
    ${I.hold.map(p=>`<div class="sbr" data-sk="${esc(p.kode)}"><div><b>${esc(p.kode)}</b><br><span class="tiny">${nf2(p.lot)} Lot</span></div><div>${nf(p.modal)}<br><span class="tiny">${nf2(p.avg)}</span></div><div>${nf(p.nilai)}<br><span class="tiny ${p.harga>=p.avg?'up':'dn'}">${nf2(p.harga)}</span></div><div class="${plc(p.pl)}"><b>${(p.pl>=0?'+':'')+nf(p.pl)}</b><br><span class="tiny ${plc(p.pl)}">${pct(p.modal?p.pl/p.modal:null)}</span></div></div>`).join('')}</div>
-  <div class="card"><h3>Saham yang sudah dijual semua</h3>${sold.map(p=>`<div class="row" data-sk="${esc(p.kode)}"><div class="l">${esc(p.kode)}</div><div class="r ${plc(p.real)}">${rp(p.real)}</div><span class="chev">›</span></div>`).join('')}
+  <div class="card"><h3>Saham yang sudah dijual</h3><div class="tiny">Termasuk saham yang pernah dijual habis lalu dibeli lagi (mis. IPCC).</div>${I.P.flatMap(p=>sahamRounds(p).filter(r=>r.sell).map(r=>({p,r}))).sort((a,b)=>b.r.d1.localeCompare(a.r.d1)).map(({p,r})=>`<div class="row" data-sk="${esc(p.kode)}"><div class="l"><div class="t1">${esc(p.kode)} · ${nf2(r.blot)} lot${r.closed?'':' (dijual sebagian)'}${r.closed&&p.lot>0?' <span class="pill">dibeli lagi</span>':''}</div><div class="t2">beli ${fdate(r.d0)} → jual ${fdate(r.d1)} · modal ${rp(r.sell-r.real)} → hasil jual ${rp(r.sell)}</div></div><div class="r ${plc(r.real)}">${pls(r.real)}<div class="tiny ${plc(r.real)}">${pct(r.sell-r.real?r.real/(r.sell-r.real):null)}</div></div><span class="chev">›</span></div>`).join('')||'<div class="tiny">Belum ada.</div>'}
    <div class="kv"><b>Total untung terealisasi</b><b>${X(rp(real),{ids:evTx(allSaham().filter(e=>e.jenis==='Jual'))},'Penjualan saham')}</b></div></div>
   <div class="card"><h3>Dividen</h3><div class="kv"><span>Dividen halal (pendapatan)</span><span>${X(rp(divH.reduce((s,e)=>s+e.total,0)),{ids:evTx(divH)},'Dividen halal')}</span></div>
    <div class="kv"><span>Dividen bank (riba, dipisahkan)</span><span>${X(rp(divR.reduce((s,e)=>s+e.total,0)),{ids:evTx(divR)},'Dividen riba')}</span></div>
@@ -752,7 +767,7 @@ function invV(){LK={};WK={};const I=invData(),al=[['Pasar uang',I.gn,'#1D9E75'],
   <div class="card"><h3>Per tujuan (ketuk untuk produk, riwayat & asal uang)</h3>${I.G.filter(g=>g.modal||g.nilai).map(g=>card('🌱',g.tujuan,g.hold.length?esc(g.produk):'tidak ada produk dipegang',g.nilai,g.pl,`data-rg="${esc(g.tujuan)}"`)).join('')}</div>
   <div class="card"><h3>Milik mama</h3>${card('🏠','Reksadana uang kos mama','modal '+rp(I.K.modal),I.K.nilai,I.K.nilai-I.K.modal,`data-rg="${KOS_RD}"`)}</div>`;
  if(IT==='dep'){const bh=idsOf(t=>t.kt==='Hasil investasi: bagi hasil deposito'),rb=idsOf(t=>t.sb==='Dana riba'&&/deposito|bpr|kirana/i.test(t.ket));
-  const dr=d=>`<div class="row" data-dp="${d.id}"><div class="l"><div class="t1">${esc(d.bpr)}</div><div class="t2">${fdate(d.aju)} → ${fdate(d.tempo)} · ${d.tenor} bln · ${esc(d.status||'')}</div></div><div class="r">${rp(d.modal)}</div><span class="chev">›</span></div>`;
+  const dr=d=>`<div class="row" data-dp="${d.id}"><div class="l"><div class="t1">${esc(d.bpr)}</div><div class="t2">${fdate(d.aju)} → ${fdate(d.tempo)} · ${d.tenor} bln · ${esc(d.status||'')}</div></div><div class="r">${rp(d.modal)}${d.untung?`<div class="tiny ${plc(d.untung)}">hasil ${pls(d.untung)} (${pct(d.modal?d.untung/d.modal:null)})</div>`:''}</div><span class="chev">›</span></div>`;
   box.innerHTML=`<div class="card"><h3>Deposito aktif</h3>${I.dA.map(dr).join('')||'<div class="tiny">Tidak ada deposito aktif. Semua deposito 2024 sudah cair.</div>'}
    <div class="kv"><span>Saldo akun Deposito BPR</span><span class="ac" data-acc="Deposito BPR">${rp(bal('Deposito BPR'))}</span></div>
    <div class="kv"><span>Total bagi hasil (halal)</span><span>${X(rp(sum(t=>bh.includes(t.id))),{ids:bh},'Bagi hasil deposito')}</span></div>
@@ -764,7 +779,7 @@ function evSrc(e){if(!e.tx)return`<div class="tiny">${e.tgl<'2025-01-01'?'Sebelu
  return h+(e.app?'<div class="tiny">Dicatat dari aplikasi</div>':'')}
 function evList(ev,amt,extra){return ev.map(e=>`<div style="padding:8px 0;border-top:1px solid var(--line)"><div><b>${e.jenis}</b> · ${fdate(e.tgl)} ${e.lot?'· '+nf2(e.lot)+' lot':''} <span style="float:right">${e.tx&&byId(e.tx)?`<span class="ac" data-tx="${e.tx}">${rp(amt(e))}</span>`:rp(amt(e))}</span></div>${extra(e)}${evSrc(e)}</div>`).join('')}
 function sahamSheet(k){const p=saham().find(x=>x.kode===k);if(!p)return;const ev=p.ev.slice().sort((a,b)=>b.tgl.localeCompare(a.tgl));
- const by=j=>ev.filter(e=>e.jenis===j),S_=a=>a.reduce((s,e)=>s+(e.total||0),0),B=by('Beli'),J=by('Jual'),Dv=by('Dividen');
+ const RD=sahamRounds(p),OPEN=new Set(RD.filter(r=>!r.closed).flatMap(r=>r.ev));const by=j=>ev.filter(e=>e.jenis===j),S_=a=>a.reduce((s,e)=>s+(e.total||0),0),B=by('Beli'),J=by('Jual'),Dv=by('Dividen');
  const lines=[['Total dibeli ('+nf2(p.blot)+' lot, termasuk fee)',S_(B),{ids:evTx(B)}],['Dijual ('+nf2(p.slot)+' lot)',S_(J),{ids:evTx(J)}]];
  if(p.lot>0)lines.push(['Lot dipegang: '+nf2(p.lot)+' lot',p.lot*100,null],['Modal (rata-rata '+nf2(p.avg)+'/lembar)',p.modal,null],['Nilai = '+nf(p.lot*100)+' × '+nf2(p.harga),p.nilai,null],['= Untung/rugi',p.pl,null,1]);
  lines.push(['Untung terealisasi',p.real,{ids:evTx(J)}],['Dividen diterima',S_(Dv),{ids:evTx(Dv)}]);
@@ -772,7 +787,7 @@ function sahamSheet(k){const p=saham().find(x=>x.kode===k);if(!p)return;const ev
  why({ids:evTx(ev)},'Saham '+k,{inv:{ev:p.ev,amt:e=>e.total},lines:lines.filter(l=>!isNaN(l[1])),
   html:(p.lot>0?`<div class="kv"><span>Harga terakhir ${S.pxAt&&S.price[k]?'(otomatis)':'(ubah manual)'} · ${nf2(p.lot)} lot</span><span><input type="number" id="hp" value="${p.harga}" style="width:110px;min-height:30px;padding:3px 6px"></span></div>`:'')+
    `<div class="tiny">Modal dihitung seperti Stockbit: harga rata-rata pembelian sejak kamu memegang saham ini; kalau pernah dijual semua, hitungan dimulai lagi dari pembelian berikutnya.</div>
-   <h4>Riwayat</h4>`+evList(ev,e=>e.total,e=>e.jenis==='Beli'?`<div class="tiny">Harga ${nf2(e.harga||0)} · nilai ${rp(e.nilai)} + fee ${rp(e.fee)}${e.sumber?' · sumber: '+esc(e.sumber):''}</div>`:e.jenis==='Jual'?`<div class="tiny">Harga ${nf2(e.harga||0)} · modal ${rp(e.modal)} → untung <span class="${plc(e.untung)}">${rp(e.untung)}</span></div>`:`<div class="tiny">${e.riba?'Riba — dipisahkan ke Dana riba':'Halal — pendapatan'}${e.alokasi?' · dipakai untuk: '+esc(e.alokasi):''}</div>`),
+   <h4>Riwayat</h4>`+evList(ev,e=>e.total,e=>e.jenis==='Beli'?`<div class="tiny">Harga ${nf2(e.harga||0)} · nilai ${rp(e.nilai)} + fee ${rp(e.fee)}${e.sumber?' · sumber: '+esc(e.sumber):''}</div>${OPEN.has(e)&&p.harga?(()=>{const now=Math.round(e.lot*100*p.harga),u=now-e.total;return`<div class="tiny">Kalau dinilai harga sekarang ${nf2(p.harga)}: ${rp(now)} → ${u>=0?'untung':'rugi'} <b class="${plc(u)}">${pls(u)}</b> (${pct(e.total?u/e.total:null)})</div>`})():!OPEN.has(e)?'<div class="tiny">Pembelian ini sudah dijual semua (lihat baris Jual).</div>':''}`:e.jenis==='Jual'?`<div class="tiny">Harga ${nf2(e.harga||0)} · modal ${rp(e.modal)} → ${e.untung>=0?'untung':'rugi'} <b class="${plc(e.untung)}">${pls(e.untung||0)}</b> (${pct(e.modal?e.untung/e.modal:null)})</div>`:`<div class="tiny">${e.riba?'Riba — dipisahkan ke Dana riba':'Halal — pendapatan'}${e.alokasi?' · dipakai untuk: '+esc(e.alokasi):''}</div>`),
   bind:()=>{if($('hp'))$('hp').onchange=ev=>{S.price[k]=+ev.target.value||0;save();closeSheet();invV()}}})}
 function rdSheet(g){const x=rdGoals().find(z=>z.tujuan===g);if(!x)return;const ev=x.ev.slice().sort((a,b)=>b.tgl.localeCompare(a.tgl));
  const txs=a=>a.flatMap(rdTxIds),B=x.ev.filter(e=>e.jenis==='Beli'),J=x.ev.filter(e=>e.jenis==='Jual');
@@ -780,7 +795,7 @@ function rdSheet(g){const x=rdGoals().find(z=>z.tujuan===g);if(!x)return;const e
   html:`<div class="kv"><span>Ubah nilai sekarang (samakan dengan Bibit)</span><span><input type="number" id="rn" value="${Math.round(x.nilai)}" style="width:130px;min-height:30px;padding:3px 6px"></span></div>
   <h4>Produk yang masih dipegang</h4>${x.hold.map(p=>`<div class="row" data-l="${LKs({ids:txs(p.ev),title:g+' · '+p.produk})}"><div class="l"><div class="t1">${esc(p.produk)}</div><div class="t2">beli ${rp(p.beli)} − jual ${rp(p.jual)} · terakhir ${fdate(p.last)}</div></div><div class="r">${rp(p.sisa)}</div><span class="chev">›</span></div>`).join('')||'<div class="tiny">Tidak ada produk yang masih dipegang.</div>'}
   ${Object.values(x.prod).filter(p=>Math.round(p.beli-p.jual)<1000).length?`<h4>Produk yang sudah dijual semua</h4>`+Object.values(x.prod).filter(p=>Math.round(p.beli-p.jual)<1000).map(p=>`<div class="row" data-l="${LKs({ids:txs(p.ev),title:g+' · '+p.produk})}"><div class="l"><div class="t1">${esc(p.produk)}</div><div class="t2">terakhir ${fdate(p.last)}</div></div><div class="r tiny">sudah dijual</div><span class="chev">›</span></div>`).join(''):''}
-  <h4>Riwayat</h4>`+evList(ev,e=>e.jenis==='Beli'?e.modal:e.nilai,e=>`<div class="tiny">${esc(e.produk)}${e.ket?' · '+esc(e.ket):''}${e.sumber?' · sumber: '+esc(e.sumber):''}${e.alokasi?' · dipakai: '+esc(e.alokasi):''}${e.jenis==='Jual'?' · modal '+rp(e.modal)+' · untung '+rp(e.untung):''}</div>`),
+  <h4>Riwayat</h4>`+evList(ev,e=>e.jenis==='Beli'?e.modal:e.nilai,e=>`<div class="tiny">${esc(e.produk)}${e.ket?' · '+esc(e.ket):''}${e.sumber?' · sumber: '+esc(e.sumber):''}${e.alokasi?' · dipakai: '+esc(e.alokasi):''}</div>${e.jenis==='Jual'?`<div class="tiny">Modal ${rp(e.modal)} → ${e.untung>=0?'untung':'rugi'} <b class="${plc(e.untung||0)}">${pls(e.untung||0)}</b> (${pct(e.modal?e.untung/e.modal:null)})</div>`:''}`),
   bind:()=>{$('rn').onchange=ev=>{S.rdcur[g]=+ev.target.value||0;S.rdAt=today;save();closeSheet();invV()}}})}
 function kosRdSheet(){const K=kosRd(),ids=idsOf(isKosRd);
  why({ids},'Reksadana uang kos mama',{lines:[['Modal di file portofolio',INV.kos[0],null],['+ Beli − jual dari aplikasi',K.modal-INV.kos[0],{ids:evTx(K.ev)}],['= Modal sekarang',K.modal,null,1],['Nilai sekarang',K.nilai,null],['= Untung/rugi',K.nilai-K.modal,null,1],
@@ -992,7 +1007,7 @@ function invSave(){const n=id=>$(id)?+$(id).value||0:0,d=$('id').value,a=$('ia')
  save();alert('Tersimpan ✓ '+msg);TPL={mode:'inv',ij:IJ,jn:JN};add()}
 /* ================= ATUR ================= */
 function set(){LK={};WK={};const held=saham().filter(p=>p.lot>0).map(p=>p.kode);
- $('main').innerHTML=`${themeCard()}${secCard()}<div class="card"><h3>Harga saham otomatis (Google Sheets)</h3>
+ $('main').innerHTML=`${themeCard()}${skinCard()}${secCard()}<div class="card"><h3>Harga saham otomatis (Google Sheets)</h3>
   <div class="tiny">Harga diambil dari Google Sheets milikmu (fungsi GOOGLEFINANCE) setiap kali aplikasi dibuka saat online. Yang disimpan hanya 1 harga terakhir per saham, jadi tidak memakan memori. Cara membuat Google Sheets-nya ada di menu Panduan › "Harga saham otomatis".</div>
   <input id="pxu" placeholder="Tempel link CSV dari Google Sheets di sini" value="${esc(S.pxUrl)}" style="margin-top:6px">
   <div class="g2" style="margin-top:6px"><button class="b p" id="pxs">Simpan & perbarui</button><button class="b" id="pxc">Salin daftar kode saham</button></div>
@@ -1003,6 +1018,8 @@ function set(){LK={};WK={};const held=saham().filter(p=>p.lot>0).map(p=>p.kode);
  <div class="card"><h3>Uang mama sebelum Februari 2024</h3><div class="tiny">Kalau ada uang kos mama yang kamu pegang sebelum Februari 2024, isi di sini supaya status lunas tepat.</div>
   <input type="number" id="mo" value="${S.mamaOpen||0}" style="margin-top:6px"></div>
  ${remCard()}
+ ${ntfCard()}
+ <div class="card"><h3>⚠️ Peringatan pada transaksi</h3><div class="tiny">Lihat semua tulisan kuning di transaksi, ubah atau hapus.</div><button class="b" data-go="warn" style="width:100%;margin-top:6px">Buka daftar peringatan (${S.tx.filter(t=>t.cek).length})</button></div>
  <div class="card" id="xlcard"><h3>Aplikasi ⇄ Excel / Google Sheets</h3>
   <div class="tiny">Kolomnya sama persis dengan sheet <b>Transaksi</b> di Excel (kolom B sampai L): Tanggal · Akun · Tipe · Akun Tujuan · Jumlah · Tujuan · Sumber · Kategori · Keterangan · Perlu Dicek · Kos/Kamar. Tanggal dd/mm/yyyy.</div>
   <button class="b w2" id="xlDl" style="width:100%;margin-top:8px">📊 Unduh Laporan Excel (lengkap)</button>
@@ -1019,7 +1036,8 @@ function set(){LK={};WK={};const held=saham().filter(p=>p.lot>0).map(p=>p.kode);
   <div class="tiny" id="xlPv"></div>
   <button class="b w2" id="xlIn" style="width:100%;margin-top:6px">⬇️ Masukkan ke aplikasi</button></div>
  <div class="card"><h3>Data</h3><div class="fl">
-  <button class="b w2" id="exc">Ekspor untuk Excel (CSV)</button><button class="b" id="bak">Cadangkan (JSON)</button><label class="b" style="text-align:center">Pulihkan<input type="file" id="res" accept=".json" style="display:none"></label>
+  <button class="b w2" id="exc">Ekspor untuk Excel (CSV)</button><button class="b" id="bak">Cadangkan (JSON)</button><label class="b" style="text-align:center">Pulihkan<input type="file" id="res" accept=".json,.txt,application/json,text/plain" style="display:none"></label>
+  <button class="b w2" id="bak2">📤 Cadangkan & pilih tempat simpan (Drive, WhatsApp, folder…)</button>
   <label class="b w2" style="text-align:center">Impor CSV transaksi baru<input type="file" id="imp" accept=".csv" style="display:none"></label>
   <button class="b w2" id="toXg">📖 Panduan pindah data Aplikasi ⇄ Excel ⇄ Google Sheets</button>
   <button class="b w2 d" id="rst">Kembalikan ke data awal (hapus semua perubahan)</button></div>
@@ -1057,7 +1075,7 @@ function set(){LK={};WK={};const held=saham().filter(p=>p.lot>0).map(p=>p.kode);
  $('xlDl').onclick=xlDownload;$('gsIn').onclick=gsPull;$('gsOut').onclick=()=>S.bkUrl?backupNow(false):alert('Pasang dulu cadangan otomatis Google Drive.');
  $('gsOpen').onclick=async()=>{if(!S.bkUrl)return alert('Pasang dulu cadangan otomatis Google Drive.');try{const j=await (await fetch(bkU('&ss=1&t='+Date.now()),{cache:'no-store'})).json();if(j.url)window.open(j.url,'_blank');else throw 0}catch(e){alert('Belum bisa membuka. Pastikan kode Apps Script sudah versi terbaru (Atur › Salin kode Apps Script → tempel → Terapkan versi baru), lalu tekan "Kirim ke Google Sheets sekarang" sekali.')}};
  $('toXg').onclick=()=>{go('guide');setTimeout(()=>{const x=$('xlguide');if(x)x.scrollIntoView()},100)};
- remCardBind();
+ remCardBind();ntfBind();skinBind();$('bak2').onclick=bakShare;
  $('bak').onclick=()=>dl(JSON.stringify(S),'dompet-digital-cadangan-'+today+'.json','application/json');
  $('res').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.tx)throw 0;S=x;save();alert('Dipulihkan ✓');go('home')}catch(_){alert('File tidak valid')}};r.readAsText(f)};
  $('imp').onchange=e=>{const f=e.target.files[0];if(!f)return;Papa.parse(f,{header:true,skipEmptyLines:true,complete:({data})=>{let n=0;for(const r of data){const d=pdt(r.Tanggal)||'',j=+String(r.Jumlah||r.Nominal||'').replace(/[^0-9]/g,'');if(!/^\d{4}-\d{2}-\d{2}$/.test(d)||!(j>0))continue;
@@ -1417,7 +1435,7 @@ function rutDueDate(r,k){const{b}=monRange(k);const d=k+'-'+String(Math.min(r.tg
 function rutDone(r,k){if((S.rutDone||{})[r.id+'|'+k])return true;return S.tx.some(t=>t.rutin===r.id&&ym(t.d)===k)}
 function rutStat(r){const k=ym(today),due=rutDueDate(r,k);if(rutDone(r,k)){return{done:1,txt:'Sudah bulan ini ✓',cls:'ok',next:rutDueDate(r,addMon(k,1))}}
  const days=Math.round((pd(due)-pd(today))/864e5);return{done:0,days,due,txt:days<0?'Terlambat '+(-days)+' hari':days===0?'Hari ini':days+' hari lagi',cls:days<=0?'no':days<=3?'wa':'nt',next:due}}
-function rutDue(){return(S.rutin||[]).filter(r=>{const s=rutStat(r);return!s.done&&s.days<=3})}
+function rutDue(){const n=ntf().days;return(S.rutin||[]).filter(r=>{const s=rutStat(r);return!s.done&&s.days<=n})}
 function rutRow(r){const s=rutStat(r);return`<div class="rut"><div class="bh"><b>${esc(r.nama)}</b><span class="dn">${rp(r.j)}</span></div>
  <div class="tiny">Tiap tanggal ${r.tgl} · ${esc(r.a)} · ${esc(r.sb)} › ${esc(r.kt)}</div>
  <div class="bh" style="margin-top:4px"><span class="pill ${s.cls}">${s.txt}</span><span class="tiny">${s.done?'Berikutnya '+fdate(s.next):'Jatuh tempo '+fdate(s.due)}</span></div>
@@ -1455,10 +1473,10 @@ function rutForm(r,fromTx){const P=r||fromTx||{t:'K',a:'Dompet',tj:'Pengeluaran'
  $('rsv').onclick=()=>{const tgl=+$('rtg').value,j=+$('rj').value,nama=$('rn').value.trim();if(!nama||!(tgl>=1&&tgl<=31)||!(j>0))return alert('Isi nama, tanggal (1–31), dan jumlah.');
   const o={nama,tgl,j,t:$('rt').value,a:$('ra').value,tu:$('rt').value==='T'?$('rtu').value:null,tj:$('rtj').value,sb:$('rsb').value,kt:$('rkt').value.trim()||'Lain-lain',ket:$('rket').value.trim(),kos:P.kos||''};
   if(r)Object.assign(r,o);else{S.rutNext=(S.rutNext||1);rutList().push({id:S.rutNext++,...o})}save();closeSheet();go('rut')}})}
-function rutHome(){const d=rutDue();if(!d.length)return null;
+function rutHome(){const d=ntf().rut?rutDue():[];if(!d.length)return null;
  return{t:'🔔 Tagihan & rutin',b:`${d.map(r=>{const s=rutStat(r);return`<div class="row" data-go="rut"><div class="l"><div class="t1">${esc(r.nama)}</div><div class="t2"><span class="pill ${s.cls}">${s.txt}</span></div></div><div class="r">${rp(r.j)}</div><span class="chev">›</span></div>`}).join('')}`}}
-function rutNotify(){try{const d=rutDue();if(!d.length||!('Notification' in window)||Notification.permission!=='granted')return;const k='dd-notif-'+today;if(localStorage.getItem(k))return;localStorage.setItem(k,'1');
- const body=d.map(r=>r.nama+' '+rp(r.j)+' ('+rutStat(r).txt+')').join('\n');navigator.serviceWorker&&navigator.serviceWorker.ready.then(g=>g.showNotification('Tagihan & rutin',{body,icon:'icon-192.png'})).catch(()=>{})}catch(e){}}
+function rutNotify(){try{const N=ntf(),d=N.hp?rutDue():[],R=N.hpRem?remDue():[];if((!d.length&&!R.length)||!('Notification' in window)||Notification.permission!=='granted')return;const k='dd-notif-'+today;if(localStorage.getItem(k))return;localStorage.setItem(k,'1');
+ const body=d.map(r=>r.nama+' '+rp(r.j)+' ('+rutStat(r).txt+')').concat(R.map(r=>'🔔 '+r.t)).join('\n');navigator.serviceWorker&&navigator.serviceWorker.ready.then(g=>g.showNotification(d.length?'Tagihan & pengingat':'Pengingat bulanan',{body,icon:'icon-192.png'})).catch(()=>{})}catch(e){}}
 /* ---------- COCOKKAN SALDO ---------- */
 function recLast(n){const h=(S.recon||{})[n];return h&&h.length?h[h.length-1]:null}
 function recLastOk(n){const h=((S.recon||{})[n]||[]).filter(x=>x.real===x.app);return h.length?h[h.length-1]:null}
@@ -1507,7 +1525,7 @@ function themeCard(){const t=themeGet();return`<div class="card"><h3>Tampilan</h
  <div class="kv" style="margin-top:8px"><span>Sembunyikan semua saldo (Rp•••••)</span><span><input type="checkbox" id="thh" ${HIDE?'checked':''} style="width:auto;min-height:0"></span></div>
  <div class="kv"><span>Mode tunjukkan ke orang (Beranda hanya pemasukan & pengeluaran)</span><span><input type="checkbox" id="thsh" ${SHARE?'checked':''} style="width:auto;min-height:0"></span></div>
  <button class="b" id="thb" style="width:100%;margin-top:6px">Atur kartu di Beranda</button></div>`}
-function bindTheme(){document.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{try{localStorage.setItem('dd-theme',b.dataset.th)}catch(e){}themeApply(b.dataset.th);set()});
+function bindTheme(){document.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{try{localStorage.setItem('dd-theme',b.dataset.th)}catch(e){}if(typeof skinGet==='function'&&skinGet())skinApply('');themeApply(b.dataset.th);set()});
  $('thh').onchange=e=>{HIDE=e.target.checked;try{localStorage.setItem('dd-hide',HIDE?'1':'0')}catch(x){}set()};$('thb').onclick=homeSetSheet;$('thsh').onchange=e=>{if(e.target.checked)setShare(true);else{e.target.checked=true;exitShare()}}}
 themeApply(themeGet());
 /* ===== Unduh Laporan Excel: isi template laporan dengan data terbaru dari aplikasi ===== */
@@ -1669,15 +1687,108 @@ const REM0=[{id:'gaji',t:'Bagi gaji',day:5,go:'bagi'},{id:'bunga',t:'Catat selis
 function rems(){if(!Array.isArray(S.rem))S.rem=REM0.map(x=>({...x,on:1}));return S.rem}
 function remDone(id){S.remDone=S.remDone||{};S.remDone[id]=today.slice(0,7)}
 function remDue(){const d=+today.slice(8),m=today.slice(0,7),D=S.remDone||{};return rems().filter(r=>r.on&&d>=r.day&&D[r.id]!==m)}
-function remChips(){const R=remDue(),P=pindahCek(60).length,K=kosLoans().total;let h='';
- for(const r of R)h+=`<div class="bkc" data-rem="${r.id}">🔔 ${esc(r.t)} <span>Buka ›</span><button class="eyeb" data-remok="${r.id}" style="margin-left:6px">✓</button></div>`;
+function remChips(){const N=ntf(),R=N.rem?remDue():[],P=N.pindah?pindahCek(60).length:0,K=N.kos?kosLoans().total:0,U=N.riba?utangRiba():0;let h='';
+ for(const r of R)h+=`<div class="bkc" data-rem="${r.id}">🔔 ${esc(r.t)} <span>${r.go?'Buka ›':''}</span><button class="eyeb" data-remok="${r.id}" style="margin-left:6px">✓</button></div>`;
  if(P)h+=`<div class="bkc" data-go="rec">⚠️ ${P} pindah uang perlu dicek <span>Cek ›</span></div>`;
- if(K)h+=`<div class="bkc" data-go="mama">🏠 Uang kos mama dipinjam ${rp(K)} belum diganti <span>Lihat ›</span></div>`;return h}
+ if(K)h+=`<div class="bkc" data-go="mama">🏠 Uang kos mama dipinjam ${rp(K)} belum diganti <span>Lihat ›</span></div>`;
+ if(U>0)h+=`<div class="bkc" data-rib="1">💸 Utang uang riba ${rp(U)} belum diganti <span>Lihat ›</span></div>`;return h}
 function remBind(){document.querySelectorAll('[data-remok]').forEach(b=>b.onclick=e=>{e.stopPropagation();remDone(b.dataset.remok);save();go(V)});
- document.querySelectorAll('[data-rem]').forEach(c=>c.onclick=()=>{const r=rems().find(x=>x.id===c.dataset.rem);if(!r)return;if(r.go==='bagi')bagiGaji();else{if(r.go==='mama')MT='kos';go(r.go)}})}
-function remCard(){return`<div class="card"><h3>🔔 Pengingat bulanan</h3><div class="tiny">Tentukan sendiri tanggalnya. Pengingat muncul di Beranda mulai tanggal itu sampai kamu tekan ✓ (atau selesai mengerjakannya).</div>
- ${rems().map((r,i)=>`<div class="fl" style="align-items:center;border-top:1px solid var(--line);padding:6px 0"><label class="ck" style="flex:2"><input type="checkbox" data-ron="${i}" ${r.on?'checked':''} style="width:auto;min-height:0"> ${esc(r.t)}</label><label class="lb" style="flex:1">Tanggal<input type="number" min="1" max="31" data-rday="${i}" value="${r.day}"></label></div>`).join('')}</div>`}
-function remCardBind(){document.querySelectorAll('[data-ron]').forEach(x=>x.onchange=()=>{rems()[+x.dataset.ron].on=x.checked?1:0;save()});document.querySelectorAll('[data-rday]').forEach(x=>x.onchange=()=>{rems()[+x.dataset.rday].day=Math.min(31,Math.max(1,+x.value||1));save()})}
+ document.querySelectorAll('[data-rem]').forEach(c=>c.onclick=()=>{const r=rems().find(x=>x.id===c.dataset.rem);if(!r||!r.go)return;if(r.go==='bagi')bagiGaji();else{if(r.go==='mama')MT='kos';go(r.go)}});
+ document.querySelectorAll('[data-rib]').forEach(c=>c.onclick=()=>{MT='riba';go('mama')})}
+const REM_GO=[['','(tidak membuka apa-apa)'],['bagi','Bagi gaji'],['add','Catat transaksi'],['mama','Amanah › Kos per kamar'],['rec','Cocokkan saldo'],['rut','Rutin & tagihan'],['bud','Anggaran'],['inv','Investasi'],['buku','Buku akun']];
+function remCard(){return`<div class="card"><h3>🔔 Pengingat bulanan</h3><div class="tiny">Atur sendiri isinya: ubah tulisan, tanggal, dan halaman yang dibuka; tambah yang baru atau hapus yang tidak perlu. Pengingat muncul di Beranda mulai tanggal itu sampai kamu tekan ✓.</div>
+ ${rems().map((r,i)=>`<div style="border-top:1px solid var(--line);padding:8px 0"><div class="fl" style="align-items:center"><label class="ck" style="flex:0 0 auto"><input type="checkbox" data-ron="${i}" ${r.on?'checked':''} style="width:auto;min-height:0"> aktif</label><input data-rtx="${i}" value="${esc(r.t)}" style="flex:3;min-width:0"></div>
+ <div class="fl" style="align-items:flex-end;margin-top:4px"><label class="lb" style="flex:1">Tanggal<input type="number" min="1" max="31" data-rday="${i}" value="${r.day}"></label><label class="lb" style="flex:2">Saat diketuk, buka<select data-rgo="${i}">${REM_GO.map(([k,l])=>`<option value="${k}" ${k===(r.go||'')?'selected':''}>${l}</option>`).join('')}</select></label><button class="b d" data-rdel="${i}" style="flex:0 0 auto">Hapus</button></div></div>`).join('')}
+ <div class="g2" style="margin-top:8px"><button class="b p" id="radd">+ Tambah pengingat</button><button class="b" id="rdef">Kembalikan bawaan</button></div></div>`}
+function remCardBind(){const Q=(s,f)=>document.querySelectorAll(s).forEach(f);
+ Q('[data-ron]',x=>x.onchange=()=>{rems()[+x.dataset.ron].on=x.checked?1:0;save()});Q('[data-rday]',x=>x.onchange=()=>{rems()[+x.dataset.rday].day=Math.min(31,Math.max(1,+x.value||1));save()});
+ Q('[data-rtx]',x=>x.onchange=()=>{const v=x.value.trim();if(v){rems()[+x.dataset.rtx].t=v;save()}});Q('[data-rgo]',x=>x.onchange=()=>{rems()[+x.dataset.rgo].go=x.value;save()});
+ Q('[data-rdel]',x=>x.onclick=()=>{const r=rems()[+x.dataset.rdel];if(!confirm('Hapus pengingat "'+r.t+'"?'))return;S.rem.splice(+x.dataset.rdel,1);save();set()});
+ $('radd').onclick=()=>{rems().push({id:'c'+Date.now(),t:'Pengingat baru',day:1,go:'',on:1});save();set()};
+ $('rdef').onclick=()=>{if(!confirm('Kembalikan daftar pengingat ke bawaan? Pengingat buatanmu akan dihapus.'))return;S.rem=REM0.map(x=>({...x,on:1}));save();set()}}
+/* ================= FITUR v53 ================= */
+/* ---- 1. Kos pinjam uang Randu ---- */
+const RDPJ='Pinjam uang Randu',rdLoan=t=>t.sb===RDPJ&&t.kt==='Pinjam dari uang Randu',rdRepay=t=>t.sb===RDPJ&&t.kt==='Ganti uang Randu';
+function rdLoanCard(){const p=sum(t=>t.d<=today&&rdLoan(t)),g=sum(t=>t.d<=today&&rdRepay(t)),s=p-g;if(!p&&!g)return'';
+ return`<div class="card"><h3>Uang Randu yang dipinjam kos</h3><div class="tiny">Uang pribadimu yang dipakai dulu untuk keperluan kos, lalu diganti dari uang kos. Catat: Pindah akun › jenis <b>${RDPJ}</b> › kategori <b>Pinjam dari uang Randu</b> / <b>Ganti uang Randu</b>.</div>
+ <div class="kv"><span>Total dipinjam</span><span class="ac" data-x="${WKs({ids:S.tx.filter(rdLoan).map(t=>t.id)},'Kos pinjam uang Randu')}">${rp(p)}</span></div>
+ <div class="kv"><span>Total sudah diganti</span><span class="ac" data-x="${WKs({ids:S.tx.filter(rdRepay).map(t=>t.id)},'Kos ganti uang Randu')}">${rp(g)}</span></div>
+ <div class="kv"><b>Belum diganti</b><b class="${s>0?'dn':'up'}">${rp(s)}</b></div></div>`}
+/* ---- 4. Pengaturan notifikasi ---- */
+const NTF0={rem:1,pindah:1,kos:1,riba:1,rut:1,hp:1,hpRem:1,days:3};
+function ntf(){S.ntf=Object.assign({},NTF0,S.ntf||{});return S.ntf}
+const NTF_L=[['rem','Pengingat bulanan di Beranda'],['rut','Tagihan & transaksi rutin di Beranda'],['pindah','Pindah uang yang perlu dicek'],['kos','Uang kos mama yang dipinjam belum diganti'],['riba','Utang uang riba belum diganti'],['hp','Notifikasi HP: tagihan & rutin yang jatuh tempo'],['hpRem','Notifikasi HP: pengingat bulanan']];
+function ntfCard(){const N=ntf(),ok='Notification' in window,pm=ok?Notification.permission:'';
+ return`<div class="card" id="ntfc"><h3>🔔 Notifikasi & alarm</h3><div class="tiny">Pilih sendiri apa yang mau dimunculkan di aplikasi dan di HP.</div>
+ ${NTF_L.map(([k,l])=>`<label class="ck" style="display:flex;gap:8px;align-items:center;border-top:1px solid var(--line);padding:7px 0"><input type="checkbox" data-ntf="${k}" ${N[k]?'checked':''} style="width:auto;min-height:0"> ${l}</label>`).join('')}
+ <div class="kv"><span>Ingatkan tagihan berapa hari sebelum jatuh tempo</span><span><input type="number" id="ntfd" min="0" max="14" value="${N.days}" style="width:70px;min-height:30px;padding:3px 6px"></span></div>
+ <div class="tiny" style="margin-top:6px">Izin notifikasi HP: <b>${!ok?'tidak didukung browser ini':pm==='granted'?'diizinkan ✓':pm==='denied'?'ditolak (ubah di pengaturan situs browser)':'belum diizinkan'}</b>. Notifikasi HP dari aplikasi ini muncul saat aplikasi dibuka (sekali sehari). Supaya HP tetap berbunyi walau aplikasi tertutup, pasang alarmnya ke Kalender HP dengan tombol di bawah.</div>
+ <div class="fl" style="margin-top:6px">${ok&&pm!=='granted'?'<button class="b" id="ntfp">Izinkan notifikasi HP</button>':''}<button class="b" id="ntft">Tes notifikasi</button><button class="b p w2" id="ntfi">⏰ Pasang alarm ke Kalender HP</button></div>
+ <div class="tiny">Tombol alarm membuat file kalender berisi semua tagihan rutin dan pengingat bulanan yang aktif (berulang tiap bulan, alarm jam 07.00 di hari-H dan sehari sebelumnya). Buka filenya, lalu pilih Kalender. Kalau jadwal berubah, hapus yang lama di Kalender dan pasang ulang.</div></div>`}
+function ntfBind(){document.querySelectorAll('[data-ntf]').forEach(x=>x.onchange=()=>{ntf()[x.dataset.ntf]=x.checked?1:0;save()});
+ $('ntfd').onchange=e=>{ntf().days=Math.min(14,Math.max(0,+e.target.value||0));save()};
+ if($('ntfp'))$('ntfp').onclick=()=>Notification.requestPermission().then(()=>set());
+ $('ntft').onclick=()=>{if(!('Notification' in window))return alert('Browser ini tidak mendukung notifikasi.');if(Notification.permission!=='granted')return alert('Izinkan dulu notifikasi HP.');
+  navigator.serviceWorker&&navigator.serviceWorker.ready.then(g=>g.showNotification('Dompet Digital',{body:'Notifikasi berfungsi ✓',icon:'icon-192.png'})).catch(()=>alert('Gagal menampilkan notifikasi.'))};
+ $('ntfi').onclick=icsAlarm}
+function shareOrDl(txt,name,type){const dlx=()=>{const u=URL.createObjectURL(new Blob([txt],{type})),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)};
+ try{const f=new File([txt],name,{type});if(navigator.canShare&&navigator.canShare({files:[f]}))return navigator.share({files:[f],title:name}).catch(e=>{if(!e||e.name!=='AbortError')dlx()})}catch(e){}dlx()}
+function icsAlarm(){const R=(S.rutin||[]).map(r=>({n:r.nama+' '+rp(r.j),d:r.tgl,x:r.sb+' › '+r.kt+' · '+r.a})).concat(rems().filter(r=>r.on).map(r=>({n:r.t,d:r.day,x:'Pengingat bulanan Dompet Digital'})));
+ if(!R.length)return alert('Belum ada tagihan rutin atau pengingat bulanan yang aktif.');
+ const esc2=s=>String(s).replace(/([,;\\])/g,'\\$1').replace(/\n/g,' '),now=new Date(),st=now.toISOString().replace(/[-:]|\.\d+/g,'');
+ const ev=R.map((r,i)=>{const dd=Math.min(28,r.d),last=r.d>28;let y=now.getFullYear(),m=now.getMonth();if(now.getDate()>dd)m++;const d0=new Date(y,m,dd),ds0=d0.getFullYear()+String(d0.getMonth()+1).padStart(2,'0')+String(d0.getDate()).padStart(2,'0');
+  return['BEGIN:VEVENT','UID:dd-'+i+'-'+st+'@dompetdigital','DTSTAMP:'+st,'DTSTART;VALUE=DATE:'+ds0,'RRULE:FREQ=MONTHLY;BYMONTHDAY='+(last?-1:dd),'SUMMARY:'+esc2('💰 '+r.n),'DESCRIPTION:'+esc2(r.x),'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+esc2(r.n),'TRIGGER:PT7H','END:VALARM','BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+esc2('Besok: '+r.n),'TRIGGER:-PT17H','END:VALARM','END:VEVENT'].join('\r\n')});
+ shareOrDl(['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Dompet Digital//ID','CALSCALE:GREGORIAN'].concat(ev,'END:VCALENDAR').join('\r\n'),'alarm-dompet-digital.ics','text/calendar')}
+/* ---- 3. Daftar peringatan (tulisan kuning) ---- */
+let WQ='';
+function warnV(){LK={};WK={};const L=S.tx.filter(t=>t.cek).sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id),q=WQ.toLowerCase(),R=q?L.filter(t=>((t.cek||'')+' '+(t.ket||'')+' '+t.a).toLowerCase().includes(q)):L;
+ $('main').innerHTML=`<div class="card"><h3>⚠️ Peringatan pada transaksi</h3><div class="tiny">Semua tulisan kuning yang menempel di transaksi. Kamu bisa mengubah atau menghapusnya di sini. Untuk menambah peringatan baru: buka transaksinya, lalu tekan "⚠️ Tambah / ubah peringatan".</div>
+  <input id="wq" placeholder="Cari peringatan / keterangan / akun" value="${esc(WQ)}" style="margin-top:8px">
+  <div class="kv"><span>Jumlah peringatan</span><b>${L.length}${q?' · cocok '+R.length:''}</b></div>
+  ${L.length?'<button class="b d" id="wall" style="width:100%;margin-top:6px">Hapus semua peringatan'+(q?' yang cocok':'')+'</button>':''}</div>
+ ${R.length?`<div class="card">${R.slice(0,300).map(t=>`<div style="padding:9px 0;border-top:1px solid var(--line)"><div class="ac" data-tx="${t.id}"><b>${esc(t.ket||t.kt)}</b></div><div class="tiny">${fdate(t.d)} · ${esc(t.a)}${t.t==='T'?' → '+esc(t.tu):''} · ${rp(t.j)}</div><div class="st w" style="margin-top:4px">⚠️ ${esc(t.cek)}</div><div class="rl"><span class="ac" data-we="${t.id}">Ubah</span><span class="ac dn" data-wx="${t.id}">Hapus peringatan</span></div></div>`).join('')}${R.length>300?'<div class="tiny">Ditampilkan 300 pertama. Pakai kotak cari untuk menyaring.</div>':''}</div>`:'<div class="card"><div class="empty">Tidak ada peringatan.</div></div>'}`;
+ $('wq').onchange=e=>{WQ=e.target.value.trim();warnV()};
+ if($('wall'))$('wall').onclick=()=>{if(!confirm('Hapus '+R.length+' peringatan? Transaksinya tidak ikut terhapus.'))return;for(const t of R)t.cek='';save();warnV()};
+ document.querySelectorAll('[data-we]').forEach(b=>b.onclick=()=>warnEdit(+b.dataset.we,warnV));
+ document.querySelectorAll('[data-wx]').forEach(b=>b.onclick=()=>{const t=byId(+b.dataset.wx);if(t){t.cek='';save();warnV()}})}
+function warnEdit(id,after){const t=byId(id);if(!t)return;const v=prompt('Isi peringatan untuk transaksi ini (kosongkan untuk menghapus):',t.cek||'');if(v===null)return;t.cek=v.trim();save();if(after)after()}
+/* ---- 9. Catatan kecil di Buku Akun bisa diubah ---- */
+function noteEdit(i){const N=S.notes=S.notes||[],x=i>=0?N[i]:{d:(typeof BA!=='undefined'&&BA.m===today.slice(0,7))?today:BA.m+'-01',a:BA.a,ket:''};
+ sheet(`<h3>${i>=0?'Ubah':'Tambah'} catatan</h3><div class="fl"><label class="lb">Tanggal<input type="date" id="ntd" value="${x.d}"></label><label class="lb">Akun<select id="nta">${opts(S.acc.map(a=>a.n),x.a)}</select></label>
+ <label class="lb w2">Isi catatan<textarea id="ntk" rows="4" style="width:100%">${esc(x.ket)}</textarea></label>
+ <button class="b p w2" id="nts">Simpan</button>${i>=0?'<button class="b d w2" id="ntx">Hapus catatan</button>':''}</div>`,()=>{
+ $('nts').onclick=()=>{const k=$('ntk').value.trim(),d=$('ntd').value;if(!k||!d)return alert('Isi tanggal dan catatannya.');const o={d,a:$('nta').value,ket:k};if(i>=0)N[i]=o;else N.push(o);save();closeSheet();go(V)};
+ if($('ntx'))$('ntx').onclick=()=>{if(!confirm('Hapus catatan ini?'))return;N.splice(i,1);save();closeSheet();go(V)}})}
+document.addEventListener('click',e=>{const x=e.target.closest('[data-nt]');if(x){e.stopPropagation();noteEdit(+x.dataset.nt)}});
+/* ---- 11. Cadangan: pilih tempat simpan ---- */
+async function bakShare(){const name='dompet-digital-cadangan-'+today+'.json',txt=JSON.stringify(S),dlx=n=>{const u=URL.createObjectURL(new Blob([txt],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)};
+ try{if(window.showSaveFilePicker){const h=await showSaveFilePicker({suggestedName:name,types:[{description:'Cadangan Dompet Digital',accept:{'application/json':['.json']}}]});const w=await h.createWritable();await w.write(txt);await w.close();return alert('Cadangan tersimpan ✓')}}catch(e){if(e&&e.name==='AbortError')return}
+ for(const[n,ty]of[[name,'application/json'],[name+'.txt','text/plain']]){try{const f=new File([txt],n,{type:ty});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});return}}catch(e){if(e&&e.name==='AbortError')return}}
+ alert('Browser ini belum bisa memilih tempat simpan. File diunduh ke folder Download; dari sana bisa kamu pindahkan.');dlx(name)}
+/* ---- 12. Tema ---- */
+const SKIN=(()=>{const L=(k,n,bg,soft,line,acc,acc2)=>({k,n,dark:0,v:{bg,card:'#FFFFFF',soft,line,tx:'#111418',tx2:'#5B6370',tx3:'#8E96A1',acc,acc2,ok:'#00A86B',okb:'#DDF4EA',no:'#E5383B',nob:'#FDE7E7',wa:'#B07A00',wab:'#FFF3D6'}}),
+ D=(k,n,bg,card,soft,line,acc,acc2)=>({k,n,dark:1,v:{bg,card,soft,line,tx:'#EDEFF2',tx2:'#A4ACB7',tx3:'#6F7782',acc,acc2,ok:'#00C27A',okb:'#0F2E22',no:'#FF5A5F',nob:'#3A1719',wa:'#F5B83D',wab:'#3A2C10'}});
+ return[L('mint','Mint','#F5F6F8','#F0F2F5','#E6E8EC','#00A86B','#DDF4EA'),L('laut','Laut','#F3F6FB','#EAF0F8','#DCE4EF','#1565C0','#DCEAFB'),L('langit','Langit','#F2F8FC','#E6F1F8','#D6E6F0','#0277BD','#D9EEFA'),L('toska','Toska','#F1F8F8','#E4F1F1','#D3E5E6','#00838F','#D6F0F2'),
+ L('lavender','Lavender','#F6F4FC','#EEEAF8','#E0DAF0','#6D4AD9','#E8E1FB'),L('anggur','Anggur','#F9F3F8','#F2E8F0','#E6D7E3','#8E2A7B','#F5DDF0'),L('mawar','Mawar','#FCF3F5','#F8E8EC','#EFD8DE','#C2185B','#FBDDE7'),L('sakura','Sakura','#FDF5F8','#FAEAF0','#F1DAE3','#C0407A','#FBE0EC'),
+ L('jeruk','Jeruk','#FCF6F0','#F8EDE2','#EEDFCF','#C75B00','#FCE6D2'),L('madu','Madu','#FBF8EE','#F6F0DD','#EAE2C8','#8A6D00','#F7ECC2'),L('pasir','Pasir','#F8F5F0','#F1EBE2','#E4DACB','#8D5A2B','#F1E2D0'),L('zaitun','Zaitun','#F5F8F0','#ECF1E2','#DCE4CD','#5E7A1E','#E5F0CF'),
+ L('abu','Abu-abu','#F4F5F6','#ECEEF0','#DDE0E4','#374151','#E3E6EA'),
+ D('malam','Malam Hijau','#0B0D10','#15181D','#1D2127','#262B33','#00C27A','#0F2E22'),D('samudra','Samudra','#0A1220','#121C2E','#1A263B','#25334B','#4C9BFF','#132B4D'),D('ungu','Ungu Malam','#110D1C','#1A1529','#231D36','#302846','#A78BFA','#2A2050'),D('marun','Marun','#170B0E','#221216','#2D191E','#3D232A','#FF6B8B','#42161F'),
+ D('kopi','Kopi','#15100C','#1F1812','#2A2119','#3A2E23','#E0A458','#3A2A14'),D('hutan','Hutan','#0A130E','#111D16','#18281F','#22362A','#5BD68A','#143521'),D('grafit','Grafit','#111214','#1A1C1F','#232629','#303439','#C9CED6','#2B2F35'),D('amoled','Hitam Pekat','#000000','#0D0D0D','#161616','#222222','#00C27A','#0C2A1E'),
+ D('senja','Senja','#170F0A','#221710','#2E2017','#3F2C20','#FF8A3D','#44230D'),D('neon','Neon','#070D12','#0E161D','#152029','#1F2D38','#22D3EE','#0B3640'),D('emas','Emas Hitam','#0D0C08','#17150E','#211E15','#2F2B1E','#E8C547','#3A3110')]})();
+const skinGet=()=>{try{return localStorage.getItem('dd-skin')||''}catch(e){return''}};
+function skinApply(k){const s=SKIN.find(x=>x.k===k),R=document.documentElement;
+ if(!s){R.style.cssText='';try{localStorage.removeItem('dd-skin');localStorage.removeItem('dd-skin-css')}catch(e){}themeApply(themeGet());return}
+ const css=Object.entries(s.v).map(([a,b])=>'--'+a+':'+b).join(';')+';color-scheme:'+(s.dark?'dark':'light');R.style.cssText=css;R.dataset.theme=s.dark?'dark':'light';
+ try{localStorage.setItem('dd-skin',k);localStorage.setItem('dd-skin-css',css);localStorage.setItem('dd-skin-dark',s.dark?'1':'0')}catch(e){}
+ const m=document.querySelector('meta[name=theme-color]');if(m)m.content=s.v.bg}
+function skinCard(){const c=skinGet();return`<div class="card"><h3>🎨 Tema warna (${SKIN.length} pilihan)</h3><div class="tiny">Ketuk untuk mengganti. "Bawaan" kembali ke tampilan Ikuti HP / Gelap / Terang di atas.</div>
+ <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px"><button data-sk2="" style="border:${c?'1px solid var(--line)':'2px solid var(--acc)'};border-radius:12px;padding:8px 4px;background:var(--card);color:var(--tx);font:inherit;font-size:12px">Bawaan</button>
+ ${SKIN.map(s=>`<button data-sk2="${s.k}" style="border:${c===s.k?'2px solid '+s.v.acc:'1px solid '+s.v.line};border-radius:12px;padding:8px 4px;background:${s.v.bg};color:${s.v.tx};font:inherit;font-size:12px"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${s.v.acc};vertical-align:-2px;margin-right:4px"></span>${s.n}${c===s.k?' ✓':''}</button>`).join('')}</div></div>`}
+function skinBind(){document.querySelectorAll('[data-sk2]').forEach(b=>b.onclick=()=>{skinApply(b.dataset.sk2);set()})}
+if(skinGet())skinApply(skinGet());
+/* ---- 6/7. Putaran saham (beli → jual habis) ---- */
+function sahamRounds(p){const R=[];let c=null;for(const e of p.ev.slice().sort((a,b)=>a.tgl.localeCompare(b.tgl))){if(e.jenis==='Beli'){if(!c){c={lot:0,blot:0,buy:0,sell:0,real:0,d0:e.tgl,d1:'',ev:[],closed:0};R.push(c)}c.lot+=e.lot;c.blot+=e.lot;c.buy+=e.total;c.ev.push(e)}
+  else if(e.jenis==='Jual'&&c){c.lot-=e.lot;c.sell+=e.total;c.real+=e.untung||0;c.d1=e.tgl;c.ev.push(e);if(c.lot<=1e-9){c.closed=1;c=null}}}return R}
 /* ================= MULAI ================= */
 load();save();netS();nav();home();if(secGet().hash)lockNow();setTimeout(autoPx,800);setTimeout(autoBackup,3000);setTimeout(rutNotify,2000);
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
