@@ -779,9 +779,11 @@ function invV(){LK={};WK={};const I=invData(),al=[['Pasar uang',I.gn,'#1D9E75'],
    <div class="kv"><span>Total bagi hasil (halal)</span><span>${X(rp(sum(t=>bh.includes(t.id))),{ids:bh},'Bagi hasil deposito')}</span></div>
    <div class="kv"><span>Bunga deposito konvensional (riba)</span><span>${X(rp(sum(t=>rb.includes(t.id))),{ids:rb},'Bunga deposito (riba)')}</span></div></div>
   <div class="card"><h3>Riwayat semua deposito</h3>${I.D.slice().reverse().map(dr).join('')}</div>`}}
-function evSrc(e){if(!e.tx)return`<div class="tiny">${e.tgl<'2025-01-01'?'Sebelum 2025 / dari catatan HP (tidak ada transaksi kas)':'Tidak ada transaksi kas (pindah antar produk/tujuan)'}</div>`;
+function evSrc(e){if(!e.tx&&e.pindah)return`<div class="tiny">${e.pindah===2?'🎁 Cashback Bibit (auto debit challenge) — tidak ada uang keluar dari kantong':'🔁 Pindah reksadana — tidak ada uang keluar/masuk kantong'}</div>`;
+ if(!e.tx)return`<div class="tiny">${e.tgl<'2025-01-01'?'Sebelum 2025 / dari catatan HP (tidak ada transaksi kas)':'Tidak ada transaksi kas (pindah antar produk/tujuan)'}</div>`;
  const t=byId(e.tx);if(!t)return'<div class="tiny">Transaksi kasnya sudah dihapus</div>';let h=`<div class="tiny">Kas: <span class="ac" data-tx="${t.id}">${esc(t.a)} · ${rp(t.j)} · ${fdate(t.d)}</span></div>`;
  h+=`<div class="tiny"><span class="ac" data-bk="${esc(t.t==='T'?t.a:t.a)}|${t.d.slice(0,7)}">📒 Lacak asal uangnya di Buku Akun ${esc(t.a)} (${BULAN[+t.d.slice(5,7)-1]} ${t.d.slice(0,4)})</span></div>`;
+ if(e.fee)h+=`<div class="tiny">Uang masuk ${rp(t.j)} = hasil jual dipotong biaya transfer ${rp(e.fee)}</div>`;
  return h+(e.app?'<div class="tiny">Dicatat dari aplikasi</div>':'')}
 function evList(ev,amt,extra){return ev.map(e=>`<div style="padding:8px 0;border-top:1px solid var(--line)"><div><b>${e.jenis}</b> · ${fdate(e.tgl)} ${e.lot?'· '+nf2(e.lot)+' lot':''} <span style="float:right">${e.tx&&byId(e.tx)?`<span class="ac" data-tx="${e.tx}">${rp(amt(e))}</span>`:rp(amt(e))}</span></div>${extra(e)}${evSrc(e)}</div>`).join('')}
 function sahamSheet(k){const p=saham().find(x=>x.kode===k);if(!p)return;const ev=p.ev.slice().sort((a,b)=>b.tgl.localeCompare(a.tgl));
@@ -1797,16 +1799,19 @@ function sahamRounds(p){const R=[];let c=null;for(const e of p.ev.slice().sort((
   else if(e.jenis==='Jual'&&c){c.lot-=e.lot;c.sell+=e.total;c.real+=e.untung||0;c.d1=e.tgl;c.ev.push(e);if(c.lot<=1e-9){c.closed=1;c=null}}}return R}
 
 /* ---- Tautan riwayat investasi → transaksi kas yang benar (Kantong Stockbit / pencairan) ---- */
+const NOCASH={'2024-12-17|Beli|4421917':1,'2024-12-17|Jual|4421917':1,'2025-08-27|Jual|16184259':1,'2026-01-05|Beli|99721':1,'2026-01-07|Beli|223594':1,'2026-03-12|Jual|578804':1,'2025-08-27|Beli|5251070':1,'2025-08-27|Beli|15913647':1,'2025-09-28|Beli|188':1,'2025-11-22|Beli|99817':1,'2026-01-05|Jual|100000':1,'2026-01-07|Jual|224100':1,'2026-02-23|Beli|38531':1,'2026-03-12|Beli|570706':1,'2025-11-22|Jual|100000':1,'2026-02-23|Jual|38663':1,'2025-08-27|Jual|5314236':1,'2025-09-28|Jual|188':1,'2026-03-07|Beli|50000':2};
 function fixInvLinks(){const SB='Jago - Kantong Stockbit',U='Jago - Kantong Utama',dd=(a,b)=>Math.round((pd(b)-pd(a))/864e5);
  const KW={'Dana Kuliah':/kuliah/,'Dana Beli Laptop':/laptop/,'Dana Keinginan':/keinginan/,'Dana Darurat':/darurat/,'Dana Kebutuhan Perbulan':/kebutuhan/,'Injeksi Dana Syariah':/injeksi|syariah/,'Dana Suntikan':/suntik/};
  const E=[];INV.saham.forEach(e=>E.push([e,'s',0]));S.inv.saham.forEach(e=>E.push([e,'s',1]));INV.rd.forEach(e=>E.push([e,'r',0]));S.inv.rd.forEach(e=>E.push([e,'r',1]));
  E.sort((a,b)=>a[0].tgl.localeCompare(b[0].tgl));const used=new Set();let ch=0;
  const okRow=(x,e)=>e.jenis==='Beli'?(x.a===SB&&x.t==='K'):e.jenis==='Jual'?((x.a===SB||x.a===U)&&x.t==='M'):(x.a===SB&&x.t==='M');
  const win=(e,d)=>e.jenis==='Beli'?(d>=-4&&d<=2):e.jenis==='Jual'?(d>=-3&&d<=8):(d>=-3&&d<=5);
- for(const[e,k,app]of E){const amt=Math.round(e.total||(e.jenis==='Beli'?e.modal:e.nilai)||0),cur=e.tx?S.tx.find(x=>x.id===e.tx):null,nm=e.kode||e.tujuan||'',kw=KW[nm]||new RegExp(String(nm).toLowerCase().replace(/[^a-z0-9]/g,'.'));
+ for(const[e,k,app]of E){const amt0=Math.round(e.total||(e.jenis==='Beli'?e.modal:e.nilai)||0),nc=k==='r'&&!app?NOCASH[e.tgl+'|'+e.jenis+'|'+amt0]:0;if(nc){e.pindah=nc;if(e.tx){e.tx=null;ch++}continue}
+  const amt=Math.round(e.total||(e.jenis==='Beli'?e.modal:e.nilai)||0),cur=e.tx?S.tx.find(x=>x.id===e.tx):null,nm=e.kode||e.tujuan||'',kw=KW[nm]||new RegExp(String(nm).toLowerCase().replace(/[^a-z0-9]/g,'.'));
   if(!e.tx&&app)continue;
   const rowOk=x=>!used.has(x.id)&&x.t!=='T'&&okRow(x,e)&&(e.jenis==='Beli'?(x.tj!=='Pengeluaran'||/reksadana|saham|rdn|sip/i.test(x.ket||'')):e.jenis==='Jual'?(x.tj==='Tabungan'||/penc[ai]+r|pencarian|penjualan|jual/i.test(x.ket||'')):(x.tj==='Pendapatan'||/dividen/i.test(x.ket||'')))&&win(e,dd(e.tgl,x.d));
   const C=S.tx.filter(x=>Math.abs(x.j-amt)<=1&&rowOk(x));
+  if(!C.length&&k==='r'&&e.jenis==='Jual'){const C2=S.tx.filter(x=>Math.abs(x.j-(amt-2900))<=1&&rowOk(x));if(C2.length){C.push(...C2);e.fee=2900}}
   let pick=null;if(C.length){pick=cur&&C.includes(cur)?cur:C.map(x=>[Math.abs(dd(e.tgl,x.d))-(kw.test((x.ket||'').toLowerCase())?0.6:0),x]).sort((a,b)=>a[0]-b[0]||a[1].id-b[1].id)[0][1]}
   else if(cur&&okRow(cur,e)&&!used.has(cur.id))pick=cur;
   else if(k==='s'){const F=S.tx.filter(x=>!used.has(x.id)&&x.t!=='T'&&okRow(x,e)&&new RegExp('\\b'+nm+'\\b','i').test(x.ket||'')&&(d=>d>=-20&&d<=6)(dd(e.tgl,x.d))&&(Math.abs(x.j-amt)<=1||win(e,dd(e.tgl,x.d))));if(F.length)pick=F.sort((a,b)=>Math.abs(dd(e.tgl,a.d))-Math.abs(dd(e.tgl,b.d)))[0]}
