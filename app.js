@@ -325,7 +325,7 @@ function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title
 const flow=(t,a)=>t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
 let V='home',charts={};
-const VIEWS=[['home','Beranda','🏠'],['trx','Transaksi','📋'],['buku','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Jago','🏦'],['log','Riwayat & Sampah','🕘'],['guide','Panduan','📖'],['set','Atur','⚙️']];
+const VIEWS=[['home','Beranda','🏠'],['trx','Transaksi','📋'],['buku','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
  $('nav').innerHTML=(()=>{const rd=rutDue().length,bt=([k,l,i])=>`<button data-v="${k}" class="${k===V?'on':''}"><span class="ic">${i}</span>${l}${k==='rut'&&rd?`<span class="bdg">${rd}</span>`:''}</button>`,A=VIEWS.filter(v=>!NAV_MORE.includes(v[0])),B=VIEWS.filter(v=>NAV_MORE.includes(v[0]));
@@ -1856,12 +1856,12 @@ document.addEventListener('click',e=>{const x=e.target.closest('[data-pdel]');if
 
 /* ================= COCOKKAN DENGAN RIWAYAT JAGO (PDF dibaca di HP, tidak dikirim ke mana pun) ================= */
 const JG_MON={Jan:1,Feb:2,Mar:3,Apr:4,Mei:5,May:5,Jun:6,Jul:7,Agt:8,Agu:8,Aug:8,Sep:9,Okt:10,Oct:10,Nov:11,Des:12,Dec:12};
-const JG_KEY=[[/gopay/i,'GoPay Tabungan'],[/kantong utama/i,'Jago - Kantong Utama'],[/stockbit/i,'Jago - Kantong Stockbit'],[/kos mama/i,'Jago - Uang Kos Mama'],[/riba/i,'Kantong Uang Riba']];
+const JG_KEY=[[/gopay/i,'GoPay Tabungan'],[/kantong utama/i,'Jago - Kantong Utama'],[/stockbit/i,'Jago - Kantong Stockbit'],[/kos mama/i,'Jago - Uang Kos Mama'],[/riba/i,'Kantong Uang Riba'],[/mandiri/i,'Bank Mandiri']];
 let JG={files:[],busy:''};
 const jgNum=s=>Math.round(parseFloat(String(s).replace(/\./g,'').replace(',','.'))*100)/100;
 async function jgLib(){if(!window._pdfjs){const m=await import('./pdf.min.mjs');m.GlobalWorkerOptions.workerSrc='./pdf.worker.min.mjs';window._pdfjs=m}return window._pdfjs}
-async function jgLines(buf){const lib=await jgLib(),doc=await lib.getDocument({data:buf}).promise,out=[];
- for(let p=1;p<=doc.numPages;p++){const pg=await doc.getPage(p),tc=await pg.getTextContent(),it=tc.items.filter(i=>i.str&&i.str.trim()).map(i=>({s:i.str,x:i.transform[4],y:i.transform[5],w:i.width||0}));
+async function jgLines(buf,pw){const lib=await jgLib(),doc=await lib.getDocument(pw?{data:buf,password:pw}:{data:buf}).promise,out=[];
+ for(let p=1;p<=doc.numPages;p++){const pg=await doc.getPage(p),tc=await pg.getTextContent(),it=tc.items.filter(i=>i.str&&i.str.trim()).map(i=>({s:i.str,x:i.transform[4],y:i.transform[5],w:i.width||0,p}));
   it.sort((a,b)=>b.y-a.y||a.x-b.x);let cur=null;const L=[];for(const i of it){if(!cur||Math.abs(cur.y-i.y)>2.5){cur={y:i.y,it:[]};L.push(cur)}cur.it.push(i)}
   for(const l of L){l.it.sort((a,b)=>a.x-b.x);out.push(l.it)}}
  return out}
@@ -1896,10 +1896,10 @@ function jgCompare(acc,rows){const dd=(a,b)=>Math.round((pd(b)-pd(a))/864e5),R=r
  let bulat=0;for(const a of A)if(!a.u){if(a.t.kt==='Selisih bunga')bulat++;else oA.push(a)}
  const last=rows[rows.length-1],first=rows[0],sEnd=last.saldo,aEnd=bal(acc,d1),sStart=first.saldo!=null?Math.round((first.saldo-first.amt)*100)/100:null,aStart=bal(acc,ds(new Date(pd(d0).getTime()-864e5)));
  return{acc,d0,d1,n:rows.length,ok,sh,oB,oA,grp,batal,receh:receh.length,bulat,sEnd,aEnd,sStart,aStart}}
-function jagoV(){LK={};WK={};const accs=S.acc.map(a=>a.n),J=S.jagoLast||{};let h=`<div class="card"><h3>🏦 Cocokkan dengan riwayat Jago</h3>
- <div class="tiny">Pilih file PDF "Pockets Transactions History" dari aplikasi Jago (boleh beberapa kantong sekaligus). Aplikasi membandingkannya sendiri dengan transaksi yang sudah dicatat.</div>
- <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">File dibaca di HP ini saja, tidak dikirim ke mana pun. Aturannya: transaksi dianggap cocok kalau akun, tanggal, arah (masuk/keluar) dan jumlahnya sama. Karena aplikasi mencatat rupiah bulat sedangkan bank mencatat sampai sen, selisih di bawah Rp1 dianggap sama. Kalau jumlahnya sama tapi tanggalnya beda (sampai 31 hari), masuk ke daftar "beda tanggal". Satu baris bank yang kamu catat sebagai beberapa transaksi (atau sebaliknya) dikenali sebagai cocok kalau jumlahnya sama dan jaraknya paling lama 7 hari. Baris +/− yang saling menghapus (dibatalkan atau dikembalikan) juga tidak dianggap masalah. Baris bank di bawah Rp1 dan baris "Selisih bunga" di aplikasi tidak dianggap masalah. Aplikasi tidak mengubah apa pun sendiri; setiap perbaikan kamu yang menekan tombolnya.</div></details>
- <label class="b p" style="display:block;text-align:center;margin-top:8px">📄 Pilih file PDF riwayat Jago<input type="file" id="jgf" accept="application/pdf,.pdf" multiple style="display:none"></label>
+function jagoV(){LK={};WK={};const accs=S.acc.map(a=>a.n),J=S.jagoLast||{};let h=`<div class="card"><h3>🏦 Cocokkan dengan riwayat bank</h3>
+ <div class="tiny">Pilih file PDF riwayat dari bank: "Pockets Transactions History" dari aplikasi Jago, atau e-Statement dari Livin' by Mandiri (boleh beberapa file sekaligus). Aplikasi membandingkannya sendiri dengan transaksi yang sudah dicatat.</div>
+ <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">File dibaca di HP ini saja, tidak dikirim ke mana pun. Kalau PDF-nya dikunci (e-Statement Mandiri), aplikasi meminta kata sandinya dan tidak menyimpannya; pakai file asli dari bank, bukan hasil cetak ulang. Aturannya: transaksi dianggap cocok kalau akun, tanggal, arah (masuk/keluar) dan jumlahnya sama. Karena aplikasi mencatat rupiah bulat sedangkan bank mencatat sampai sen, selisih di bawah Rp1 dianggap sama. Kalau jumlahnya sama tapi tanggalnya beda (sampai 31 hari), masuk ke daftar "beda tanggal". Satu baris bank yang kamu catat sebagai beberapa transaksi (atau sebaliknya) dikenali sebagai cocok kalau jumlahnya sama dan jaraknya paling lama 7 hari. Baris +/− yang saling menghapus (dibatalkan atau dikembalikan) juga tidak dianggap masalah. Baris bank di bawah Rp1 dan baris "Selisih bunga" di aplikasi tidak dianggap masalah. Aplikasi tidak mengubah apa pun sendiri; setiap perbaikan kamu yang menekan tombolnya.</div></details>
+ <label class="b p" style="display:block;text-align:center;margin-top:8px">📄 Pilih file PDF riwayat bank<input type="file" id="jgf" accept="application/pdf,.pdf" multiple style="display:none"></label>
  ${JG.busy?`<div class="st w" style="margin-top:8px">${esc(JG.busy)}</div>`:''}
  <label class="tiny ck" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="jgh" ${JG.hide?'checked':''} style="width:auto;min-height:0"> Sembunyikan selisih kecil di bawah Rp1.000 (bunga, pajak bunga)</label></div>`;
  if(!JG.files.length){const K=Object.keys(J);if(K.length)h+=`<div class="card"><h3>Pemeriksaan terakhir</h3>${K.map(a=>`<div class="kv"><span>${esc(a)}<div class="tiny">${fdate(J[a].d0)} – ${fdate(J[a].d1)} · diperiksa ${fdate(J[a].at)}</div></span><span class="${J[a].beda?'dn':'up'}">${J[a].beda?J[a].beda+' perlu dicek':'cocok ✓'}</span></div>`).join('')}</div>`}
@@ -1922,8 +1922,7 @@ function jagoV(){LK={};WK={};const accs=S.acc.map(a=>a.n),J=S.jagoLast||{};let h
  $('main').innerHTML=h;
  $('jgh').onchange=e=>{JG.hide=e.target.checked;jagoV()};
  $('jgf').onchange=async e=>{const fs=[...e.target.files];if(!fs.length)return;JG.files=[];for(const[k,file]of fs.entries()){JG.busy=`Membaca ${file.name} (${k+1} dari ${fs.length})…`;jagoV();
-   try{const P=jgParse(await jgLines(new Uint8Array(await file.arrayBuffer())));if(!P.rows.length)throw new Error('Tidak ada baris transaksi yang terbaca. Pastikan ini PDF "Pockets Transactions History" dari aplikasi Jago.');
-    const nm=/[A-Za-z]/.test(P.name.charAt(0))?P.name:((file.name.match(/Jago_(.+?)_History/)||[])[1]||'').replace(/_/g,' ');JG.files.push({file:file.name,name:nm,rows:P.rows,acc:jgGuess(nm)||jgGuess(file.name)})}
+   try{const P=await jgRead(file),nm=P.name;JG.files.push({file:file.name,name:nm,rows:P.rows,acc:jgGuess(nm)||jgGuess(file.name)})}
    catch(x){JG.files.push({file:file.name,err:'Gagal membaca: '+(x&&x.message||x)})}}
   JG.busy='';jagoV();jgRemember()};
  document.querySelectorAll('[data-jga]').forEach(s=>s.onchange=()=>{const f=JG.files[+s.dataset.jga];f.acc=s.value;if(f.name&&f.acc){S.jagoMap=S.jagoMap||{};S.jagoMap[f.name]=f.acc}jagoV();jgRemember()});
@@ -1932,6 +1931,29 @@ function jagoV(){LK={};WK={};const accs=S.acc.map(a=>a.n),J=S.jagoLast||{};let h
  document.querySelectorAll('[data-jgd]').forEach(b=>b.onclick=()=>{const[i,k]=b.dataset.jgd.split('|').map(Number),x=JG.files[i].C.sh[k];if(!x)return;const t=byId(x.t.id);if(!t)return;
   if(!confirm(`Ubah tanggal transaksi "${t.ket||t.kt}" (${rp(t.j)}) dari ${fdate(t.d)} menjadi ${fdate(x.r.d)} sesuai bank?${t.t==='T'?'\n\nIni transaksi pindah: tanggalnya ikut berubah di akun '+(t.a===JG.files[i].acc?t.tu:t.a)+' juga.':''}`))return;t.d=x.r.d;save();jagoV();jgRemember()})}
 function jgRemember(){let ch=0;S.jagoLast=S.jagoLast||{};for(const f of JG.files){if(!f.acc||!f.C)continue;S.jagoLast[f.acc]={at:today,d0:f.C.d0,d1:f.C.d1,beda:f.beda||0};ch=1}if(ch)save()}
+
+/* ---- e-Statement Bank Mandiri (Livin') ---- */
+function mdParse(lines){const txt=l=>l.map(i=>i.s.trim()).join(' ').replace(/\s+/g,' ').trim(),all=lines.map(txt).join(' \n ');
+ if(!/e-?Statement/i.test(all)||!/Nominal|Saldo Awal|Initial Balance/i.test(all))return null;
+ const NUM=/^[+\-−–]\s?[\d.]+,\d{2}$/,SAL=/^[\-−]?[\d.]+,\d{2}$/,num=s=>jgNum(s.replace(/[−–]/g,'-').replace(/\s/g,''));
+ const L=lines.map(l=>({it:l,y:l[0].y,p:l[0].p,t:txt(l)})),anc=[];
+ L.forEach((l,k)=>{const cells=[];let c=null;for(const i of l.it){if(c&&i.x-c.x2<4){c.s+=i.s;c.x2=i.x+i.w}else{c={s:i.s,x:i.x,x2:i.x+i.w};cells.push(c)}}
+  for(let q=0;q<cells.length-1;q++){const a=cells[q].s.trim(),b=cells[cells.length-1].s.trim();if(NUM.test(a)&&q<cells.length-1&&SAL.test(b)&&cells[cells.length-1]!==cells[q]){anc.push({k,l,x:cells[q].x,amt:num(a),saldo:num(b)});break}}});
+ const rows=[];anc.forEach((a,n)=>{const same=anc.filter(z=>z.l.p===a.l.p),i=same.indexOf(a),up=i>0?(same[i-1].l.y-a.l.y)/2:38,dn=i<same.length-1?(a.l.y-same[i+1].l.y)/2:38;
+  const band=L.filter(l=>l.p===a.l.p&&l.y<=a.l.y+Math.min(up,60)+.5&&l.y>a.l.y-Math.min(dn,60)-.5);let d='',ket=[];
+  for(const l of band){const m=l.t.match(/(\d{2}) ([A-Za-z]{3}) (\d{4})/);if(m&&JG_MON[m[2]]&&!d)d=`${m[3]}-${String(JG_MON[m[2]]).padStart(2,'0')}-${m[1]}`;
+   const k=l.it.filter(i=>i.x<a.x-2).map(i=>i.s.trim()).filter(Boolean).join(' ').replace(/\d{2}:\d{2}:\d{2}\s*WIB/,'').replace(/\d{2} (Jan|Feb|Mar|Apr|Mei|May|Jun|Jul|Agu|Agt|Aug|Sep|Okt|Oct|Nov|Des|Dec) \d{4}/,'').replace(/^\s*\d{1,3}\s+(?=\D)/,'').replace(/^\s*\d{1,3}\s*$/,'').trim();if(k)ket.push(k)}
+  if(d)rows.push({d,amt:a.amt,saldo:a.saldo,desc:ket.join(' · '),next:''})});
+ const g=re=>{const l=L.find(l=>re.test(l.t));if(!l)return null;const m=l.t.match(/[\-−]?[\d.]+,\d{2}/g);return m?num(m[m.length-1]):null};
+ const rek=(all.match(/(?:Nomor Rekening|Account Number)[^\d]{0,30}(\d{8,})/)||[])[1]||'';
+ let putus=0;for(let k=1;k<rows.length;k++)if(Math.abs(rows[k-1].saldo+rows[k].amt-rows[k].saldo)>0.6)putus++;
+ return{name:'Bank Mandiri'+(rek?' '+rek.slice(-4):''),rows,putus,awal:g(/Saldo Awal|Initial Balance/i),akhir:g(/Saldo Akhir|Closing Balance/i),nAnc:anc.length}}
+async function jgRead(file){const buf=new Uint8Array(await file.arrayBuffer());let lines,pw='';
+ for(let n=0;;n++){try{lines=await jgLines(buf.slice(),pw);break}catch(x){if(x&&x.name==='PasswordException'&&n<3){pw=prompt((n?'Kata sandi salah. ':'')+'PDF "'+file.name+'" dikunci. Masukkan kata sandi PDF-nya.\n\nKata sandi hanya dipakai untuk membaca file ini di HP dan tidak disimpan.')||'';if(!pw)throw new Error('Dibatalkan: kata sandi tidak diisi.');continue}throw x}}
+ if(!lines.length)throw new Error('PDF ini berisi gambar, bukan teks (biasanya karena hasil "Cetak → Simpan sebagai PDF" atau hasil foto). Pilih file PDF asli yang diunduh dari aplikasi bank; kalau dikunci, aplikasi akan meminta kata sandinya.');
+ const M=mdParse(lines);if(M&&M.rows.length){if(M.putus||(M.nAnc!==M.rows.length))throw new Error('e-Statement Mandiri terbaca, tapi '+(M.putus?'saldo antar baris tidak bersambung di '+M.putus+' tempat':'ada baris tanpa tanggal')+'. Supaya tidak salah angka, file ini tidak dibandingkan. Kirim file ini ke Claude untuk diperiksa.');return M}
+ const P=jgParse(lines);if(!P.rows.length)throw new Error('Tidak ada baris transaksi yang terbaca. Yang didukung: PDF "Pockets Transactions History" dari aplikasi Jago dan e-Statement dari Livin\' by Mandiri.');
+ P.name=/[A-Za-z]/.test(P.name.charAt(0))?P.name:((file.name.match(/Jago_(.+?)_History/)||[])[1]||'').replace(/_/g,' ');return P}
 /* ================= v60: tombol kembali, lompat ke Buku Akun, riwayat perubahan, sampah, cari, pengingat cadangan ================= */
 /* ---- keadaan tampilan (untuk tombol kembali) ---- */
 let LGT='ubah',JBH=null,PRE=null,INP=null;
