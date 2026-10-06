@@ -111,12 +111,20 @@ textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid va
 #backB{font-size:26px;line-height:1;padding-bottom:3px}
 table.bkt{font-size:12.5px}table.bkt td{vertical-align:top}table.bkt td.kt{white-space:normal;min-width:120px;font-size:12px;line-height:1.35}table.bkt td.n{white-space:nowrap;padding-left:6px}
 table.bkt tr.note td{font-size:12px;color:var(--mut,#888);padding:4px 4px 6px;border-top:0}table.bkt tr.bdh td{background:var(--soft);font-weight:600;font-size:12px;padding:6px 4px;border-top:0}table.bkt tr.sa td{background:var(--acc2)}table.bkt tr.tot td{font-weight:700;border-top:2px solid var(--line)}
+
+tr.hl td{background:var(--wab)!important;transition:background 1.2s}tr.hl.hl2 td{background:transparent!important}
+.r.jb{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+details.tip{margin:6px 0}details.tip>summary{cursor:pointer;font-size:12px;color:var(--tx3);list-style:none}details.tip>summary::-webkit-details-marker{display:none}details.tip[open]>summary{color:var(--tx2)}
+details.grp{margin-top:10px}details.grp>summary{cursor:pointer;list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-weight:600;font-size:14.5px;display:flex;justify-content:space-between;align-items:center}details.grp>summary::-webkit-details-marker{display:none}details.grp>summary::after{content:'›';color:var(--tx3);font-size:18px;transition:transform .15s}details.grp[open]>summary::after{transform:rotate(90deg)}
+details.navm>summary{display:flex;align-items:center;gap:12px;padding:11px 12px;font-size:14.5px;cursor:pointer;list-style:none;border-radius:10px;color:var(--tx)}details.navm>summary::-webkit-details-marker{display:none}details.navm>summary::after{content:'▾';margin-left:6px;color:var(--tx3)}details.navm[open]>summary::after{content:'▴'}details.navm>button{padding-left:24px}
+.lgr{padding:9px 0;border-top:1px solid var(--line)}.lgr[data-tx]{cursor:pointer}
+#toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:9px 14px;border-radius:18px;font-size:13px;z-index:99;opacity:0;pointer-events:none;transition:opacity .2s;max-width:86vw;text-align:center}#toast.on{opacity:.95}
 </style>
 <script>
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
 </script>
 </head><body>
-<header><div class="top"><button id="menuB" class="mb" aria-label="Buka menu">☰</button><button id="backB" class="mb" aria-label="Kembali" style="display:none">‹</button><b id="ttl">Beranda</b><button id="hideTop" class="mb" aria-label="Sembunyikan saldo">👁</button><span id="net" class="pill">…</span></div></header>
+<header><div class="top"><button id="menuB" class="mb" aria-label="Buka menu">☰</button><button id="backB" class="mb" aria-label="Kembali" style="display:none">‹</button><b id="ttl">Beranda</b><button id="srchB" class="mb" aria-label="Cari">🔍</button><button id="hideTop" class="mb" aria-label="Sembunyikan saldo">👁</button><span id="net" class="pill">…</span></div></header>
 <div id="scrim"></div><nav id="nav"></nav>
 <button id="fab" aria-label="Catat transaksi">＋</button><div id="print"></div>
 <main id="main"></main>
