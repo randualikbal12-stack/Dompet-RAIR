@@ -926,7 +926,14 @@ function txForm(){const t=EDIT?byId(EDIT):null,P=t||TPL||null;TPL=null;const tip
     TPL={mode:'inv',ij:INVSB[o.sb],jn:tp==='M'?'Jual':'Beli',pre:{d:o.d,a:o.a,j:o.j,ket:o.ket}};return add()}
    if(!confirm('Simpan hanya sebagai uang masuk/keluar di akun (nilai investasi TIDAK berubah)?'))return}
   const rid=P&&P.rutin||t&&t.rutin;if(rid)o.rutin=rid;const fl=$('afoto').files[0];
-  let tt;if(t){Object.assign(t,o);tt=t}else{tt={id:S.next++,...o};S.tx.push(tt)}
+  if(tp==='T'&&o.kt==='Belum dikategorikan')o.kt='Pindah antar akun sendiri';
+  /* pindah akun: kalau pasangannya sudah tercatat sendiri di akun lain (mis. sama-sama ditambahkan dari PDF bank), gabungkan supaya tidak dobel */
+  if(tp==='T'){const dd=(x,y)=>Math.abs(Math.round((pd(y)-pd(x))/864e5)),lone=x=>x!==t&&x.t!=='T'&&x.j===j&&dd(x.d,d)<=3&&(x.kt==='Belum dikategorikan'||isUnpair(x))&&!appInv(x.id);
+   const C=S.tx.filter(x=>lone(x)&&((x.t==='M'&&x.a===o.tu)||(x.t==='K'&&x.a===o.a))).sort((x,y)=>dd(x.d,d)-dd(y.d,d)),pick=[];
+   for(const side of['M','K']){const c=C.find(x=>x.t===side);if(c&&confirm(`Di akun ${c.a} sudah ada uang ${side==='M'?'masuk':'keluar'} ${rp(c.j)} tanggal ${fdate(c.d)}:\n"${c.ket||c.kt}"\n\nItu bagian dari pindah yang sama? Tekan OK untuk menggabungkannya (baris itu dihapus dan diganti pindah ini, supaya tidak dobel). Tekan Batal kalau itu transaksi lain.`))pick.push(c)}
+   if(pick.length){S.txMap=S.txMap||{};S.tx=S.tx.filter(x=>!pick.includes(x));var _merged=pick}}
+  let tt;if(t){Object.assign(t,o);tt=t}else{tt={id:S.next++,...o};S.tx.push(tt)}if(typeof _merged!=='undefined'&&_merged)for(const c of _merged){S.txMap[c.id]=tt.id;if(c.cek&&!/Ditambahkan dari PDF bank/.test(c.cek)&&!tt.cek)tt.cek=c.cek}
+  if(tt.cek&&/^Ditambahkan dari PDF bank, kategori belum diisi$/.test(tt.cek)&&tt.kt!=='Belum dikategorikan')tt.cek='';
   const fin=()=>{save();const wasEdit=!!t;EDIT=null;alert('Tersimpan ✓');if(!wasEdit&&tt.kt==='Gaji bulanan'&&confirm('Gaji tercatat. Bagi gaji sekarang (uang masak, paket, kebutuhan, investasi, keinginan)?')){go('home');return bagiGaji({j:tt.j,d:tt.d,a:tt.a})}if(wasEdit)go('trx');else if(rid)go('rut');else add()};
   if(fl)shrink(fl).then(u=>fotoPut(tt.id,u)).then(()=>{tt.foto=1;fin()}).catch(e=>{alert('Transaksi tersimpan, tapi foto gagal disimpan: '+e.message);fin()});else fin()}
  if(t&&t.foto)fotoView(t.id)}
@@ -1733,7 +1740,7 @@ function remChips(){const N=ntf(),R=N.rem?remDue():[],P=N.pindah?pindahCek(60).l
  for(const r of R)h+=`<div class="bkc" data-rem="${r.id}">🔔 ${esc(r.t)} <span>${r.go?'Buka ›':''}</span><button class="eyeb" data-remok="${r.id}" style="margin-left:6px">✓</button></div>`;
  if(P)h+=`<div class="bkc" data-go="rec">⚠️ ${P} pindah uang perlu dicek <span>Cek ›</span></div>`;
  if(K)h+=`<div class="bkc" data-go="mama">🏠 Uang kos mama dipinjam ${rp(K)} belum diganti <span>Lihat ›</span></div>`;
- h+=bakChip();if(U>0)h+=`<div class="bkc" data-rib="1">💸 Utang uang riba ${rp(U)} belum diganti <span>Lihat ›</span></div>`;return h}
+ h+=bakChip();{const dn=dupPairs().length;if(dn)h+=`<div class="bkc" data-go="warn" style="background:var(--wab);color:var(--wa)">⚠️ ${dn} transaksi kemungkinan tercatat dobel <span>Cek ›</span></div>`}if(U>0)h+=`<div class="bkc" data-rib="1">💸 Utang uang riba ${rp(U)} belum diganti <span>Lihat ›</span></div>`;return h}
 function remBind(){document.querySelectorAll('[data-remok]').forEach(b=>b.onclick=e=>{e.stopPropagation();remDone(b.dataset.remok);save();go(V)});
  document.querySelectorAll('[data-rem]').forEach(c=>c.onclick=()=>{const r=rems().find(x=>x.id===c.dataset.rem);if(!r||!r.go)return;if(r.go==='bagi')bagiGaji();else{if(r.go==='mama')MT='kos';go(r.go)}});
  document.querySelectorAll('[data-rib]').forEach(c=>c.onclick=()=>{MT='riba';go('mama')})}
@@ -1784,7 +1791,7 @@ function icsAlarm(){const R=(S.rutin||[]).map(r=>({n:r.nama+' '+rp(r.j),d:r.tgl,
 /* ---- 3. Daftar peringatan (tulisan kuning) ---- */
 let WQ='';
 function warnV(){LK={};WK={};const L=S.tx.filter(t=>t.cek).sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id),q=WQ.toLowerCase(),R=q?L.filter(t=>((t.cek||'')+' '+(t.ket||'')+' '+t.a).toLowerCase().includes(q)):L;
- $('main').innerHTML=unpairCard()+`<div class="card"><h3>⚠️ Peringatan pada transaksi</h3><details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">Semua tulisan kuning yang menempel di transaksi. Kamu bisa mengubah atau menghapusnya di sini. Untuk menambah peringatan baru: buka transaksinya, lalu tekan "⚠️ Tambah / ubah peringatan".</div></details>
+ $('main').innerHTML=dupCard()+unpairCard()+`<div class="card"><h3>⚠️ Peringatan pada transaksi</h3><details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">Semua tulisan kuning yang menempel di transaksi. Kamu bisa mengubah atau menghapusnya di sini. Untuk menambah peringatan baru: buka transaksinya, lalu tekan "⚠️ Tambah / ubah peringatan".</div></details>
   <input id="wq" placeholder="Cari peringatan / keterangan / akun" value="${esc(WQ)}" style="margin-top:8px">
   <div class="kv"><span>Jumlah peringatan</span><b>${L.length}${q?' · cocok '+R.length:''}</b></div>
   ${L.length?'<button class="b d" id="wall" style="width:100%;margin-top:6px">Hapus semua peringatan'+(q?' yang cocok':'')+'</button>':''}</div>
@@ -2074,6 +2081,13 @@ function viewSave(){try{sessionStorage.setItem('dd-view',JSON.stringify({v:V,st:
 function viewRestore(){let o=null;try{o=JSON.parse(sessionStorage.getItem('dd-view'))}catch(e){}if(!o||!o.v||o.v==='home'||locked||Date.now()-o.t>6*3600e3)return;
  try{VS.set(o.st);EDIT=null;TPL=null;NAVS=[{v:'home',st:(()=>{const s=VS.get();s.F={};return s})(),sh:null,wk:{},lk:{},y:0}];go(o.v,{nopush:1});setTimeout(()=>window.scrollTo(0,o.y||0),60)}catch(e){go('home',{nopush:1})}}
 addEventListener('pagehide',viewSave);document.addEventListener('visibilitychange',()=>{if(document.hidden)viewSave()});
+
+/* ---- kemungkinan dobel: pindah akun yang pasangannya masih tercatat sendiri (dari PDF bank) ---- */
+function dupPairs(){const dd=(x,y)=>Math.abs(Math.round((pd(y)-pd(x))/864e5)),L=S.tx.filter(x=>x.t!=='T'&&x.kt==='Belum dikategorikan'),out=[],used=new Set();
+ for(const x of L){const t=S.tx.find(t=>t.t==='T'&&!used.has(t.id+'|'+x.t)&&t.j===x.j&&dd(t.d,x.d)<=3&&((x.t==='K'&&t.a===x.a)||(x.t==='M'&&t.tu===x.a)));if(t){used.add(t.id+'|'+x.t);out.push({x,t})}}return out}
+function dupCard(){const D=dupPairs();if(!D.length)return'';return`<div class="card"><h3>⚠️ Kemungkinan tercatat dobel (${D.length})</h3><div class="tiny">Baris dari PDF bank yang belum dikategorikan, padahal di akun yang sama sudah ada pindah dengan jumlah yang sama. Kalau memang transaksi yang sama, hapus baris yang berlebih (masuk Tempat sampah, bisa dikembalikan).</div>
+ ${D.map(({x,t})=>`<div class="lgr"><div><b class="${x.t==='M'?'up':'dn'}">${x.t==='M'?'+':'−'}${rp(x.j)}</b> · ${fdate(x.d)} · ${esc(x.a)}</div><div class="tiny">Berlebih: <span class="ac" data-tx="${x.id}">${esc(x.ket||x.kt)}</span></div><div class="tiny">Sudah ada: <span class="ac" data-tx="${t.id}">${esc(t.ket||t.kt)}</span> (${esc(t.a)} → ${esc(t.tu)}, ${fdate(t.d)})</div><div class="rl"><span class="ac dn" data-dupx="${x.id}">🗑️ Hapus baris yang berlebih</span><span class="ac" data-jb="${x.id}">📒 Lihat di Buku Akun</span></div></div>`).join('')}</div>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-dupx]');if(!b)return;e.stopPropagation();const x=byId(+b.dataset.dupx);if(!x||!confirm(`Hapus "${x.ket||x.kt}" ${rp(x.j)} di ${x.a} (${fdate(x.d)})?\n\nPindah yang sudah ada tidak diubah.`))return;S.tx=S.tx.filter(q=>q!==x);save();toast('Dihapus, ada di Tempat sampah');if(V==='warn')warnV();else go(V)},true);
 /* ================= MULAI ================= */
 load();save();netS();nav();home();lockStart();viewRestore();setTimeout(autoPx,800);setTimeout(autoBackup,3000);setTimeout(rutNotify,2000);
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
