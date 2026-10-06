@@ -247,7 +247,7 @@ const accNames=()=>S.acc.map(a=>a.n);
 const byId=id=>S.tx.find(t=>t.id===id)||(S.txMap&&S.txMap[id]!=null?S.tx.find(t=>t.id===S.txMap[id]):undefined);
 
 /* urutan dalam satu hari: selisih bunga awal bulan dicatat paling dulu */
-const ordK=t=>(t.kt==='Selisih bunga'&&t.d.endsWith('-01'))?-1e9+t.id:t.id;
+const ordK=t=>(t.kt==='Selisih bunga'&&t.d.endsWith('-01'))?-1e9+t.id:(t.o??t.id);
 const txCmp=(p,q)=>p.d.localeCompare(q.d)||ordK(p)-ordK(q);
 /* ================= PERHITUNGAN ================= */
 function openAt(a,d){const x=S.acc.find(z=>z.n===a);return x&&x.od<=d?x.o:0}
@@ -567,7 +567,8 @@ function buku(){LK={};WK={};if(!S.acc.some(a=>a.n===BA.a))BA.a=S.acc[0].n;const[
  const flushTo=d=>{for(const x of [...new Set(NT.map(q=>q.d))].sort())if(x<d&&x>cur&&!L.some(t=>t.d===x&&flow(t,n))){rows+=hdr(x)}};
  for(const t of L){const f=flow(t,n);if(!f)continue;if(t.d!==cur){flushTo(t.d);cur=t.d;rows+=hdr(t.d)}
   run+=f*t.j;if(f>0)tin+=t.j;else tout+=t.j;
-  rows+=`<tr class="cl" data-tx="${t.id}"><td class="kt">${esc(t.ket||t.kt)}<div class="tiny">${esc(t.kt)}${t.t==='T'?' · '+(f>0?'dari <span class="ac" data-jb="'+t.id+'" data-js="a">'+esc(t.a)+' ›</span>':'ke <span class="ac" data-jb="'+t.id+'" data-js="tu">'+esc(t.tu)+' ›</span>'):''}</div></td><td class="n up">${f>0?nf(t.j):''}</td><td class="n dn">${f<0?nf(t.j):''}</td><td class="n">${rp(run).replace('Rp','')}</td></tr>`}
+  const dn=L.filter(x=>x.d===t.d&&flow(x,n)),mi=dn.indexOf(t),lk=x=>x.kt==='Selisih bunga'&&x.d.endsWith('-01'),mv=dn.length>1&&!lk(t)?`<span class="mvs">${mi>0&&!lk(dn[mi-1])?`<span class="mv" data-mv="${t.id}|${dn[mi-1].id}">▲</span>`:''}${mi<dn.length-1?`<span class="mv" data-mv="${t.id}|${dn[mi+1].id}">▼</span>`:''}</span>`:'';
+  rows+=`<tr class="cl" data-tx="${t.id}"><td class="kt">${mv}${esc(t.ket||t.kt)}<div class="tiny">${esc(t.kt)}${t.t==='T'?' · '+(f>0?'dari <span class="ac" data-jb="'+t.id+'" data-js="a">'+esc(t.a)+' ›</span>':'ke <span class="ac" data-jb="'+t.id+'" data-js="tu">'+esc(t.tu)+' ›</span>'):''}</div></td><td class="n up">${f>0?nf(t.j):''}</td><td class="n dn">${f<0?nf(t.j):''}</td><td class="n">${rp(run).replace('Rp','')}</td></tr>`}
  flushTo('9999');
  const accs=S.acc.filter(a=>a.n===n||bal(a.n)||S.tx.some(t=>t.a===a.n||t.tu===a.n));
  $('main').innerHTML=`<div class="card"><div class="seg"><button id="bkDaftar">Daftar & cari</button><button class="on">Buku akun</button></div>
@@ -1306,8 +1307,8 @@ function lockNow(){const c=secGet();if(!c.hash)return;locked=true;closeSheet();l
  L.querySelectorAll('[data-p]').forEach(b=>b.onclick=async()=>{const k=b.dataset.p;if(k==='bio')return bioUnlock();if(k==='del')pin=pin.slice(0,-1);else if(pin.length<(c.len||6))pin+=k;draw();
   if(pin.length===(c.len||6)){if(await sha(c.salt+pin)===c.hash)unlock();else{$('lkErr').textContent='PIN salah';pin='';draw()}}});
  $('lkForgot').onclick=forgotPin;
- if(c.cred)setTimeout(bioUnlock,300)}
-function unlock(){locked=false;$('lock').style.display='none';$('lock').innerHTML='';autoBackup();if(window._afterUnlock){const f=window._afterUnlock;window._afterUnlock=null;f()}}
+ try{sessionStorage.removeItem('dd-unl')}catch(e){}if(c.cred)bioUnlock()}
+function unlock(){try{sessionStorage.setItem('dd-unl','1');sessionStorage.removeItem('dd-hid')}catch(e){}locked=false;$('lock').style.display='none';$('lock').innerHTML='';autoBackup();if(window._afterUnlock){const f=window._afterUnlock;window._afterUnlock=null;f()}}
 async function bioUnlock(){const c=secGet();if(!c.cred||!window.PublicKeyCredential)return;try{
   await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:ub64(c.cred),transports:['internal']}],userVerification:'required',timeout:60000}});unlock()}
  catch(e){const x=$('lkErr');if(x)x.textContent='Sidik jari/wajah dibatalkan, pakai PIN'}}
@@ -1345,7 +1346,10 @@ function forgotPin(){const c=secGet();const L=$('lock');
   if(await sha(c.rsalt+v)===c.rhash){unlock();pinSetup()}else $('fer').textContent='Kode pemulihan salah'};
  $('fwipe').onclick=()=>{if(!confirm('SEMUA data di HP ini akan dihapus. Data hanya bisa kembali dari cadangan Google Drive. Lanjut?'))return;
   localStorage.removeItem(KEY);localStorage.removeItem(SK);try{indexedDB.deleteDatabase('dd-foto')}catch(e){}location.reload()}}
-document.addEventListener('visibilitychange',()=>{if(document.hidden){hiddenAt=Date.now();autoBackup(true)}else{const c=secGet();if(c.hash&&!locked&&Date.now()-hiddenAt>=(c.delay??60)*1000)lockNow()}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){hiddenAt=Date.now();try{sessionStorage.setItem('dd-hid',String(hiddenAt))}catch(e){}autoBackup(true)}else{const c=secGet();if(c.hash&&!locked&&Date.now()-hiddenAt>=(c.delay??60)*1000)lockNow();else{try{sessionStorage.removeItem('dd-hid')}catch(e){}}}});
+/* muat ulang (tarik layar ke bawah) = masih di dalam aplikasi: tidak dikunci lagi */
+function lockStart(){const c=secGet();if(!c.hash)return;let u=0,h=0;try{u=sessionStorage.getItem('dd-unl')==='1';h=+sessionStorage.getItem('dd-hid')||0}catch(e){}
+ if(u&&(!h||Date.now()-h<Math.max((c.delay??60)*1000,15000))){try{sessionStorage.removeItem('dd-hid')}catch(e){}return}lockNow()}
 /* cadangan otomatis ke Google Drive (Apps Script milik user) */
 function bkKey(){const c=secGet();if(!c.bk){c.bk=b64(crypto.getRandomValues(new Uint8Array(18))).replace(/[^A-Za-z0-9]/g,'');secSet(c)}return c.bk}
 function bkScript(){return`var KUNCI='${bkKey()}';var FOLDER='Dompet Digital Cadangan';var SS_NAMA='Dompet Digital - Data';
@@ -1894,6 +1898,7 @@ function jgCompare(acc,rows){const dd=(a,b)=>Math.round((pd(b)-pd(a))/864e5),R=r
  for(const a of A){if(a.u)continue;const c=A.find(q=>!q.u&&q!==a&&q.amt===-a.amt&&Math.abs(dd(q.t.d,a.t.d))<=7);if(c){a.u=c.u=1;batal+=2}}
  for(const b of B)if(!b.u)(Math.abs(b.r.amt)<1?receh:oB).push(b.r);
  let bulat=0;for(const a of A)if(!a.u){if(a.t.kt==='Selisih bunga')bulat++;else oA.push(a)}
+ for(const r of oB){const j=Math.round(Math.abs(r.amt));r._dup=S.tx.find(t=>t.a!==acc&&t.tu!==acc&&Math.abs(t.j-j)<=1&&Math.abs(dd(t.d,r.d))<=7&&(t.t==='T'||(t.t==='M')===(r.amt>0)))||null}
  const last=rows[rows.length-1],first=rows[0],sEnd=last.saldo,aEnd=bal(acc,d1),sStart=first.saldo!=null?Math.round((first.saldo-first.amt)*100)/100:null,aStart=bal(acc,ds(new Date(pd(d0).getTime()-864e5)));
  return{acc,d0,d1,n:rows.length,ok,sh,oB,oA,grp,batal,receh:receh.length,bulat,sEnd,aEnd,sStart,aStart}}
 function jagoV(){LK={};WK={};const accs=S.acc.map(a=>a.n),J=S.jagoLast||{};let h=`<div class="card"><h3>🏦 Cocokkan dengan riwayat bank</h3>
@@ -1905,17 +1910,17 @@ function jagoV(){LK={};WK={};const accs=S.acc.map(a=>a.n),J=S.jagoLast||{};let h
  if(!JG.files.length){const K=Object.keys(J);if(K.length)h+=`<div class="card"><h3>Pemeriksaan terakhir</h3>${K.map(a=>`<div class="kv"><span>${esc(a)}<div class="tiny">${fdate(J[a].d0)} – ${fdate(J[a].d1)} · diperiksa ${fdate(J[a].at)}</div></span><span class="${J[a].beda?'dn':'up'}">${J[a].beda?J[a].beda+' perlu dicek':'cocok ✓'}</span></div>`).join('')}</div>`}
  const big=x=>!JG.hide||Math.abs(x)>=1000,nf=v=>(v<0?'−':'+')+rp(Math.abs(v)).replace('Rp','Rp');
  JG.files.forEach((f,i)=>{if(f.err){h+=`<div class="card"><h3>${esc(f.file)}</h3><div class="st w">${esc(f.err)}</div></div>`;return}
-  h+=`<div class="card"><h3>${esc(f.name||f.file)}</h3><div class="tiny">${esc(f.file)} · ${f.rows.length} baris · ${fdate(f.rows[0].d)} – ${fdate(f.rows[f.rows.length-1].d)}</div>
+  h+=`<div class="card"><h3>${esc(f.name||f.file)}</h3><div class="tiny">${esc(f.file)} · ${f.n?f.n+' file digabung, '+(f.dup||0)+' baris kembar dibuang · ':''}${f.rows.length} baris · ${fdate(f.rows[0].d)} – ${fdate(f.rows[f.rows.length-1].d)}</div>
   <label class="lb" style="margin-top:6px">Akun di aplikasi<select data-jga="${i}"><option value="">— pilih akun —</option>${accs.map(a=>`<option ${a===f.acc?'selected':''}>${esc(a)}</option>`).join('')}</select></label>`;
   if(!f.acc){h+=`<div class="st w" style="margin-top:8px">Pilih dulu akun di aplikasi yang sama dengan kantong ini.</div></div>`;return}
-  const C=jgCompare(f.acc,f.rows),sh=C.sh.filter(x=>big(x.r.amt)),oB=C.oB.filter(x=>big(x.amt)),oA=C.oA.filter(x=>big(x.amt)),eOk=C.sEnd==null||Math.abs(C.sEnd-C.aEnd)<2,sOk=C.sStart==null||Math.abs(C.sStart-C.aStart)<2,beda=sh.length+oB.length+oA.length+(eOk?0:1);f.beda=beda;f.C=C;
+  const C=jgCompare(f.acc,f.rows),sh=C.sh.filter(x=>big(x.r.amt)),oB=C.oB.filter(x=>big(x.amt)),oA=C.oA.filter(x=>big(x.amt)),eOk=C.sEnd==null||Math.abs(C.sEnd-C.aEnd)<2,sOk=C.sStart==null||Math.abs(C.sStart-C.aStart)<2,beda=sh.length+oB.length+oA.length+(eOk?0:1);f.beda=beda;f.C=C;f.skip=f.skip||new Set();f.seen=f.seen||new Set();for(const r of C.oB)if(r._dup&&!f.seen.has(jgK(r))){f.seen.add(jgK(r));f.skip.add('b|'+jgK(r))}
   h+=`<div class="st ${beda?'w':'ok'}" style="margin-top:8px">${beda?'⚠️ Ada '+beda+' hal yang perlu dicek':'✓ Semua cocok dengan bank'}</div>
   <div class="kv"><span>Baris bank yang cocok</span><b>${C.n-C.oB.length-C.sh.length} dari ${C.n}</b></div>
   <div class="kv"><span>Saldo awal periode (bank / aplikasi)</span><span class="${sOk?'':'dn'}">${C.sStart==null?'-':rp(C.sStart)} / ${rp(C.aStart)} ${sOk?'✓':'✗'}</span></div>
   <div class="kv"><span>Saldo akhir ${fdate(C.d1)} (bank / aplikasi)</span><span class="${eOk?'':'dn'}">${C.sEnd==null?'-':rp(C.sEnd)} / ${rp(C.aEnd)} ${eOk?'✓':'✗ selisih '+rp(C.aEnd-C.sEnd)}</span></div>
   ${C.receh||C.bulat||C.batal?`<div class="tiny">Tidak dianggap masalah: ${C.receh} baris bank di bawah Rp1, ${C.bulat} baris "Selisih bunga" di aplikasi${C.batal?', '+C.batal+' baris yang saling menghapus (dibatalkan/dikembalikan)':''}.</div>`:''}
   ${C.grp.length?`<details class="tip"><summary>ⓘ ${C.grp.length} baris cocok tapi dicatat terpisah (ketuk untuk lihat)</summary>${C.grp.map(g=>`<div class="lgr"><div class="tiny"><b>Bank:</b> ${g.bank.map(r=>fdate(r.d)+' '+nf(r.amt)).join(' + ')}</div><div class="tiny"><b>Aplikasi:</b> ${g.app.map(t=>`<span class="ac" data-tx="${t.id}">${fdate(t.d)} ${rp(t.j)}</span>`).join(' + ')}</div></div>`).join('')}</details>`:''}`;
-  if(oB.length)h+=`<h4>Ada di bank, belum ada di aplikasi (${oB.length} · ${nf(oB.reduce((s,x)=>s+x.amt,0))})</h4>`+`<div class="g2" style="margin:6px 0"><button class="b p" data-jgall="${i}">➕ Tambahkan yang dicentang</button><button class="b" data-jgtg="${i}|b">Centang / kosongkan semua</button></div>`+oB.slice(0,200).map((r,k)=>`<div class="lgr"><div><input type="checkbox" data-jgk="${i}|b|${esc(jgK(r))}" ${f.skip&&f.skip.has('b|'+jgK(r))?'':'checked'} style="width:auto;min-height:0;margin-right:8px;vertical-align:-2px"><b class="${r.amt>0?'up':'dn'}">${nf(r.amt)}</b> · ${fdate(r.d)}</div><div class="tiny">${esc(r.desc)}${r.next?' · '+esc(r.next):''}</div>${r._b?'<div class="tiny" style="color:var(--wa)">Di bank ada baris masuk dan keluar dengan jumlah yang sama (uang lewat, dibatalkan, atau dikembalikan). Saldo tidak terpengaruh; lewati kalau memang tidak perlu dicatat.</div>':''}<div class="rl"><span class="ac" data-jgc="${i}|${C.oB.indexOf(r)}">➕ Catat ke aplikasi</span><span class="ac" data-bk="${esc(f.acc)}|${r.d.slice(0,7)}">📒 Buku Akun ${BULAN[+r.d.slice(5,7)-1]}</span></div></div>`).join('');
+  if(oB.length)h+=`<h4>Ada di bank, belum ada di aplikasi (${oB.length} · ${nf(oB.reduce((s,x)=>s+x.amt,0))})</h4>`+`<div class="g2" style="margin:6px 0"><button class="b p" data-jgall="${i}">➕ Tambahkan yang dicentang</button><button class="b" data-jgtg="${i}|b">Centang / kosongkan semua</button></div>`+oB.slice(0,200).map((r,k)=>`<div class="lgr"><div><input type="checkbox" data-jgk="${i}|b|${esc(jgK(r))}" ${f.skip&&f.skip.has('b|'+jgK(r))?'':'checked'} style="width:auto;min-height:0;margin-right:8px;vertical-align:-2px"><b class="${r.amt>0?'up':'dn'}">${nf(r.amt)}</b> · ${fdate(r.d)}</div><div class="tiny">${esc(r.desc)}${r.next?' · '+esc(r.next):''}</div>${r._dup?`<div class="tiny" style="color:var(--wa)">⚠️ Mungkin sudah dicatat di akun lain: <span class="ac" data-tx="${r._dup.id}">${fdate(r._dup.d)} · ${esc(r._dup.a)}${r._dup.t==='T'?' → '+esc(r._dup.tu):''} · ${rp(r._dup.j)} · ${esc((r._dup.ket||r._dup.kt||'').slice(0,60))}</span>. Centangnya dikosongkan; periksa dulu sebelum menambahkan.</div>`:''}${r._b?'<div class="tiny" style="color:var(--wa)">Di bank ada baris masuk dan keluar dengan jumlah yang sama (uang lewat, dibatalkan, atau dikembalikan). Saldo tidak terpengaruh; lewati kalau memang tidak perlu dicatat.</div>':''}<div class="rl"><span class="ac" data-jgc="${i}|${C.oB.indexOf(r)}">➕ Catat ke aplikasi</span><span class="ac" data-bk="${esc(f.acc)}|${r.d.slice(0,7)}">📒 Buku Akun ${BULAN[+r.d.slice(5,7)-1]}</span></div></div>`).join('');
   if(sh.length)h+=`<h4>Jumlah sama, tanggal beda (${sh.length})</h4>`+`<div class="g2" style="margin:6px 0"><button class="b p" data-jgdall="${i}">📅 Pakai tanggal bank yang dicentang</button><button class="b" data-jgtg="${i}|s">Centang / kosongkan semua</button></div>`+sh.slice(0,200).map(x=>`<div class="lgr"><div><input type="checkbox" data-jgk="${i}|s|${esc(jgK(x.r))}" ${f.skip&&f.skip.has('s|'+jgK(x.r))?'':'checked'} style="width:auto;min-height:0;margin-right:8px;vertical-align:-2px"><b class="${x.r.amt>0?'up':'dn'}">${nf(x.r.amt)}</b> · bank ${fdate(x.r.d)} · aplikasi ${fdate(x.t.d)}</div><div class="tiny">Bank: ${esc(x.r.desc)}</div><div class="tiny">Aplikasi: ${esc(x.t.ket||x.t.kt)}</div><div class="rl"><span class="ac" data-jgd="${i}|${C.sh.indexOf(x)}">📅 Pakai tanggal bank</span><span class="ac" data-tx="${x.t.id}">Lihat transaksi</span></div></div>`).join('');
   if(oA.length)h+=`<h4>Ada di aplikasi, tidak ada di bank (${oA.length} · ${nf(oA.reduce((s,x)=>s+x.amt,0))})</h4>`+oA.slice(0,80).map(x=>`<div class="lgr" data-tx="${x.t.id}"><div><b class="${x.amt>0?'up':'dn'}">${nf(x.amt)}</b> · ${fdate(x.t.d)}</div><div class="tiny">${esc(x.t.ket||x.t.kt)} · ${esc(x.t.sb)} › ${esc(x.t.kt)}</div></div>`).join('');
   h+='</div>'});
@@ -1924,7 +1929,7 @@ function jagoV(){LK={};WK={};const accs=S.acc.map(a=>a.n),J=S.jagoLast||{};let h
  $('jgf').onchange=async e=>{const fs=[...e.target.files];if(!fs.length)return;JG.files=[];for(const[k,file]of fs.entries()){JG.busy=`Membaca ${file.name} (${k+1} dari ${fs.length})…`;jagoV();
    try{const P=await jgRead(file),nm=P.name;JG.files.push({file:file.name,name:nm,rows:P.rows,acc:jgGuess(nm)||jgGuess(file.name)})}
    catch(x){JG.files.push({file:file.name,err:'Gagal membaca: '+(x&&x.message||x)})}}
-  JG.busy='';jagoV();jgRemember()};
+  jgMerge();JG.busy='';jagoV();jgRemember()};
  document.querySelectorAll('[data-jga]').forEach(s=>s.onchange=()=>{const f=JG.files[+s.dataset.jga];f.acc=s.value;if(f.name&&f.acc){S.jagoMap=S.jagoMap||{};S.jagoMap[f.name]=f.acc}jagoV();jgRemember()});
  document.querySelectorAll('[data-jgk]').forEach(c=>c.onchange=()=>{const[i,k,...r]=c.dataset.jgk.split('|'),f=JG.files[+i];f.skip=f.skip||new Set();const key=k+'|'+r.join('|');c.checked?f.skip.delete(key):f.skip.add(key)});
  document.querySelectorAll('[data-jgtg]').forEach(b=>b.onclick=()=>{const[i,k]=b.dataset.jgtg.split('|'),f=JG.files[+i];f.skip=f.skip||new Set();const L=(k==='b'?f.C.oB:f.C.sh.map(x=>x.r)).filter(r=>big(r.amt)).map(r=>k+'|'+jgK(r)),any=L.some(x=>!f.skip.has(x));L.forEach(x=>any?f.skip.add(x):f.skip.delete(x));jagoV()});
@@ -1963,6 +1968,14 @@ async function jgRead(file){const buf=new Uint8Array(await file.arrayBuffer());l
  const M=mdParse(lines);if(M&&M.rows.length){if(M.putus||(M.nAnc!==M.rows.length))throw new Error('e-Statement Mandiri terbaca, tapi '+(M.putus?'saldo antar baris tidak bersambung di '+M.putus+' tempat':'ada baris tanpa tanggal')+'. Supaya tidak salah angka, file ini tidak dibandingkan. Kirim file ini ke Claude untuk diperiksa.');return M}
  const P=jgParse(lines);if(!P.rows.length)throw new Error('Tidak ada baris transaksi yang terbaca. Yang didukung: PDF "Pockets Transactions History" dari aplikasi Jago dan e-Statement dari Livin\' by Mandiri.');
  P.name=/[A-Za-z]/.test(P.name.charAt(0))?P.name:((file.name.match(/Jago_(.+?)_History/)||[])[1]||'').replace(/_/g,' ');return P}
+
+/* dua PDF untuk akun yang sama dengan rentang tanggal yang bersambung digabung jadi satu kartu; di rentang yang tumpang-tindih dipakai file yang lebih baru */
+function jgMerge(){const ok=JG.files.filter(f=>!f.err&&f.acc),out=JG.files.filter(f=>f.err||!f.acc),by={};for(const f of ok)(by[f.acc]=by[f.acc]||[]).push(f);
+ for(const a in by){const G=by[a].sort((x,y)=>x.rows[0].d.localeCompare(y.rows[0].d)||y.rows[y.rows.length-1].d.localeCompare(x.rows[x.rows.length-1].d));let cur=null;
+  for(const f of G){const d0=f.rows[0].d,e1=f.rows[f.rows.length-1].d,e=cur&&cur.rows[cur.rows.length-1].d;
+   if(cur&&d0<=ds(new Date(pd(e).getTime()+864e5))){const tot=cur.rows.length+f.rows.length;if(e1>=e)cur.rows=cur.rows.filter(r=>r.d<d0).concat(f.rows);cur.dup=(cur.dup||0)+tot-cur.rows.length;cur.file+=' + '+f.file;cur.n=(cur.n||1)+1}
+   else{cur=f;out.push(f)}}}
+ JG.files=out}
 /* ================= v60: tombol kembali, lompat ke Buku Akun, riwayat perubahan, sampah, cari, pengingat cadangan ================= */
 /* ---- keadaan tampilan (untuk tombol kembali) ---- */
 let LGT='ubah',JBH=null,PRE=null,INP=null;
@@ -2049,6 +2062,10 @@ function cariSheet(){sheet(`<h3>🔍 Cari di semua tempat</h3><input type="searc
   $('cr').innerHTML=h||'<div class="empty">Tidak ada yang cocok.</div>'};
  $('cq').oninput=()=>{clearTimeout(window._cqt);window._cqt=setTimeout(run,250)};setTimeout(()=>$('cq')&&$('cq').focus(),60)})}
 if($('srchB'))$('srchB').onclick=cariSheet;
+
+/* ---- geser urutan transaksi dalam satu hari (Buku Akun) ---- */
+document.addEventListener('click',e=>{const x=e.target.closest('[data-mv]');if(!x)return;e.stopPropagation();e.preventDefault();const[a,b]=x.dataset.mv.split('|').map(Number),t=byId(a),u=byId(b);if(!t||!u||t.d!==u.d)return;
+ const ka=ordK(t),kb=ordK(u);t.o=kb;u.o=ka;if(t.o===u.o)t.o+=(ka<kb?.5:-.5);save();const y=scrollY;buku();window.scrollTo(0,y);const r=document.querySelector(`tr[data-tx="${a}"]`);if(r){r.classList.add('hl');setTimeout(()=>r.classList.add('hl2'),1200)}},true);
 /* ================= MULAI ================= */
-load();save();netS();nav();home();if(secGet().hash)lockNow();setTimeout(autoPx,800);setTimeout(autoBackup,3000);setTimeout(rutNotify,2000);
+load();save();netS();nav();home();lockStart();setTimeout(autoPx,800);setTimeout(autoBackup,3000);setTimeout(rutNotify,2000);
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
