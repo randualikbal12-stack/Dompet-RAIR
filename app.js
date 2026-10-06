@@ -1307,8 +1307,8 @@ function lockNow(){const c=secGet();if(!c.hash)return;locked=true;closeSheet();l
  L.querySelectorAll('[data-p]').forEach(b=>b.onclick=async()=>{const k=b.dataset.p;if(k==='bio')return bioUnlock();if(k==='del')pin=pin.slice(0,-1);else if(pin.length<(c.len||6))pin+=k;draw();
   if(pin.length===(c.len||6)){if(await sha(c.salt+pin)===c.hash)unlock();else{$('lkErr').textContent='PIN salah';pin='';draw()}}});
  $('lkForgot').onclick=forgotPin;
- try{sessionStorage.removeItem('dd-unl')}catch(e){}if(c.cred)bioUnlock()}
-function unlock(){try{sessionStorage.setItem('dd-unl','1');sessionStorage.removeItem('dd-hid')}catch(e){}locked=false;$('lock').style.display='none';$('lock').innerHTML='';autoBackup();if(window._afterUnlock){const f=window._afterUnlock;window._afterUnlock=null;f()}}
+ try{sessionStorage.removeItem('dd-unl');localStorage.removeItem('dd-beat')}catch(e){}if(c.cred)bioUnlock()}
+function unlock(){try{sessionStorage.setItem('dd-unl','1');sessionStorage.removeItem('dd-hid')}catch(e){}locked=false;beat();$('lock').style.display='none';$('lock').innerHTML='';autoBackup();if(window._afterUnlock){const f=window._afterUnlock;window._afterUnlock=null;f()}}
 async function bioUnlock(){const c=secGet();if(!c.cred||!window.PublicKeyCredential)return;try{
   await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:ub64(c.cred),transports:['internal']}],userVerification:'required',timeout:60000}});unlock()}
  catch(e){const x=$('lkErr');if(x)x.textContent='Sidik jari/wajah dibatalkan, pakai PIN'}}
@@ -1348,8 +1348,10 @@ function forgotPin(){const c=secGet();const L=$('lock');
   localStorage.removeItem(KEY);localStorage.removeItem(SK);try{indexedDB.deleteDatabase('dd-foto')}catch(e){}location.reload()}}
 document.addEventListener('visibilitychange',()=>{if(document.hidden){hiddenAt=Date.now();try{sessionStorage.setItem('dd-hid',String(hiddenAt))}catch(e){}autoBackup(true)}else{const c=secGet();if(c.hash&&!locked&&Date.now()-hiddenAt>=(c.delay??60)*1000)lockNow();else{try{sessionStorage.removeItem('dd-hid')}catch(e){}}}});
 /* muat ulang (tarik layar ke bawah) = masih di dalam aplikasi: tidak dikunci lagi */
-function lockStart(){const c=secGet();if(!c.hash)return;let u=0,h=0;try{u=sessionStorage.getItem('dd-unl')==='1';h=+sessionStorage.getItem('dd-hid')||0}catch(e){}
- if(u&&(!h||Date.now()-h<Math.max((c.delay??60)*1000,15000))){try{sessionStorage.removeItem('dd-hid')}catch(e){}return}lockNow()}
+function lockStart(){const c=secGet();if(!c.hash)return;let u=0,h=0,bt=0;try{u=sessionStorage.getItem('dd-unl')==='1';h=+sessionStorage.getItem('dd-hid')||0}catch(e){}try{bt=+localStorage.getItem('dd-beat')||0}catch(e){}
+ if((u&&(!h||Date.now()-h<Math.max((c.delay??60)*1000,15000)))||(bt&&Date.now()-bt<8000)){try{sessionStorage.removeItem('dd-hid');sessionStorage.setItem('dd-unl','1')}catch(e){}return}lockNow()}
+/* detak: tanda aplikasi sedang terbuka dan tidak terkunci (cadangan kalau penyimpanan sesi tidak bertahan saat muat ulang) */
+const beat=()=>{try{if(!locked&&!document.hidden&&secGet().hash)localStorage.setItem('dd-beat',String(Date.now()))}catch(e){}};setInterval(beat,3000);addEventListener('pagehide',beat);
 /* cadangan otomatis ke Google Drive (Apps Script milik user) */
 function bkKey(){const c=secGet();if(!c.bk){c.bk=b64(crypto.getRandomValues(new Uint8Array(18))).replace(/[^A-Za-z0-9]/g,'');secSet(c)}return c.bk}
 function bkScript(){return`var KUNCI='${bkKey()}';var FOLDER='Dompet Digital Cadangan';var SS_NAMA='Dompet Digital - Data';
@@ -2066,6 +2068,12 @@ if($('srchB'))$('srchB').onclick=cariSheet;
 /* ---- geser urutan transaksi dalam satu hari (Buku Akun) ---- */
 document.addEventListener('click',e=>{const x=e.target.closest('[data-mv]');if(!x)return;e.stopPropagation();e.preventDefault();const[a,b]=x.dataset.mv.split('|').map(Number),t=byId(a),u=byId(b);if(!t||!u||t.d!==u.d)return;
  const ka=ordK(t),kb=ordK(u);t.o=kb;u.o=ka;if(t.o===u.o)t.o+=(ka<kb?.5:-.5);save();const y=scrollY;buku();window.scrollTo(0,y);const r=document.querySelector(`tr[data-tx="${a}"]`);if(r){r.classList.add('hl');setTimeout(()=>r.classList.add('hl2'),1200)}},true);
+
+/* ---- muat ulang (tarik layar ke bawah): kembali ke halaman yang sama, bukan ke Beranda ---- */
+function viewSave(){try{sessionStorage.setItem('dd-view',JSON.stringify({v:V,st:VS.get(),y:scrollY,t:Date.now()}))}catch(e){}}
+function viewRestore(){let o=null;try{o=JSON.parse(sessionStorage.getItem('dd-view'))}catch(e){}if(!o||!o.v||o.v==='home'||locked||Date.now()-o.t>6*3600e3)return;
+ try{VS.set(o.st);EDIT=null;TPL=null;NAVS=[{v:'home',st:(()=>{const s=VS.get();s.F={};return s})(),sh:null,wk:{},lk:{},y:0}];go(o.v,{nopush:1});setTimeout(()=>window.scrollTo(0,o.y||0),60)}catch(e){go('home',{nopush:1})}}
+addEventListener('pagehide',viewSave);document.addEventListener('visibilitychange',()=>{if(document.hidden)viewSave()});
 /* ================= MULAI ================= */
-load();save();netS();nav();home();lockStart();setTimeout(autoPx,800);setTimeout(autoBackup,3000);setTimeout(rutNotify,2000);
+load();save();netS();nav();home();lockStart();viewRestore();setTimeout(autoPx,800);setTimeout(autoBackup,3000);setTimeout(rutNotify,2000);
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
