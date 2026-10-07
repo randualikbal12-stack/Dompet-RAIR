@@ -328,8 +328,8 @@ let F={}, page=1, agg='bulan';
 function match(t,f){if(f.ids){if(!f._s)Object.defineProperty(f,'_s',{value:new Set(f.ids),enumerable:false});if(!f._s.has(t.id))return false}
  if(f.from&&t.d<f.from)return false;if(f.to&&t.d>f.to)return false;
  if(f.tj&&t.tj!==f.tj)return false;if(f.sb&&t.sb!==f.sb)return false;if(f.kt&&t.kt!==f.kt)return false;
- if(f.a&&t.a!==f.a&&t.tu!==f.a)return false;if(f.kos&&t.kos!==f.kos)return false;if(f.cek&&!t.cek)return false;if(f.tipe&&t.t!==f.tipe)return false;
- if(f.q){const q=f.q.toLowerCase().replace(/^rp\s?/,'');if(!(String(t.j)+' '+t.j.toLocaleString('id-ID')+' '+t.ket+' '+t.kt+' '+t.sb+' '+t.a+' '+(t.tu||'')+' '+t.cek+' '+t.kos).toLowerCase().includes(q))return false}
+ if(f.a&&t.a!==f.a&&t.tu!==f.a)return false;if(f.kos&&t.kos!==f.kos)return false;if(f.cek&&!t.cek)return false;if(f.rf&&!isRefund(t))return false;if(f.tipe&&t.t!==f.tipe)return false;
+ if(f.q){const q=f.q.toLowerCase().replace(/^rp\s?/,'');if(!(String(t.j)+' '+t.j.toLocaleString('id-ID')+' '+t.ket+' '+t.kt+' '+t.sb+' '+t.a+' '+(t.tu||'')+' '+t.cek+' '+t.kos+(isRefund(t)?' uang kembali':'')).toLowerCase().includes(q))return false}
  return true}
 const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==undefined)o[k]=f[k];return o};
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
@@ -509,7 +509,7 @@ function trx(){LK={};WK={};const f=F,fc=clean(F),ft=F.title||'Hasil pencarian';c
  const shown=res.slice(0,page*80);
  $('main').innerHTML=`<div class="seg" style="margin-top:8px"><button class="on">Daftar & cari</button><button id="toBuku">Buku akun</button></div>
  <div class="sbar"><input type="search" id="fq" placeholder="🔍 Cari transaksi… (keterangan, kategori, akun, jumlah)" value="${esc(f.q||'')}" autocomplete="off"></div>
- <details class="card"${['tj','sb','kt','a','kos','tipe','from','to','cek'].some(k=>f[k])?' open':''}><summary><b>Filter lanjutan</b></summary><div class="fl" style="margin-top:8px">
+ <details class="card"${['tj','sb','kt','a','kos','tipe','from','to','cek','rf'].some(k=>f[k])?' open':''}><summary><b>Filter lanjutan</b></summary><div class="fl" style="margin-top:8px">
   <select id="ftj">${opts(TUJ,f.tj,'Semua tujuan')}</select>
   <select id="fsb">${opts(f.tj?SUMBER[f.tj]:Object.values(SUMBER).flat(),f.sb,'Semua sumber')}</select>
   <select class="w2" id="fkt">${opts(katList(f.tj,f.sb),f.kt,'Semua kategori')}</select>
@@ -517,6 +517,7 @@ function trx(){LK={};WK={};const f=F,fc=clean(F),ft=F.title||'Hasil pencarian';c
   <select id="ftp" class="w2">${opts(['Masuk','Keluar','Pindah'],{M:'Masuk',K:'Keluar',T:'Pindah'}[f.tipe],'Semua jenis')}</select>
   <input type="date" id="ffrom" value="${f.from||''}"><input type="date" id="fto" value="${f.to||''}">
   <label class="w2 tiny"><input type="checkbox" id="fcek" style="width:auto;min-height:0" ${f.cek?'checked':''}> Hanya yang perlu dicek</label>
+  <label class="w2 tiny"><input type="checkbox" id="frf" style="width:auto;min-height:0" ${f.rf?'checked':''}> Hanya ↩️ uang kembali</label>
   <button class="b" id="fclr">Hapus filter</button><button class="b p" id="fgo">Cari</button></div></details>
  ${f.title?`<div class="chips"><span class="chip">🔎 ${esc(f.title)}</span></div>`:''}
  <div class="card"><div class="g3">
@@ -530,7 +531,7 @@ function trx(){LK={};WK={};const f=F,fc=clean(F),ft=F.title||'Hasil pencarian';c
  <div class="card"><h3>Daftar transaksi</h3>${shown.map(txRow).join('')||'<div class="empty">Tidak ada transaksi</div>'}
   ${res.length>shown.length?`<button class="b" style="width:100%;margin-top:8px" id="more">Tampilkan lagi (${res.length-shown.length} tersisa)</button>`:''}</div>`;
  const rd=()=>({q:$('fq').value.trim()||undefined,tj:$('ftj').value||undefined,sb:$('fsb').value||undefined,kt:$('fkt').value||undefined,a:$('fa').value||undefined,
-   tipe:{Masuk:'M',Keluar:'K',Pindah:'T'}[$('ftp').value],kos:$('fkos').value||undefined,from:$('ffrom').value||undefined,to:$('fto').value||undefined,cek:$('fcek').checked||undefined});
+   tipe:{Masuk:'M',Keluar:'K',Pindah:'T'}[$('ftp').value],kos:$('fkos').value||undefined,from:$('ffrom').value||undefined,to:$('fto').value||undefined,cek:$('fcek').checked||undefined,rf:$('frf').checked||undefined});
  $('ftj').onchange=()=>{F={...rd(),sb:undefined,kt:undefined};trx()};$('fsb').onchange=()=>{F={...rd(),kt:undefined};trx()};
  if($('toBuku'))$('toBuku').onclick=()=>{if(F.a)BA.a=F.a;go('buku')};
  $('fgo').onclick=()=>{F=rd();page=1;trx()};$('fclr').onclick=()=>{F={};page=1;trx()};
@@ -622,6 +623,8 @@ function rep(){LK={};WK={};const P=period(),tree={},C=rangeCtx(P.a,P.b,P.lab);
   <input type="date" id="rpd" value="${RP.d}" style="margin-top:8px"><div class="mut" style="margin-top:6px">${P.lab}</div>
   <div class="g3" style="margin-top:8px"><div class="kp" data-x="${WKs(...C.fI)}"><div class="a">Pendapatan</div><div class="b up">${rp(C.inc)}</div></div><div class="kp" data-x="${WKs(...C.fE)}"><div class="a">Pengeluaran</div><div class="b dn">${rp(C.exp)}</div></div><div class="kp" data-x="${WKs(...C.fS)}"><div class="a">Selisih</div><div class="b">${rp(C.inc-C.exp)}</div></div></div>
   <div class="tiny" style="margin-top:6px">Pengeluaran sudah termasuk tabungan bersih ${rp(C.tb)}. Pindah uang tidak dihitung.</div>
+  ${(()=>{const R=S.tx.filter(t=>isRefund(t)&&inR(t,P.a,P.b));return R.length?`<div class="kv" style="margin-top:6px"><span>↩️ Uang kembali (sudah mengurangi pengeluaran)</span><span class="ac" data-l="${LKs({ids:R.map(t=>t.id),title:'Uang kembali · '+P.lab})}">${R.length} · ${rp(R.reduce((s,t)=>s+t.j,0))}</span></div>`:''})()}
+  <div class="tiny" style="margin-top:6px"><span class="ac" data-l="${LKs({rf:1,title:'Semua uang kembali'})}">↩️ Lihat semua uang kembali (semua waktu)</span></div>
   <button class="b" id="rpPdf" style="width:100%;margin-top:8px">🖨 Cetak / simpan PDF laporan ${esc(P.lab)}</button></div>
  <div class="card tree"><h3>Rincian (ketuk untuk asal-usulnya)</h3>${['Pendapatan','Pengeluaran','Tabungan'].map(tj=>{const x=tree[tj];if(!x)return'';
   return rw('n0',tj==='Tabungan'?'Tabungan bersih (semua)':tj,x.v,{tj},tj)+Object.entries(x.s).sort((a,b)=>b[1].v-a[1].v).map(([sb,y])=>
