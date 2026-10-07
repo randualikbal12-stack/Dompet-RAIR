@@ -335,12 +335,12 @@ const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==u
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
 const flow=(t,a)=>t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-let V='home',charts={};
+const APPV='70';let V='home',charts={};
 const VIEWS=[['home','Beranda','🏠'],['trx','Transaksi','📋'],['buku','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
  $('nav').innerHTML=(()=>{const rd=rutDue().length,bt=([k,l,i])=>`<button data-v="${k}" class="${k===V?'on':''}"><span class="ic">${i}</span>${l}${k==='rut'&&rd?`<span class="bdg">${rd}</span>`:''}</button>`,A=VIEWS.filter(v=>!NAV_MORE.includes(v[0])),B=VIEWS.filter(v=>NAV_MORE.includes(v[0]));
-  return`<div class="dh"><b>Dompet Digital</b><div class="tiny">Menu</div></div>`+A.map(bt).join('')+`<details class="navm"${NAV_MORE.includes(V)||window._navOpen?' open':''}><summary><span class="ic">⋯</span>Lainnya${rd?`<span class="bdg">${rd}</span>`:''}</summary>${B.map(bt).join('')}</details>`})();
+  return`<div class="dh"><b>Dompet Digital</b><div class="tiny">Menu · versi ${APPV}</div></div>`+A.map(bt).join('')+`<details class="navm"${NAV_MORE.includes(V)||window._navOpen?' open':''}><summary><span class="ic">⋯</span>Lainnya${rd?`<span class="bdg">${rd}</span>`:''}</summary>${B.map(bt).join('')}</details>`})();
  const nm=$('nav').querySelector('.navm');if(nm)nm.ontoggle=()=>{window._navOpen=nm.open};
  $('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{drawer(false);if(b.dataset.v==='trx'&&V!=='trx')F={};if(b.dataset.v==='add'){EDIT=null;TPL=null}go(b.dataset.v)});
  $('fab').style.display=V==='add'?'none':'';if($('backB'))$('backB').style.display=NAVS.length||V!=='home'?'':'none';$('hideTop').textContent=HIDE?'🙈':'👁'}
