@@ -22,7 +22,7 @@ const MAMA_IN=['Uang Kos Mama','Uang Kedai'],MAMA_OUT=['Pengeluaran Uang Kos','P
 let S;
 function load(){LOGS=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
  if(!S||!S.tx){S={acc:SEED.acc,tx:SEED.tx,next:Math.max(...SEED.tx.map(t=>t.id))+1,price:{...INV.last},rdcur:{},goals:[],seedAt:today}}
- S.price=S.price||{...INV.last};S.rdcur=S.rdcur||{};S.goals=S.goals||[];S.inv=S.inv||{saham:[],rd:[],dep:[]};S.inv.saham=S.inv.saham||[];S.inv.rd=S.inv.rd||[];S.inv.dep=S.inv.dep||[];S.pxUrl=S.pxUrl||'';S.kuliah=S.kuliah||null;migrate();migrate5();if(!S.mig6){S.rdcur={};S.mig6=1;save()}migrate7();migrate8();migrate9();migrate10();migrate11();migrate12();migrate13();migrate14();migrate15();if(!S.mig16){const b=S.acc.find(a=>a.n==='Bank BRI');if(b)b.tutup=1;S.mig16=1;save()}migrate17();migrate18();migrate19();migrate20();if(!window.NO21)migrate21();migrate22();migrate23();migrate24();migrate25();migrate26();migrate27();migrate28();migrate29();migrate30();migrate31();migrate32();migrate33();migrate34();migrate35();migrate36();migrate37();try{if(typeof fixInvLinks==='function')fixInvLinks()}catch(e){}try{if(typeof logSnap==='function')logSnap()}catch(e){}}
+ S.price=S.price||{...INV.last};S.rdcur=S.rdcur||{};S.goals=S.goals||[];S.inv=S.inv||{saham:[],rd:[],dep:[]};S.inv.saham=S.inv.saham||[];S.inv.rd=S.inv.rd||[];S.inv.dep=S.inv.dep||[];S.pxUrl=S.pxUrl||'';S.kuliah=S.kuliah||null;migrate();migrate5();if(!S.mig6){S.rdcur={};S.mig6=1;save()}migrate7();migrate8();migrate9();migrate10();migrate11();migrate12();migrate13();migrate14();migrate15();if(!S.mig16){const b=S.acc.find(a=>a.n==='Bank BRI');if(b)b.tutup=1;S.mig16=1;save()}migrate17();migrate18();migrate19();migrate20();if(!window.NO21)migrate21();migrate22();migrate23();migrate24();migrate25();migrate26();migrate27();migrate28();migrate29();migrate30();migrate31();migrate32();migrate33();migrate34();migrate35();migrate36();migrate37();migrate38();try{if(typeof fixInvLinks==='function')fixInvLinks()}catch(e){}try{if(typeof logSnap==='function')logSnap()}catch(e){}}
 const MIG4={"rename": {"from": "Uang dari Disan", "to": "Uang untuk Disan"}, "upd": [{"id": 1591, "d": "2025-12-09", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1612, "d": "2025-12-15", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1832, "d": "2026-02-02", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Dianggap uang untuk Disan: kk Lisa mengganti uang yang dipakai untuk belanja Disan 28 Jan 2026"}}, {"id": 1843, "d": "2026-02-05", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1935, "d": "2026-02-13", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2074, "d": "2026-03-13", "j": 600000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "THR untuk Disan: belum ada catatan kapan uang ini diberikan ke Disan"}}, {"id": 2110, "d": "2026-04-01", "j": 200000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2245, "d": "2026-05-05", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Untuk perbaikan HP Disan: belum ada catatan kapan uang ini dipakai/diberikan"}}, {"id": 2340, "d": "2026-06-05", "j": 400000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2341, "d": "2026-06-05", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2527, "d": "2026-07-10", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2548, "d": "2026-07-16", "j": 100000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2608, "d": "2026-08-03", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2664, "d": "2026-08-14", "j": 150000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "cek": "Belum ada catatan kapan uang ini diberikan ke Disan"}}, {"id": 2707, "d": "2026-09-01", "j": 350000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 2725, "d": "2026-09-06", "j": 50000, "set": {"tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan"}}, {"id": 1592, "d": "2025-12-10", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 1620, "d": "2025-12-17", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Dikembalikan ke kk Lisa"}}, {"id": 1948, "d": "2026-02-23", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2353, "d": "2026-06-05", "j": 500000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2529, "d": "2026-07-11", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2549, "d": "2026-07-16", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2622, "d": "2026-08-05", "j": 150000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2716, "d": "2026-09-04", "j": 300000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 2730, "d": "2026-09-06", "j": 100000, "set": {"tj": "Pengeluaran", "sb": "Pengeluaran Uang Disan", "kt": "Belanja / pengeluaran Disan"}}, {"id": 1827, "d": "2026-01-28", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 1932, "d": "2026-02-11", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2010, "d": "2026-03-03", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2088, "d": "2026-03-18", "j": 50000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2162, "d": "2026-04-08", "j": 150000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2277, "d": "2026-05-11", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2278, "d": "2026-05-11", "j": 150000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2087, "d": "2026-03-16", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 2252, "d": "2026-05-06", "j": 100000, "set": {"tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri"}}, {"id": 1994, "d": "2026-03-02", "j": 550000, "set": {"j": 450000, "cek": "Dipisah: Rp100.000 untuk belanja Disan dicatat di baris sendiri (Uang untuk Disan)"}}], "add": [{"d": "2026-03-02", "a": "Bank Mandiri", "t": "M", "j": 100000, "tj": "Pendapatan", "sb": "Uang Disan", "kt": "Uang untuk Disan", "ket": "Bagian dari Tf masuk kk lisa Rp550.000: Rp100.000 untuk belanja disan", "tu": null, "cek": "", "kos": ""}, {"d": "2026-09-08", "a": "Uang Kos Mama Cash", "t": "K", "j": 300000, "tj": "Pindah Uang", "sb": "Pindah akun", "kt": "Pindah antar akun sendiri", "ket": "Top up saldo gopay tabungan, uang kos mama cash Rp300.000 (pasangan catatan GoPay 8 Sep 2026: dari dompet Rp230.500, dari uang kos mama Rp300.000)", "tu": null, "cek": "", "kos": ""}]};
 function migrate(){if(S.mig4)return;const T={};for(const t of S.tx)T[t.id]=t;
  for(const t of S.tx)if(t.kt===MIG4.rename.from)t.kt=MIG4.rename.to;
@@ -239,6 +239,14 @@ function migrate35(){if(S.mig35||window.NO35)return;/* baris TOTAL bulanan dari 
  S.mig35=1;save()}
 function migrate36(){if(S.mig36||window.NO36)return;const x=S.tx.find(x=>x.a==='Jago - Kantong Stockbit'&&x.d==='2026-05-28'&&x.t==='K'&&x.j===47979&&!x.tu);
  if(x&&x.tj==='Pengeluaran'){x.tj='Tabungan';x.sb='Reksadana';x.kt='Disetor';if(!(x.ket||'').trim())x.ket='Penarikan dana RDN untuk investasi Reksadana Majoris Pasar Uang Syariah Indonesia, Injeksi Dana Syariah';if(/^Tanpa keterangan/.test(x.cek||''))x.cek=''}S.mig36=1;save()}
+function migrate38(){if(S.mig38||window.NO38)return;const f=(a,d,t,j,kt)=>S.tx.find(x=>x.a===a&&x.d===d&&x.t===t&&x.j===j&&(!kt||x.kt===kt)&&!x.tu);
+ const ref=(m,k)=>{if(m&&k&&m.tj==='Pendapatan'){m.tj='Pengeluaran';m.sb=k.sb;m.kt=k.kt;m.ref=k.id;return 1}return 0};
+ ref(f('Uang Jasa','2026-09-22','M',100000,'Pengembalian uang jasa yg keluar'),f('Uang Jasa','2026-09-21','K',100000,'Perbaiki sen motor disti'));
+ ref(f('Dompet','2025-07-06','M',158000,'Penggantian'),f('Dompet','2025-07-01','K',158000));
+ {const m=f('Bank Mandiri','2025-01-06','M',32000,'Penggantian'),k1=f('Bank Mandiri','2025-01-06','K',30000,'Pulsa & Internet'),k2=f('Bank Mandiri','2025-01-06','K',2000,'Biaya Admin Transaksi');
+  if(m&&k1&&k2&&m.tj==='Pendapatan'){m.j=30000;ref(m,k1);const n={...m,id:S.next++,j:2000,sb:k2.sb,kt:k2.kt,ref:k2.id,ket:(m.ket||'')+' (bagian biaya admin Rp2.000)'};S.tx.push(n)}}
+ {const k=f('Kantong Uang Riba','2026-09-23','K',10000),m=f('Kantong Uang Riba','2026-09-23','M',10000);if(k&&m&&/GOOGLE \*TEMPORARY/i.test((k.ket||'')+(m.ket||''))&&(m.tj==='Pendapatan'||k.kt==='Belum dikategorikan')){for(const x of[k,m]){x.tj='Pindah Uang';x.sb='Pindah akun';x.kt='Ditahan sementara lalu dikembalikan';if(/Ditambahkan dari PDF bank/.test(x.cek||''))x.cek=''}}}
+ S.mig38=1;save()}
 function migrate37(){if(S.mig37||window.NO37)return;const G='GoPay Tabungan',d='2026-02-28',t=S.tx.find(x=>x.a===G&&x.d===d&&x.t==='T'&&x.tu==='Kantong Uang Riba'&&x.j===24);
  if(t&&!S.tx.some(x=>x.a===G&&x.d===d&&x.t!=='T'&&x.sb==='Dana riba')){const c='Angka hasil hitungan (bersih Rp24 yang dipindah ke Kantong Uang Riba, pajak 20%), bukan dari riwayat bank: riwayat GoPay Tabungan Feb 2026 tidak ada di PDF Jago. Kemungkinan lain: bunga Rp30, pajak Rp6.',add=o=>S.tx.push(Object.assign({id:S.next++,a:G,d,tu:null,kos:'',tj:'Pindah Uang',sb:'Dana riba',cek:c},o));
   add({t:'M',j:29,kt:'Bunga bank',ket:'Bunga bank jago kantong gopay tabungan'});add({t:'K',j:5,kt:'Pajak bunga',ket:'Pajak bunga bank jago kantong gopay tabungan'})}S.mig37=1;save()}
@@ -256,7 +264,10 @@ function sum(f){let s=0;for(const t of S.tx)if(f(t))s+=t.j;return s}
 const inR=(t,a,b)=>t.d>=a&&t.d<=b;
 const idsOf=f=>S.tx.filter(f).map(t=>t.id);
 function income(a,b,src){return sum(t=>t.tj==='Pendapatan'&&t.t==='M'&&inR(t,a,b)&&(!src||t.sb===src))}
-function expense(a,b,src){return sum(t=>t.tj==='Pengeluaran'&&t.t==='K'&&inR(t,a,b)&&(!src||t.sb===src))}
+/* uang kembali = uang masuk yang mengurangi pengeluaran (bukan pendapatan): t='M' dengan tj='Pengeluaran' */
+const isRefund=t=>t.t==='M'&&t.tj==='Pengeluaran';const sgE=t=>isRefund(t)?-t.j:t.j;
+function sumE(f){let s=0;for(const t of S.tx)if(f(t))s+=sgE(t);return s}
+function expense(a,b,src){return sumE(t=>t.tj==='Pengeluaran'&&(t.t==='K'||t.t==='M')&&inR(t,a,b)&&(!src||t.sb===src))}
 const isKosRd=t=>t.sb==='Reksadana uang kos mama';
 function tabNet(a,b,mm=false){return sum(t=>t.tj==='Tabungan'&&inR(t,a,b)&&isKosRd(t)===mm&&t.t==='K')-sum(t=>t.tj==='Tabungan'&&inR(t,a,b)&&isKosRd(t)===mm&&t.t==='M')}
 function tabIds(a,b,mm=false,tp){return idsOf(t=>t.tj==='Tabungan'&&inR(t,a,b)&&isKosRd(t)===mm&&(!tp||t.t===tp))}
@@ -307,7 +318,7 @@ const RIBA='Kantong Uang Riba',RB_LOAN=['Pinjam dari uang riba','Kelebihan ganti
 const ribaLoan=t=>t.a===RIBA&&(t.t==='K'||t.t==='T')&&(RB_LOAN.includes(t.kt)||t.tj==='Pengeluaran');
 /* belanja yang dibayar langsung dari Kantong Uang Riba = pinjaman sekaligus pengeluaran */
 const RB_KT=['Pinjam dari uang riba','Ganti uang riba','Kelebihan ganti dikembalikan'];
-const ribaRepay=t=>t.kt==='Ganti uang riba'&&((t.a===RIBA&&t.t==='M')||(t.t==='T'&&t.tu===RIBA));
+const ribaRepay=t=>(t.kt==='Ganti uang riba'&&((t.a===RIBA&&t.t==='M')||(t.t==='T'&&t.tu===RIBA)))||(isRefund(t)&&t.a===RIBA);
 function utangRiba(d=today){return sum(t=>t.d<=d&&ribaLoan(t))-sum(t=>t.d<=d&&ribaRepay(t))}
 function ribaLoans(){const L=S.tx.filter(t=>t.d<=today&&ribaLoan(t)).sort((a,b)=>a.d.localeCompare(b.d)||a.id-b.id).map(t=>({t,sisa:t.j}));
  let pay=sum(t=>t.d<=today&&ribaRepay(t));for(const x of L){const k=Math.min(pay,x.sisa);x.sisa-=k;pay-=k}return L}
@@ -402,17 +413,22 @@ function appBack(){if(typeof locked!=='undefined'&&locked)return true;
   setTimeout(()=>window.scrollTo(0,p.y||0),30);if(p.sh&&p.sh.length){SH=p.sh;rs()}return true}
  if(V!=='home'){go('home',{nopush:1});return true}
  if(Date.now()-(window._exitAt||0)<2200)return false;window._exitAt=Date.now();toast('Tekan kembali sekali lagi untuk keluar');return true}
-try{history.replaceState({dd:0},'');history.pushState({dd:1},'')}catch(e){}
-addEventListener('popstate',()=>{if(appBack()){try{history.pushState({dd:1},'')}catch(e){}}else{history.back()}});
+/* Setiap langkah maju (buka halaman, jendela, menu) menambah satu entri riwayat browser SAAT pengguna mengetuk,
+   supaya tombol kembali HP bisa mundur berkali-kali berturut-turut. (Chrome Android melewati entri yang dibuat tanpa ketukan.) */
+let HD=0,EXITING=false;
+const histWant=()=>NAVS.length+($('sheet').style.display==='flex'?SH.length:0)+(document.body.classList.contains('dopen')?1:0)+1;
+function histSync(){try{let w=Math.min(histWant(),120);while(HD<w){history.pushState({dd:HD+1},'');HD++}}catch(e){}}
+try{history.replaceState({dd:0},'')}catch(e){}histSync();
+addEventListener('popstate',()=>{if(EXITING){history.back();return}HD=Math.max(0,HD-1);if(appBack())histSync();else{EXITING=true;history.back()}});
 /* ================= BERANDA ================= */
 const PRIB_IN=['Gaji','Jasa'],PRIB_OUT=['Pengeluaran Gaji','Pengeluaran Jasa'];
 function monthCtx(y,m,pers){const a=ds(new Date(y,m,1)),b=mEnd(y,m),ttl=BULAN[m]+' '+y;
  const inc=(pers?PRIB_IN:SUMBER.Pendapatan).map(x=>[x,income(a,b,x)]).filter(x=>x[1]),exp=(pers?PRIB_OUT:SUMBER.Pengeluaran).map(x=>[x,expense(a,b,x)]).filter(x=>x[1]);
  const tb=pers?0:tabNet(a,b),tI=inc.reduce((p,x)=>p+x[1],0),tE0=exp.reduce((p,x)=>p+x[1],0),tE=tE0+tb;
- const idI=idsOf(t=>inR(t,a,b)&&t.tj==='Pendapatan'&&t.t==='M'&&(!pers||PRIB_IN.includes(t.sb))),idE=idsOf(t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&t.t==='K'&&(!pers||PRIB_OUT.includes(t.sb))),idT=pers?[]:tabIds(a,b);
+ const idI=idsOf(t=>inR(t,a,b)&&t.tj==='Pendapatan'&&t.t==='M'&&(!pers||PRIB_IN.includes(t.sb))),idE=idsOf(t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&t.t!=='T'&&(!pers||PRIB_OUT.includes(t.sb))),idT=pers?[]:tabIds(a,b);
  const dis=sum(t=>idT.includes(t.id)&&t.t==='K'),cair=sum(t=>idT.includes(t.id)&&t.t==='M');
  const fI=()=>[{ids:idI},'Pendapatan · '+ttl,{lines:inc.map(([x,v])=>[x,v,{tj:'Pendapatan',sb:x,tipe:'M',from:a,to:b}]).concat([['= Total pendapatan',tI,null,1]])}];
- const fE=()=>[{ids:idE.concat(idT)},'Pengeluaran · '+ttl,{lines:exp.map(([x,v])=>[x,v,{tj:'Pengeluaran',sb:x,tipe:'K',from:a,to:b}]).concat(tb?[['+ Tabungan bersih (disetor − dicairkan)',tb,{ids:idT}]]:[],[['= Total pengeluaran',tE,null,1]]),note:pers?'Hanya uang pribadi (gaji & jasa). Uang amanah (kos mama, Disan, riba) dan investasi tidak dihitung.':'Tabungan bersih ikut dihitung sebagai pengeluaran supaya uang yang ditabung tidak terlihat sebagai sisa uang.'}];
+ const fE=()=>[{ids:idE.concat(idT)},'Pengeluaran · '+ttl,{lines:exp.map(([x,v])=>[x,v,{tj:'Pengeluaran',sb:x,from:a,to:b}]).concat(tb?[['+ Tabungan bersih (disetor − dicairkan)',tb,{ids:idT}]]:[],[['= Total pengeluaran',tE,null,1]]),note:pers?'Hanya uang pribadi (gaji & jasa). Uang amanah (kos mama, Disan, riba) dan investasi tidak dihitung.':'Tabungan bersih ikut dihitung sebagai pengeluaran supaya uang yang ditabung tidak terlihat sebagai sisa uang.'}];
  const fS=()=>[{ids:idI.concat(idE,idT)},'Selisih · '+ttl,{lines:[['Pendapatan',tI,{ids:idI}],['− Pengeluaran (termasuk tabungan bersih)',tE,{ids:idE.concat(idT)}],['= Selisih',tI-tE,null,1]]}];
  const fT=()=>[{ids:idT},'Tabungan bersih · '+ttl,{lines:[['Disetor ke tabungan/investasi',dis,{ids:tabIds(a,b,false,'K')}],['− Dicairkan',cair,{ids:tabIds(a,b,false,'M')}],['= Tabungan bersih',tb,null,1]],note:'Reksadana uang kos mama tidak dihitung di sini karena itu uang mama.'}];
  return{a,b,ttl,inc,exp,tb,tI,tE,fI,fE,fS,fT}}
@@ -523,7 +539,7 @@ function trx(){LK={};WK={};const f=F,fc=clean(F),ft=F.title||'Hasil pencarian';c
  document.querySelectorAll('#aggSeg button').forEach(b=>b.onclick=()=>{agg=b.dataset.g;trx()});
  if($('more'))$('more').onclick=()=>{page++;trx()}}
 function txRow(t){const c=t.t==='M'?'up':t.t==='K'?'dn':'';const s=t.t==='M'?'+':t.t==='K'?'−':'';
- return`<div class="row" data-tx="${t.id}"><div class="l"><div class="t1">${esc(t.ket||t.kt)}</div><div class="t2">${fdate(t.d)} · ${esc(t.a)}${t.t==='T'?' → '+esc(t.tu):''} · ${esc(t.sb)} › ${esc(t.kt)}${t.kos?' · '+esc(t.kos):''}${t.cek?' · ⚠️':''}</div></div><div class="r ${c} jb" data-jb="${t.id}" title="Lihat di Buku Akun">${s}${rp(t.j)}</div></div>`}
+ return`<div class="row" data-tx="${t.id}"><div class="l"><div class="t1">${esc(t.ket||t.kt)}</div><div class="t2">${fdate(t.d)} · ${esc(t.a)}${t.t==='T'?' → '+esc(t.tu):''} · ${esc(t.sb)} › ${esc(t.kt)}${t.kos?' · '+esc(t.kos):''}${isRefund(t)?' · ↩️ uang kembali':''}${t.cek?' · ⚠️':''}</div></div><div class="r ${c} jb" data-jb="${t.id}" title="Lihat di Buku Akun">${s}${rp(t.j)}</div></div>`}
 function invLinks(id){const out=[];for(const e of allSaham())if(e.tx===id)out.push(`<span class="ac" data-sk="${esc(e.kode)}">${e.jenis} saham ${esc(e.kode)} (${fdate(e.tgl)})</span>`);
  for(const e of allRd())if(e.tx===id)out.push(`<span class="ac" data-rg="${esc(e.tujuan)}">${e.jenis} reksadana ${esc(e.tujuan)} (${fdate(e.tgl)})</span>`);
  for(const d of S.inv.dep)if((d.tx||[]).includes(id))out.push(`<span class="ac" data-dp="${d.id}">Deposito ${esc(d.bpr)}</span>`);return out}
@@ -539,7 +555,7 @@ function detail(id){const t=byId(id);if(!t)return;const inv=invLinks(id);
  sheet(`<h3>${esc(t.ket||t.kt)}</h3>
  <div class="kv"><span>Tanggal</span><span>${L(fdate(t.d),{from:t.d,to:t.d,title:'Tanggal '+fdate(t.d)})}</span></div>
  ${t.t==='T'?`<div class="kv"><span>Pindah</span><span><b>${esc(t.a)}</b> → <b>${esc(t.tu)}</b></span></div>`:''}
- <div class="kv"><span>Jumlah</span><span class="${t.t==='M'?'up':t.t==='K'?'dn':''}">${{M:'Masuk ',K:'Keluar ',T:'Pindah '}[t.t]}${rp(t.j)}</span></div>
+ <div class="kv"><span>Jumlah</span><span class="${t.t==='M'?'up':t.t==='K'?'dn':''}">${isRefund(t)?'↩️ Uang kembali ':{M:'Masuk ',K:'Keluar ',T:'Pindah '}[t.t]}${rp(t.j)}</span></div>
 
  <div class="kv"><span>Sumber</span><span>${L(esc(t.sb),{tj:t.tj,sb:t.sb,title:t.sb})}</span></div>
  <div class="kv"><span>Kategori</span><span>${L(esc(t.kt),{tj:t.tj,sb:t.sb,kt:t.kt,title:t.kt})}</span></div>
@@ -548,12 +564,14 @@ function detail(id){const t=byId(id);if(!t)return;const inv=invLinks(id);
  ${t.t==='T'?`<div class="kv"><span>Ke akun</span><span class="ac" data-acc="${esc(t.tu)}">${esc(t.tu)}</span></div>`:''}
  <div class="kv"><span>Saldo ${esc(t.a)} setelah transaksi ini</span><span>${L(rp(saldo),{a:t.a,to:t.d,title:'Transaksi '+t.a+' sampai '+fdate(t.d)})}</span></div>
  ${inv.length?`<div class="kv"><span>Terkait investasi</span><span style="text-align:right">${inv.join('<br>')}</span></div>`:''}
+ ${refInfo(t)}
  ${t.cek?`<div class="st w">⚠️ ${esc(t.cek)}</div>`:''}
  ${t.foto?'<div id="ftv" style="margin-top:8px">Memuat foto…</div>':''}
  <div class="${t.t==='T'?'g2':''}" style="margin-top:12px"><button class="b" style="width:100%" data-jb="${t.id}" data-js="a">📒 Buku Akun ${esc(t.a)}</button>${t.t==='T'?`<button class="b" style="width:100%" data-jb="${t.id}" data-js="tu">📒 Buku Akun ${esc(t.tu)}</button>`:''}</div>
  <div class="g2" style="margin-top:6px"><button class="b" id="edT">Ubah</button><button class="b d" id="delT">Hapus</button></div>
  <button class="b" id="rutT" style="width:100%;margin-top:6px">🔁 Jadikan transaksi rutin</button>
- <button class="b" id="wrnT" style="width:100%;margin-top:6px">⚠️ ${t.cek?'Ubah / hapus':'Tambah'} peringatan</button>`,()=>{if(t.foto)fotoView(id);$('wrnT').onclick=()=>warnEdit(id,()=>{closeSheet();go(V)});$('rutT').onclick=()=>rutForm(null,t);
+ ${refBtn(t)}
+ <button class="b" id="wrnT" style="width:100%;margin-top:6px">⚠️ ${t.cek?'Ubah / hapus':'Tambah'} peringatan</button>`,()=>{refBind(t);if(t.foto)fotoView(id);$('wrnT').onclick=()=>warnEdit(id,()=>{closeSheet();go(V)});$('rutT').onclick=()=>rutForm(null,t);
  $('edT').onclick=()=>{if(appInv(id))return alert('Ini transaksi investasi yang dicatat lewat Catat › Investasi. Untuk mengubahnya, hapus transaksi ini lalu catat ulang, supaya data investasinya ikut benar.');closeSheet();EDIT=id;TPL=null;go('add')};
  $('delT').onclick=()=>{if(!confirm('Hapus transaksi ini?'+(appInv(id)?' Data investasi yang terkait juga ikut dihapus.':'')))return;const extra=unlinkInv(id);S.tx=S.tx.filter(x=>x.id!==id&&!extra.includes(x.id));if(t.foto)fotoDel(id).catch(()=>{});save();closeSheet();go(V)}})}
 
@@ -588,15 +606,15 @@ function buku(){LK={};WK={};if(!S.acc.some(a=>a.n===BA.a))BA.a=S.acc[0].n;const[
 let RP={m:'bulan',d:today};
 function period(){const d=pd(RP.d),y=d.getFullYear(),m=d.getMonth();
  if(RP.m==='hari')return{a:RP.d,b:RP.d,lab:fdate(RP.d)};if(RP.m==='bulan')return{a:ds(new Date(y,m,1)),b:mEnd(y,m),lab:BULAN[m]+' '+y};return{a:y+'-01-01',b:y+'-12-31',lab:'Tahun '+y}}
-function rangeCtx(a,b,lab){const idI=idsOf(t=>inR(t,a,b)&&t.tj==='Pendapatan'&&t.t==='M'),idE=idsOf(t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&t.t==='K'),idT=tabIds(a,b);
+function rangeCtx(a,b,lab){const idI=idsOf(t=>inR(t,a,b)&&t.tj==='Pendapatan'&&t.t==='M'),idE=idsOf(t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&t.t!=='T'),idT=tabIds(a,b);
  const inc=income(a,b),e0=expense(a,b),tb=tabNet(a,b),exp=e0+tb;
  return{inc,exp,tb,e0,
   fI:[{ids:idI},'Pendapatan · '+lab,{lines:SUMBER.Pendapatan.map(x=>[x,income(a,b,x),{tj:'Pendapatan',sb:x,tipe:'M',from:a,to:b}]).filter(x=>x[1]).concat([['= Total pendapatan',inc,null,1]])}],
-  fE:[{ids:idE.concat(idT)},'Pengeluaran · '+lab,{lines:SUMBER.Pengeluaran.map(x=>[x,expense(a,b,x),{tj:'Pengeluaran',sb:x,tipe:'K',from:a,to:b}]).filter(x=>x[1]).concat(tb?[['+ Tabungan bersih',tb,{ids:idT}]]:[],[['= Total pengeluaran',exp,null,1]])}],
+  fE:[{ids:idE.concat(idT)},'Pengeluaran · '+lab,{lines:SUMBER.Pengeluaran.map(x=>[x,expense(a,b,x),{tj:'Pengeluaran',sb:x,from:a,to:b}]).filter(x=>x[1]).concat(tb?[['+ Tabungan bersih',tb,{ids:idT}]]:[],[['= Total pengeluaran',exp,null,1]])}],
   fS:[{ids:idI.concat(idE,idT)},'Selisih · '+lab,{lines:[['Pendapatan',inc,{ids:idI}],['− Pengeluaran (termasuk tabungan bersih)',exp,{ids:idE.concat(idT)}],['= Selisih',inc-exp,null,1]]}]}}
 function rep(){LK={};WK={};const P=period(),tree={},C=rangeCtx(P.a,P.b,P.lab);
  for(const t of S.tx){if(!inR(t,P.a,P.b)||t.tj==='Pindah Uang')continue;const x=tree[t.tj]=tree[t.tj]||{v:0,s:{}},y=x.s[t.sb]=x.s[t.sb]||{v:0,k:{}};
-  const sg=t.tj==='Tabungan'?(t.t==='K'?1:-1):1;x.v+=t.j*sg;y.v+=t.j*sg;y.k[t.kt]=(y.k[t.kt]||0)+t.j*sg}
+  const sg=t.tj==='Tabungan'?(t.t==='K'?1:-1):isRefund(t)?-1:1;x.v+=t.j*sg;y.v+=t.j*sg;y.k[t.kt]=(y.k[t.kt]||0)+t.j*sg}
  const rw=(cls,lbl,v,f,ttl)=>`<div class="row ${cls}" data-x="${WKs({...f,from:P.a,to:P.b},ttl+' · '+P.lab)}"><div class="l">${lbl}</div><div class="r">${rp(v)}</div><span class="chev">›</span></div>`;
  const d=pd(RP.d),ML=[];for(let i=11;i>=0;i--){const dd=new Date(d.getFullYear(),d.getMonth()-i,1);ML.push({y:dd.getFullYear(),m:dd.getMonth(),a:ds(dd),b:mEnd(dd.getFullYear(),dd.getMonth())})}
  const MR=ML.map(x=>({...x,inc:income(x.a,x.b),exp:expense(x.a,x.b)+tabNet(x.a,x.b)}));
@@ -648,7 +666,7 @@ function mamaV(){LK={};WK={};const tabs=`<div class="seg" id="mt">${[['mama','Ua
    <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">Belum diinvestasikan = saldo Kantong Uang Kos Mama + Uang Kos Mama Cash di akhir bulan. Ke investasi = disetor − dicairkan dari reksadana uang kos mama (bisa minus kalau reksadana dicairkan untuk bayar listrik/pegadaian).</div></details></div>`;
   const byK={},idK={};for(const t of S.tx)if(t.kos&&inR(t,Y0,Y1)){byK[t.kos]=(byK[t.kos]||0)+t.j;(idK[t.kos]=idK[t.kos]||[]).push(t.id)}
   const grp=w=>Object.entries(byK).filter(([k])=>k.startsWith('Kos '+w)).sort();const tot=w=>grp(w).reduce((p,x)=>p+x[1],0);const allIds=w=>grp(w).flatMap(([k])=>idK[k]);
-  const outK={};for(const t of S.tx)if(t.sb==='Pengeluaran Uang Kos'&&inR(t,Y0,Y1))outK[t.kt]=(outK[t.kt]||0)+t.j;const rk=tabNet(Y0,Y1,true);
+  const outK={};for(const t of S.tx)if(t.sb==='Pengeluaran Uang Kos'&&inR(t,Y0,Y1))outK[t.kt]=(outK[t.kt]||0)+sgE(t);const rk=tabNet(Y0,Y1,true);
   const kr=(k,lbl)=>`<div class="row" data-x="${FN(()=>kamarSheet(k))}"><div class="l">${lbl}</div><div class="r up">${rp(byK[k]||0)}</div><span class="chev">›</span></div>`;
   body=kosLoanCard()+rdLoanCard()+kosBayarCard(MY)+kosMonth+`<div class="card"><h3>Kos cowok (5 kamar) — ${MY}</h3>${[1,2,3,4,5,'?'].map(i=>kr('Kos cowok · Kamar '+i,i==='?'?'Kamar belum tercatat':'Kamar '+i)).join('')}
    ${grp('cowok').filter(([k])=>!/Kamar [1-5?]$/.test(k)).map(([k])=>kr(k,esc(k.replace('Kos cowok · ','')))).join('')}<div class="kv"><b>Total kos cowok</b><b>${X(rp(tot('cowok')),{ids:allIds('cowok')},'Kos cowok · '+MY)}</b></div></div>
@@ -905,7 +923,7 @@ function txForm(){const t=EDIT?byId(EDIT):null,P=t||TPL||null;TPL=null;const tip
  <div class="tiny" id="ahint" style="margin-top:8px"></div></div>`;
  let tp=tipe;const setT=k=>{tp=k;document.querySelectorAll('#tt button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
   $('latu').style.display=k==='T'?'':'none';$('laa').firstChild.textContent=k==='T'?'Dari akun':k==='M'?'Masuk ke akun':'Keluar dari akun';
-  const tjs=k==='M'?['Pendapatan','Tabungan','Pindah Uang']:k==='K'?['Pengeluaran','Tabungan','Pindah Uang']:['Pindah Uang'];
+  const tjs=k==='M'&&P&&P.t==='M'&&P.tj==='Pengeluaran'?['Pengeluaran']:k==='M'?['Pendapatan','Tabungan','Pindah Uang']:k==='K'?['Pengeluaran','Tabungan','Pindah Uang']:['Pindah Uang'];
   $('atj').innerHTML=opts(tjs,P&&tjs.includes(P.tj)?P.tj:tjs[0]);fillSb(true)};
  const sbList=()=>{const tjs=[...$('atj').options].map(o=>o.value);return tjs.flatMap(tj=>tj==='Tabungan'&&!(P&&P.tj==='Tabungan')?[]:SUMBER[tj].filter(s=>tp==='T'||s!=='Pindah akun').map(s=>[s,tj]))};
  const syncTj=()=>{const x=sbList().find(z=>z[0]===$('asb').value);if(x)$('atj').value=x[1]};
@@ -919,7 +937,7 @@ function txForm(){const t=EDIT?byId(EDIT):null,P=t||TPL||null;TPL=null;const tip
  $('asave').onclick=()=>{const j=+$('aj').value,d=$('ad').value;if(!(j>0)||!d)return alert('Isi tanggal dan jumlah.');
   if(tp==='T'&&$('atu').value===$('aa').value)return alert('Akun tujuan harus berbeda.');
   if($('asb').value==='Uang Kos Mama'&&$('akt').value==='Uang kos anak kos'&&!$('akos').value&&!confirm('Kos/kamar belum dipilih. Simpan tanpa kamar?'))return;
-  const o={d,a:$('aa').value,t:tp,j,tj:$('atj').value,sb:$('asb').value,kt:$('akt').value.trim()||(tp==='T'?'Pindah antar akun sendiri':'Lain-lain'),ket:$('aket').value.trim(),tu:tp==='T'?$('atu').value:null,cek:t?t.cek:'',kos:$('asb').value==='Uang Kos Mama'?$('akos').value:''};
+  const o={d,a:$('aa').value,t:tp,j,tj:$('atj').value,sb:$('asb').value,kt:$('akt').value.trim()||(tp==='T'?'Pindah antar akun sendiri':'Lain-lain'),ket:$('aket').value.trim(),tu:tp==='T'?$('atu').value:null,cek:t?t.cek:'',kos:$('asb').value==='Uang Kos Mama'?$('akos').value:''};if(t&&t.ref&&!(o.t==='M'&&o.tj==='Pengeluaran'))delete t.ref;
   const INVSB={'Reksadana':'rd','Reksadana uang kos mama':'rd','Saham':'saham'};
   if(!t&&o.tj==='Tabungan'&&INVSB[o.sb]&&(o.kt==='Disetor'||o.kt==='Dicairkan'||tp!=='T')){
    if(confirm(`Transaksi ${o.sb} (${tp==='M'?'dicairkan/dijual':'dibeli/disetor'}) harus dicatat lewat Catat › Investasi supaya nilai investasinya ikut ${tp==='M'?'berkurang':'bertambah'}.\n\nPindah ke form Investasi sekarang? (tanggal, akun, jumlah & keterangan ikut dibawa)`)){
@@ -1099,13 +1117,13 @@ function set(){LK={};WK={};const held=saham().filter(p=>p.lot>0).map(p=>p.kode);
  const xlInfo=()=>{const L=xlRows();$('xlInfo').innerHTML=`${L.length} transaksi akan disalin${S.xlLast?' · terakhir disalin sampai '+fdx(S.xlLast):''}`};xlInfo();$('xlFrom').onchange=xlInfo;$('xlTo').onchange=xlInfo;
  $('xlCopy').onclick=()=>{const L=xlRows();if(!L.length)return alert('Tidak ada transaksi di rentang tanggal itu.');
   const cl=v=>String(v==null?'':v).replace(/[\t\r\n]+/g,' ');
-  const txt=L.map(t=>[fdx(t.d),t.a,TIP[t.t],t.tu||'',t.j,t.tj,t.sb,t.kt,t.ket,t.cek||'',t.kos||''].map(cl).join('\t')).join('\n');
+  const txt=L.map(t=>[fdx(t.d),t.a,isRefund(t)?'Keluar':TIP[t.t],t.tu||'',isRefund(t)?-t.j:t.j,t.tj,t.sb,t.kt,t.ket,t.cek||'',t.kos||''].map(cl).join('\t')).join('\n');
   const done=()=>{S.xlLast=$('xlTo').value||today;save();xlInfo();alert(L.length+' transaksi tersalin ✓\n\nBuka Excel → sheet Transaksi → ketuk sel kolom B di baris kosong pertama di bawah data terakhir → Tempel.')};
   (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(done,()=>{$('xlPaste').value=txt;$('xlPaste').select();alert('HP tidak mengizinkan salin otomatis. Teksnya sudah ditaruh di kotak "Excel → Aplikasi": tekan lama di kotak itu → Pilih semua → Salin, lalu kosongkan kotaknya.')})};
  const pdt=v=>{v=String(v||'').trim();let m=v.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);if(m)return`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;m=v.match(/^(\d{4})-(\d{2})-(\d{2})/);return m?m[0]:null};
  const xlParse=()=>{const out=[],bad=[];const seen=new Set(S.tx.map(t=>[t.d,t.a,t.t,t.j,t.ket].join('|')));let dup=0;
   for(const [i,line] of $('xlPaste').value.split(/\r?\n/).entries()){if(!line.trim())continue;const c=line.split('\t');if(/^tanggal$/i.test((c[0]||'').trim()))continue;
-   const d=pdt(c[0]),a=(c[1]||'').trim(),tp={masuk:'M',keluar:'K',pindah:'T',transfer:'T'}[(c[2]||'').trim().toLowerCase()],j=+String(c[4]||'').replace(/[^0-9]/g,'');
+   const d=pdt(c[0]),a=(c[1]||'').trim(),tp0={masuk:'M',keluar:'K',pindah:'T',transfer:'T'}[(c[2]||'').trim().toLowerCase()],neg=/^\s*[-−(]/.test(String(c[4]||''))&&tp0==='K'&&(c[5]||'').trim()==='Pengeluaran',tp=neg?'M':tp0,j=+String(c[4]||'').replace(/[^0-9]/g,'');
    if(!d||!a||!tp||!(j>0)){bad.push(i+1);continue}
    if(!S.acc.find(x=>x.n===a)||(tp==='T'&&!S.acc.find(x=>x.n===(c[3]||'').trim()))){bad.push(i+1+' (akun "'+(tp==='T'&&S.acc.find(x=>x.n===a)?(c[3]||'').trim():a)+'" tidak ada)');continue}
    const o={d,a,t:tp,j,tu:tp==='T'?c[3].trim():null,tj:(c[5]||'').trim()||(tp==='M'?'Pendapatan':tp==='K'?'Pengeluaran':'Pindah Uang'),sb:(c[6]||'').trim()||(tp==='M'?'Gaji':tp==='K'?'Pengeluaran Gaji':'Pindah akun'),kt:(c[7]||'').trim()||'Lain-lain',ket:(c[8]||'').trim(),cek:(c[9]||'').trim(),kos:(c[10]||'').trim()};
@@ -1454,7 +1472,7 @@ const addMon=(k,n)=>{const[y,m]=k.split('-').map(Number);const d=new Date(y,m-1+
 /* ---------- ANGGARAN (uang pribadi: Pengeluaran Gaji & Pengeluaran Jasa) ---------- */
 const BUD_SB=['Pengeluaran Gaji','Pengeluaran Jasa'];let BM=ym(today);
 const budIds=(kt,a,b)=>idsOf(t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&BUD_SB.includes(t.sb)&&t.kt===kt);
-const budUsed=(kt,a,b)=>sum(t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&BUD_SB.includes(t.sb)&&t.kt===kt);
+const budUsed=(kt,a,b)=>sumE(t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&BUD_SB.includes(t.sb)&&t.kt===kt);
 function budKats(){return[...new Set(S.tx.filter(t=>t.tj==='Pengeluaran'&&BUD_SB.includes(t.sb)).map(t=>t.kt))].sort()}
 function avg3(kt,k){let s=0;for(let i=1;i<=3;i++){const r=monRange(addMon(k,-i));s+=budUsed(kt,r.a,r.b)}return Math.round(s/3)}
 function budRows(k){const r=monRange(k),B=S.bud||{};return Object.keys(B).filter(kt=>B[kt]>0).map(kt=>({kt,lim:B[kt],used:budUsed(kt,r.a,r.b)})).sort((x,y)=>y.used/y.lim-x.used/x.lim)}
@@ -1552,7 +1570,7 @@ function shrink(file){return new Promise((ok,no)=>{const img=new Image(),u=URL.c
 function fotoView(id){fotoGet(id).then(u=>{const b=$('ftv');if(b&&u)b.innerHTML=`<img src="${u}" class="struk" alt="Foto struk" id="ftimg">`;const i=$('ftimg');if(i)i.onclick=()=>sheet(`<h3>Foto struk</h3><img src="${u}" style="width:100%;border-radius:8px">`)}).catch(()=>{})}
 /* ---------- LAPORAN BULANAN (cetak / simpan PDF) ---------- */
 function printReport(a,b,lab){const C=rangeCtx(a,b,lab),tree={};
- for(const t of S.tx){if(!inR(t,a,b)||t.tj==='Pindah Uang')continue;const x=tree[t.tj]=tree[t.tj]||{v:0,s:{}},y=x.s[t.sb]=x.s[t.sb]||{v:0,k:{}};const sg=t.tj==='Tabungan'?(t.t==='K'?1:-1):1;x.v+=t.j*sg;y.v+=t.j*sg;y.k[t.kt]=(y.k[t.kt]||0)+t.j*sg}
+ for(const t of S.tx){if(!inR(t,a,b)||t.tj==='Pindah Uang')continue;const x=tree[t.tj]=tree[t.tj]||{v:0,s:{}},y=x.s[t.sb]=x.s[t.sb]||{v:0,k:{}};const sg=t.tj==='Tabungan'?(t.t==='K'?1:-1):isRefund(t)?-1:1;x.v+=t.j*sg;y.v+=t.j*sg;y.k[t.kt]=(y.k[t.kt]||0)+t.j*sg}
  const end=b<today?b:today,tx=S.tx.filter(t=>inR(t,a,b)).sort((p,q)=>p.d.localeCompare(q.d)||p.id-q.id);
  const kI=income(a,b,'Uang Kos Mama')+income(a,b,'Uang Kedai'),kO=expense(a,b,'Pengeluaran Uang Kos')+expense(a,b,'Pengeluaran Uang Kedai'),dI=income(a,b,'Uang Disan'),dO=expense(a,b,'Pengeluaran Uang Disan');
  const bud=a.slice(0,7)===b.slice(0,7)?budRows(a.slice(0,7)):[];
@@ -1611,7 +1629,7 @@ async function xlDownload(){if(!('CompressionStream' in window)||!('Decompressio
   const put=(name,cells)=>{const p=sheetPath(files,name);if(!p)throw new Error('Sheet '+name+' tidak ada di template');files[p]=te.encode(xFill(td.decode(files[p]),cells))};
   const TIP={M:'Masuk',K:'Keluar',T:'Pindah'},C={},over=[];
   for(const t of S.tx){const r=15+t.id;if(r>5015){over.push(t);continue}
-   Object.assign(C,{['B'+r]:xserial(t.d),['C'+r]:t.a,['D'+r]:TIP[t.t],['E'+r]:t.t==='T'?t.tu||'':'',['F'+r]:t.j,['G'+r]:t.tj,['H'+r]:t.sb,['I'+r]:t.kt,['J'+r]:t.ket||'',['K'+r]:t.cek||'',['L'+r]:t.kos||''})}
+   Object.assign(C,{['B'+r]:xserial(t.d),['C'+r]:t.a,['D'+r]:isRefund(t)?'Keluar':TIP[t.t],['E'+r]:t.t==='T'?t.tu||'':'',['F'+r]:isRefund(t)?-t.j:t.j,['G'+r]:t.tj,['H'+r]:t.sb,['I'+r]:t.kt,['J'+r]:t.ket||'',['K'+r]:t.cek||'',['L'+r]:t.kos||''})}
   if(over.length)throw new Error('Nomor transaksi melebihi 5000 baris template. Minta template baru.');
   put('Transaksi',C);
   const A={};S.acc.slice(0,100).forEach((a,i)=>{const r=5+i;A['A'+r]=a.n;A['B'+r]=a.g||'';A['C'+r]=+a.o||0;if(a.od)A['D'+r]=xserial(a.od)});put('Akun',A);
@@ -1654,7 +1672,7 @@ const JATAH_KT={masak:['Uang Masak / Dapur'],paket:['Pulsa & Internet'],butuh:['
 function jatahMonth(a,b){const A=alloc(),pos=A.pos,gaji=sum(t=>inR(t,a,b)&&t.tj==='Pendapatan'&&t.sb==='Gaji'&&t.kt==='Gaji bulanan');
  const pers=t=>inR(t,a,b)&&t.tj==='Pengeluaran'&&(t.sb==='Pengeluaran Gaji'||t.sb==='Pengeluaran Jasa');
  const used={},ids={};for(const p of pos){used[p.k]=0;ids[p.k]=[]}
- for(const t of S.tx){if(pers(t)){let k=Object.keys(JATAH_KT).find(k=>JATAH_KT[k].includes(t.kt))||'ingin';if(!(k in used))k='ingin';used[k]+=t.j;ids[k].push(t.id)}
+ for(const t of S.tx){if(pers(t)){let k=Object.keys(JATAH_KT).find(k=>JATAH_KT[k].includes(t.kt))||'ingin';if(!(k in used))k='ingin';used[k]+=sgE(t);ids[k].push(t.id)}
   else if(inR(t,a,b)&&t.tj==='Tabungan'&&t.t==='K'&&t.sb!=='Reksadana uang kos mama'){used.inv=(used.inv||0)+t.j;(ids.inv=ids.inv||[]).push(t.id)}}
  const fixed=pos.filter(p=>!p.rest).reduce((s,p)=>s+(+p.j||0),0);
  return pos.map(p=>({...p,jatah:p.rest?Math.max(0,(gaji||0)-fixed):+p.j||0,pakai:used[p.k]||0,ids:ids[p.k]||[]})).concat([{k:'_gaji',gaji}])}
@@ -1997,9 +2015,9 @@ function navTake(v){const now=VS.get();
  if(v!==V||window._prevF){const s=navSnap();if(window._prevF)s.st.F=JSON.parse(JSON.stringify(window._prevF));return s}return null}
 function navBtn(){if($('backB'))$('backB').style.display=NAVS.length||V!=='home'?'':'none'}
 function navAfter(P,keepSheet){if(!P||P.used)return;if(V===P.v&&vsKey(P.st)!==vsKey(VS.get())){P.used=1;if(!keepSheet)P.sh=null;NAVS.push(P);if(NAVS.length>80)NAVS.shift();navBtn()}}
-['click','change'].forEach(ev=>document.addEventListener(ev,e=>{if(typeof locked!=='undefined'&&locked)return;if(e.target.closest&&e.target.closest('#backB'))return;const P=PRE=navSnap();setTimeout(()=>navAfter(P),0);setTimeout(()=>navAfter(P),450)},true));
+['click','change'].forEach(ev=>document.addEventListener(ev,e=>{if(typeof locked!=='undefined'&&locked)return;if(e.target.closest&&e.target.closest('#backB'))return;EXITING=false;const P=PRE=navSnap();setTimeout(()=>{navAfter(P);histSync()},0);setTimeout(()=>{navAfter(P);histSync()},450)},true));
 document.addEventListener('input',e=>{const el=e.target;if(!el||!el.id||!/^(INPUT|TEXTAREA)$/.test(el.tagName))return;const now=Date.now();
- if(!INP||INP.id!==el.id||now-INP.at>4000)INP={id:el.id,P:navSnap()};INP.at=now;const I=INP;setTimeout(()=>navAfter(I.P),600);setTimeout(()=>navAfter(I.P),1500)},true);
+ if(!INP||INP.id!==el.id||now-INP.at>4000)INP={id:el.id,P:navSnap()};INP.at=now;const I=INP;setTimeout(()=>{navAfter(I.P);histSync()},600);setTimeout(()=>{navAfter(I.P);histSync()},1500)},true);
 function toast(msg){let t=$('toast');if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t)}t.textContent=msg;t.className='on';clearTimeout(window._tt);window._tt=setTimeout(()=>{t.className=''},2200)}
 
 /* ---- ketuk angka -> Buku Akun di tanggalnya ---- */
@@ -2088,6 +2106,30 @@ function dupPairs(){const dd=(x,y)=>Math.abs(Math.round((pd(y)-pd(x))/864e5)),L=
 function dupCard(){const D=dupPairs();if(!D.length)return'';return`<div class="card"><h3>⚠️ Kemungkinan tercatat dobel (${D.length})</h3><div class="tiny">Baris dari PDF bank yang belum dikategorikan, padahal di akun yang sama sudah ada pindah dengan jumlah yang sama. Kalau memang transaksi yang sama, hapus baris yang berlebih (masuk Tempat sampah, bisa dikembalikan).</div>
  ${D.map(({x,t})=>`<div class="lgr"><div><b class="${x.t==='M'?'up':'dn'}">${x.t==='M'?'+':'−'}${rp(x.j)}</b> · ${fdate(x.d)} · ${esc(x.a)}</div><div class="tiny">Berlebih: <span class="ac" data-tx="${x.id}">${esc(x.ket||x.kt)}</span></div><div class="tiny">Sudah ada: <span class="ac" data-tx="${t.id}">${esc(t.ket||t.kt)}</span> (${esc(t.a)} → ${esc(t.tu)}, ${fdate(t.d)})</div><div class="rl"><span class="ac dn" data-dupx="${x.id}">🗑️ Hapus baris yang berlebih</span><span class="ac" data-jb="${x.id}">📒 Lihat di Buku Akun</span></div></div>`).join('')}</div>`}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-dupx]');if(!b)return;e.stopPropagation();const x=byId(+b.dataset.dupx);if(!x||!confirm(`Hapus "${x.ket||x.kt}" ${rp(x.j)} di ${x.a} (${fdate(x.d)})?\n\nPindah yang sudah ada tidak diubah.`))return;S.tx=S.tx.filter(q=>q!==x);save();toast('Dihapus, ada di Tempat sampah');if(V==='warn')warnV();else go(V)},true);
+
+/* ================= UANG KEMBALI (mengurangi pengeluaran, bukan pendapatan) ================= */
+const refOf=id=>S.tx.filter(x=>isRefund(x)&&x.ref===id);
+function refInfo(t){if(isRefund(t)){const o=t.ref&&byId(t.ref);return`<div class="st ok">↩️ Uang kembali: mengurangi pengeluaran <b>${esc(t.sb)} › ${esc(t.kt)}</b>, tidak dihitung sebagai pendapatan.${o?` Dari: <span class="ac" data-tx="${o.id}">${esc(o.ket||o.kt)} (${fdate(o.d)}, ${rp(o.j)})</span>`:''}</div>`}
+ if(t.t==='K'&&t.tj==='Pengeluaran'){const R=refOf(t.id);if(R.length){const s=R.reduce((p,x)=>p+x.j,0);return`<div class="st ok">↩️ Sudah kembali ${rp(s)} dari ${rp(t.j)}${s>=t.j?' (semua)':', sisa pengeluaran '+rp(t.j-s)}: ${R.map(x=>`<span class="ac" data-tx="${x.id}">${fdate(x.d)} ${rp(x.j)}</span>`).join(', ')}</div>`}}return''}
+function refBtn(t){if(isRefund(t))return'<button class="b" id="refX" style="width:100%;margin-top:6px">↩️ Batalkan: jadikan pendapatan biasa lagi</button>';
+ if(t.t==='K'&&t.tj==='Pengeluaran')return'<button class="b" id="refK" style="width:100%;margin-top:6px">↩️ Uang ini dikembalikan (batal / diganti orang)</button>';
+ if(t.t==='M'&&t.tj==='Pendapatan')return'<button class="b" id="refM" style="width:100%;margin-top:6px">↩️ Ini uang kembali, bukan pendapatan</button>';return''}
+function refBind(t){if($('refK'))$('refK').onclick=()=>refNew(t);if($('refM'))$('refM').onclick=()=>refPick(t);
+ if($('refX'))$('refX').onclick=()=>{const sbI={'Pengeluaran Jasa':'Jasa','Pengeluaran Uang Kos':'Uang Kos Mama','Pengeluaran Uang Kedai':'Uang Kedai','Pengeluaran Uang Disan':'Uang Disan'}[t.sb]||'Gaji';if(!confirm(`Jadikan pendapatan biasa lagi?\n\nBaris ini akan dicatat sebagai Pendapatan › ${sbI} › Penggantian, dan pengeluaran "${t.kt}" tidak lagi dikurangi.`))return;t.tj='Pendapatan';t.sb=sbI;t.kt='Penggantian';delete t.ref;save();closeSheet();go(V)}}
+function refNew(t){const back=refOf(t.id).reduce((p,x)=>p+x.j,0),sisa=Math.max(0,t.j-back);
+ sheet(`<h3>↩️ Uang dikembalikan</h3><div class="tiny">Untuk: <b>${esc(t.ket||t.kt)}</b> · ${fdate(t.d)} · ${rp(t.j)}${back?' · sudah kembali '+rp(back):''}</div>
+ <div class="fl" style="margin-top:8px"><label class="lb">Tanggal kembali<input type="date" id="rfd" value="${today}"></label><label class="lb">Jumlah kembali (Rp)<input type="number" inputmode="numeric" id="rfj" value="${sisa||t.j}"></label>
+ <label class="lb w2">Masuk ke akun<select id="rfa">${opts(S.acc.filter(a=>!a.tutup).map(a=>a.n),t.a)}</select></label><label class="lb w2">Keterangan<input id="rfk" value="${esc('Uang kembali: '+(t.ket||t.kt))}"></label></div>
+ <div class="tiny" style="margin-top:6px">Saldo akun bertambah, pengeluaran <b>${esc(t.sb)} › ${esc(t.kt)}</b> berkurang sebesar uang yang kembali, dan pendapatan tidak bertambah.</div>
+ <button class="b p" id="rfs" style="width:100%;margin-top:8px">Simpan</button>`,()=>{$('rfs').onclick=()=>{const j=+$('rfj').value,d=$('rfd').value;if(!(j>0)||!d)return alert('Isi tanggal dan jumlah.');if(d<t.d&&!confirm('Tanggal kembali lebih awal dari tanggal pengeluarannya. Tetap simpan?'))return;
+  if(j>sisa&&!confirm(`Jumlah kembali ${rp(j)} lebih besar dari sisa pengeluaran ${rp(sisa)}. Tetap simpan?`))return;
+  S.tx.push({id:S.next++,d,a:$('rfa').value,t:'M',tu:null,j,tj:'Pengeluaran',sb:t.sb,kt:t.kt,ket:$('rfk').value.trim()||'Uang kembali',cek:'',kos:'',ref:t.id});save();closeSheet();toast('Uang kembali dicatat ✓');go(V)}})}
+function refPick(m){const dd=(a,b)=>Math.round((pd(b)-pd(a))/864e5),C=S.tx.filter(x=>x.t==='K'&&x.tj==='Pengeluaran'&&dd(x.d,m.d)>=-7&&dd(x.d,m.d)<=120).map(x=>({x,s:(x.j===m.j?0:x.j>m.j?1:2)*1000+Math.abs(dd(x.d,m.d))})).sort((a,b)=>a.s-b.s).slice(0,60);
+ const row=({x})=>`<div class="lgr" data-rfp="${x.id}" style="cursor:pointer"><div><b class="dn">−${rp(x.j)}</b> · ${fdate(x.d)} · ${esc(x.a)}${x.j===m.j?' <span class="up">· jumlah sama</span>':''}</div><div class="tiny">${esc(x.ket||x.kt)} · ${esc(x.sb)} › ${esc(x.kt)}</div></div>`;
+ sheet(`<h3>↩️ Uang kembali dari pengeluaran yang mana?</h3><div class="tiny">Uang masuk: <b>${esc(m.ket||m.kt)}</b> · ${fdate(m.d)} · ${rp(m.j)}. Pilih pengeluaran yang uangnya kembali (7 hari sesudah sampai 4 bulan sebelumnya). Baris ini lalu mengurangi pengeluaran itu dan tidak lagi dihitung sebagai pendapatan.</div>
+ <input type="search" id="rfq" placeholder="Cari keterangan / kategori / jumlah" style="margin-top:8px"><div id="rfl">${C.map(row).join('')||'<div class="empty">Tidak ada pengeluaran di rentang itu.</div>'}</div>`,()=>{
+  const bind=()=>document.querySelectorAll('[data-rfp]').forEach(r=>r.onclick=()=>{const k=byId(+r.dataset.rfp);if(!k)return;if(!confirm(`Jadikan uang kembali dari:\n"${k.ket||k.kt}" (${fdate(k.d)}, ${rp(k.j)})?\n\nPengeluaran ${k.sb} › ${k.kt} berkurang ${rp(m.j)}; pendapatan ${m.sb} berkurang ${rp(m.j)}. Saldo tidak berubah.`))return;m.tj='Pengeluaran';m.sb=k.sb;m.kt=k.kt;m.ref=k.id;save();closeSheet();toast('Dijadikan uang kembali ✓');go(V)});bind();
+  $('rfq').oninput=()=>{const q=$('rfq').value.trim();$('rfl').innerHTML=C.filter(({x})=>!q||match(x,{q})).map(row).join('')||'<div class="empty">Tidak ada yang cocok.</div>';bind()}})}
 /* ================= MULAI ================= */
 load();save();netS();nav();home();lockStart();viewRestore();setTimeout(autoPx,800);setTimeout(autoBackup,3000);setTimeout(rutNotify,2000);
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
