@@ -1,5 +1,5 @@
-const C='dompet-digital-v94';
-const FILES=['./','./app.js','./libs.js','./seed.js','./inv.js','./kosasli.js','./fixdata.js','./pdf.min.mjs','./pdf.worker.min.mjs','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const C='dompet-digital-v95';
+const FILES=['./','./app.js','./libs.js','./seed.js','./inv.js','./kosasli.js','./kos2023.js','./fixdata.js','./pdf.min.mjs','./pdf.worker.min.mjs','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(FILES)))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 async function clean(r){return r&&r.redirected?new Response(await r.blob(),{status:200,headers:r.headers}):r}

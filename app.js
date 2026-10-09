@@ -434,7 +434,7 @@ const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==u
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
 const flow=(t,a)=>t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-const APPV='83';let V='home',charts={};
+const APPV='84';let V='home',charts={};
 const VIEWS=[['home','Beranda','🏠'],['trx','Transaksi','📋'],['buku','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['fix','Perbaikan dari Claude','🛠️'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','fix','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
@@ -2282,7 +2282,16 @@ function kosKamarSheet(k){const P=kosPays(),s=kosStatus(k,P),e=s.e,cfg=S.kosCfg;
   if($('kout'))$('kout').onclick=()=>{cfg.out=cfg.out||{};if(e.keluar){delete cfg.out[k];cfg.kosong=(cfg.kosong||[]).filter(x=>x!==k)}else{if(!confirm('Tandai '+k+' kosong mulai hari ini? Pembayaran berikutnya di kamar ini dianggap penghuni baru.'))return;cfg.out[k]=today}save();closeSheet();go('mama')}})}
 document.addEventListener('click',e=>{const x=e.target.closest('[data-kkm]');if(x){e.stopPropagation();kosKamarSheet(x.dataset.kkm)}},true);
 /* tabel bulanan seperti laporan kos asli: tiap pembayaran kamar, pengeluaran yang dipotong darinya (uang yang masuk lebih dulu dipakai lebih dulu), saldo berjalan */
-function kosBulanCard(){const AS=window.KOSASLI&&KOSASLI[KM],[y,mm]=KM.split('-').map(Number),a=KM+'-01',b=mEnd(y,mm-1),P=kosPays();
+function kos2023Card(){const o=KOS2023[KM],[y,mm]=KM.split('-').map(Number),nf=v=>rp(v).replace('Rp',''),T=(a,b)=>`<tr><td>${a}</td><td class="n">${b}</td></tr>`;
+ const rows=o.r.map(r=>`<tr${r.ok?'':' style="opacity:.6"'}><td>${r.kos} ${r.k}${r.nm?' · '+esc(r.nm):''}${r.ket?`<div class="tiny">${esc(r.ket)}</div>`:''}</td><td class="n up">${r.j?nf(r.j):'–'}</td><td class="tiny">${r.j?(r.ok?'✓ dicentang':'tidak dicentang'):''}</td></tr>`).join('');
+ const us=o.u.map(u=>`<tr${u.ok?'':' style="opacity:.6"'}><td style="white-space:normal">${esc(u.t)}</td><td class="n dn">${u.j?nf(u.j):'–'}</td><td class="tiny">${u.ok?'✓':'tidak dicentang'}</td></tr>`).join('')+o.simp.map(u=>`<tr><td style="white-space:normal">${esc(u.t)} <span class="tiny">(dari simpanan bulan sebelumnya)</span></td><td class="n dn">${nf(u.j)}</td><td class="tiny">✓</td></tr>`).join('');
+ const beda=o.totCat-o.hitung;
+ return`<div class="card"><h3>📋 Uang kos bulan ini per kamar</h3><div class="mnav"><button class="b" id="kmP">‹</button><input type="month" id="kmM" value="${KM}" style="width:auto;text-align:center"><button class="b" id="kmN">›</button></div>
+ <div class="tiny" style="margin:8px 0">🗂️ <b>Catatan 2023 (dipisah sementara)</b> — dari catatan HP "${esc(o.judul)}". Tidak masuk saldo akun mana pun; saldo awal uang kos tunai tetap Rp1.549.000 per 01/02/2024.</div>
+ <div class="tw"><table class="sm"><tr><th>Kamar</th><th class="n">Masuk</th><th></th></tr>${rows}<tr><th>Pemakaian</th><th class="n"></th><th></th></tr>${us}</table></div>
+ <div class="tw" style="margin-top:8px"><table class="sm">${T('Sisa bulan ini (catatan)',nf(o.sisaCat))}${T('<b>Total keseluruhan tersisa (catatan)</b>','<b>'+nf(o.totCat)+'</b>')}${T('Hitung ulang dari Januari 2023',nf(o.hitung))}${beda?T('Selisih',`<span class="dn">${nf(beda)}</span>`):''}</table></div>
+ ${o.ket?`<div class="tiny" style="margin-top:6px">⚠️ ${esc(o.ket)}</div>`:''}</div>`}
+function kosBulanCard(){if(KM<'2024-01'&&window.KOS2023&&KOS2023[KM])return kos2023Card();const AS=window.KOSASLI&&KOSASLI[KM],[y,mm]=KM.split('-').map(Number),a=KM+'-01',b=mEnd(y,mm-1),P=kosPays();
  const pay=[];for(const k in P)for(const p of P[k])if(p.d>=a&&p.d<=b)pay.push({...p,k,sisa:p.j,pot:[]});
  const lain=S.tx.filter(t=>t.t==='M'&&t.sb==='Uang Kos Mama'&&inR(t,a,b)&&(t.kt!=='Uang kos anak kos'||!kamarOf(t.kos).length));for(const t of lain)pay.push({d:t.d,j:t.j,id:t.id,ket:t.ket||'',k:'',lain:t.kt,sisa:t.j,pot:[]});
  pay.sort((p,q)=>p.d.localeCompare(q.d)||p.id-q.id);
