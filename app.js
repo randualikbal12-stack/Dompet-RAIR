@@ -523,13 +523,15 @@ function match(t,f){if(f.ids){if(!f._s)Object.defineProperty(f,'_s',{value:new S
  if(f.from&&t.d<f.from)return false;if(f.to&&t.d>f.to)return false;
  if(f.tj&&t.tj!==f.tj)return false;if(f.sb&&t.sb!==f.sb)return false;if(f.kt&&t.kt!==f.kt)return false;
  if(f.a&&t.a!==f.a&&t.tu!==f.a)return false;if(f.kos&&t.kos!==f.kos)return false;if(f.cek&&!t.cek)return false;if(f.rf&&!isBack(t))return false;if(f.tipe&&t.t!==f.tipe)return false;
+ if(f.dr||f.ke){const dk=dariKe(t);if(f.dr&&dk[0]!==f.dr)return false;if(f.ke&&dk[1]!==f.ke)return false}
+ if(f.ud&&!udParts(t).some(p=>p[0]===f.ud))return false;
  if(f.q){const q=f.q.toLowerCase().replace(/^rp\s?/,'');if(!(String(t.j)+' '+t.j.toLocaleString('id-ID')+' '+t.ket+' '+t.kt+' '+t.sb+' '+t.a+' '+(t.tu||'')+' '+t.cek+' '+t.kos+(isBack(t)?' uang kembali':'')).toLowerCase().includes(q))return false}
  return true}
 const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==undefined)o[k]=f[k];return o};
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
 const flow=(t,a)=>t.iv===a&&t.a!==a?(t.t==='K'?1:t.t==='M'?-1:0):t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-const APPV='100';let V='home',charts={};
+const APPV='102';let V='home',charts={};
 const VIEWS=[['home','Beranda','🏠'],['trx','Transaksi','📋'],['buku','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['fix','Perbaikan dari Claude','🛠️'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','fix','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
@@ -695,6 +697,11 @@ function accSheet(n){const x=S.acc.find(a=>a.n===n);if(!x)return;const b=bal(n);
 /* ================= TRANSAKSI ================= */
 function opts(list,sel,first){return(first?`<option value="">${first}</option>`:'')+list.map(v=>`<option ${v===sel?'selected':''}>${esc(v)}</option>`).join('')}
 function katList(tj,sb){return[...new Set((sb==='Pinjam uang kos'?['Pinjam dari uang kos','Ganti uang kos']:sb==='Pinjam uang Randu'?['Pinjam dari uang Randu','Ganti uang Randu']:sb==='Pindah akun'?['Pindah antar akun sendiri','Belum dikategorikan','Pinjam dari uang riba','Ganti uang riba','Bunga bank jago kantong utama','Bunga bank jago kantong stockbit','Bunga bank jago kantong uang kos mama','Bunga bank jago gopay tabungan','Bunga bank jago kantong pengeluaran uang riba']:[]).concat(S.tx.filter(t=>(!tj||t.tj===tj)&&(!sb||t.sb===sb)).map(t=>t.kt)))].sort()}
+const YRS=Array.from({length:18},(_,i)=>String(2023+i));
+function fYM(f){if(!f.from&&!f.to)return{};const y=(f.from||'').slice(0,4);if(f.from===y+'-01-01'&&f.to===y+'-12-31')return{y};
+ const m=+(f.from||'').slice(5,7)-1;if(f.from&&f.from.slice(8)==='01'&&f.to===mEnd(+y,m))return{y,m:BULAN[m]};return{cust:1}}
+function dkOpts(i){const s=new Set();for(const t of S.tx)s.add(dariKe(t)[i]);const acc=accNames().filter(n=>s.has(n)),oth=[...s].filter(n=>n&&!acc.includes(n)).sort();return[acc,oth]}
+function dkSel(i,sel,first){const[a,o]=dkOpts(i),op=l=>l.map(v=>`<option ${v===sel?'selected':''}>${esc(v)}</option>`).join('');return`<option value="">${first}</option><optgroup label="Akun">${op(a)}</optgroup><optgroup label="Kategori">${op(o)}</optgroup>`}
 function trx(){LK={};WK={};const f=F,fc=clean(F),ft=F.title||'Hasil pencarian';const res=S.tx.filter(t=>match(t,f)).sort((p,q)=>q.d.localeCompare(p.d)||q.id-p.id);
  const sIn=res.reduce((s,t)=>s+(t.t==='M'?t.j:0),0),sOut=res.reduce((s,t)=>s+(t.t==='K'?t.j:0),0),sTr=res.reduce((s,t)=>s+(t.t==='T'?t.j:0),0);
  const g={};for(const t of res){const k=agg==='hari'?t.d:agg==='bulan'?t.d.slice(0,7):t.d.slice(0,4);const o=g[k]=g[k]||[0,0];if(t.t==='M')o[0]+=t.j;else if(t.t==='K')o[1]+=t.j}
@@ -704,30 +711,32 @@ function trx(){LK={};WK={};const f=F,fc=clean(F),ft=F.title||'Hasil pencarian';c
  const shown=res.slice(0,page*80);
  $('main').innerHTML=`<div class="seg" style="margin-top:8px"><button class="on">Daftar & cari</button><button id="toBuku">Buku akun</button></div>
  <div class="sbar"><input type="search" id="fq" placeholder="🔍 Cari transaksi… (keterangan, kategori, akun, jumlah)" value="${esc(f.q||'')}" autocomplete="off"></div>
- <details class="card"${['tj','sb','kt','a','kos','tipe','from','to','cek','rf'].some(k=>f[k])?' open':''}><summary><b>Filter lanjutan</b></summary><div class="fl" style="margin-top:8px">
-  <select id="ftj">${opts(TUJ,f.tj,'Semua tujuan')}</select>
-  <select id="fsb">${opts(f.tj?SUMBER[f.tj]:Object.values(SUMBER).flat(),f.sb,'Semua sumber')}</select>
-  <select class="w2" id="fkt">${opts(katList(f.tj,f.sb),f.kt,'Semua kategori')}</select>
-  <select id="fa">${opts(accNames(),f.a,'Semua akun')}</select><select id="fkos">${opts(KOSL.concat(['Campuran (cewek & cowok)','Belum diketahui']),f.kos,'Semua kos/kamar')}</select>
+ <details class="card"${['dr','ke','ud','tj','sb','kt','a','kos','tipe','from','to','cek','rf'].some(k=>f[k])?' open':''}><summary><b>Filter lanjutan</b></summary><div class="fl" style="margin-top:8px">
+  <select id="fdr">${dkSel(0,f.dr,'Dari: semua')}</select>
+  <select id="fke">${dkSel(1,f.ke,'Ke: semua')}</select>
+  <select class="w2" id="fkt">${opts(katList(),f.kt,'Semua kategori')}</select>
+  <select id="fud">${opts(UD_L,f.ud,'Uang dari: semua')}</select><select id="fkos">${opts(KOSL.concat(['Campuran (cewek & cowok)','Belum diketahui']),f.kos,'Semua kos/kamar')}</select>
   <select id="ftp" class="w2">${opts(['Masuk','Keluar','Pindah'],{M:'Masuk',K:'Keluar',T:'Pindah'}[f.tipe],'Semua jenis')}</select>
-  <input type="date" id="ffrom" value="${f.from||''}"><input type="date" id="fto" value="${f.to||''}">
+  ${(()=>{const ym=fYM(f);return`<select id="fy">${opts(YRS,ym.y,'Semua tahun')}</select><select id="fm">${opts(BULAN,ym.m,'Semua bulan')}</select>${ym.cust?`<div class="w2 tiny">Rentang tanggal: ${fdate(f.from||'')||'awal'} – ${fdate(f.to||'')||'akhir'} (pilih tahun/bulan untuk mengganti)</div>`:''}`})()}
   <label class="w2 tiny"><input type="checkbox" id="fcek" style="width:auto;min-height:0" ${f.cek?'checked':''}> Hanya yang perlu dicek</label>
   <label class="w2 tiny"><input type="checkbox" id="frf" style="width:auto;min-height:0" ${f.rf?'checked':''}> Hanya ↩️ uang kembali</label>
   <button class="b" id="fclr">Hapus filter</button><button class="b p" id="fgo">Cari</button></div></details>
- ${f.title?`<div class="chips"><span class="chip">🔎 ${esc(f.title)}</span></div>`:''}
+ ${f.title||f.a||f.tj||f.sb?`<div class="chips">${f.title?`<span class="chip">🔎 ${esc(f.title)}</span>`:''}${!f.title&&f.a?`<span class="chip">Akun: ${esc(f.a)}</span>`:''}${!f.title&&(f.tj||f.sb)?`<span class="chip">${esc([f.tj,f.sb].filter(Boolean).join(' · '))}</span>`:''}</div>`:''}
  <div class="card"><div class="g3">
   <div class="kp" data-x="${WKs({...fc,tipe:'M'},ft+' · uang masuk')}"><div class="a">Uang masuk</div><div class="b up">${rp(sIn)}</div></div>
   <div class="kp" data-x="${WKs({...fc,tipe:'K'},ft+' · uang keluar')}"><div class="a">Uang keluar</div><div class="b dn">${rp(sOut)}</div></div>
-  <div class="kp" data-x="${WKs({...fc,tipe:'T'},ft+' · pindah akun')}"><div class="a">Pindah akun</div><div class="b">${rp(sTr)}</div></div></div>
-  <div class="tiny" style="margin-top:6px">${res.length} transaksi ditemukan</div></div>
+  <div class="kp"><div class="a">Selisih</div><div class="b">${rp(sIn-sOut)}</div></div></div>
+  <div class="tiny" style="margin-top:6px">${res.length} transaksi ditemukan${sTr?` · <span class="ac" data-x="${WKs({...fc,tipe:'T'},ft+' · pindah akun')}">${res.filter(t=>t.t==='T').length} pindah akun antar akun sendiri (tidak dihitung masuk/keluar)</span>`:''}</div></div>
  <div class="card"><h3>Total per periode (ketuk baris untuk rinciannya)</h3><div class="seg" id="aggSeg">${['hari','bulan','tahun'].map(x=>`<button data-g="${x}" class="${x===agg?'on':''}">Per ${x}</button>`).join('')}</div>
   <table style="margin-top:8px"><tr><th>Periode</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Selisih</th></tr>
   ${gk.map(k=>{const[a1,b1]=rng(k);return`<tr class="cl" data-x="${WKs({...fc,from:a1>(fc.from||'')?a1:fc.from,to:b1<(fc.to||'9999')?b1:fc.to},(F.title?F.title+' · ':'')+lbl(k))}"><td>${lbl(k)}</td><td class="n up">${rp(g[k][0])}</td><td class="n dn">${rp(g[k][1])}</td><td class="n">${rp(g[k][0]-g[k][1])}</td></tr>`}).join('')||'<tr><td colspan=4 class="empty">Tidak ada data</td></tr>'}</table></div>
  <div class="card"><h3>Daftar transaksi</h3>${shown.map(txRow).join('')||'<div class="empty">Tidak ada transaksi</div>'}
   ${res.length>shown.length?`<button class="b" style="width:100%;margin-top:8px" id="more">Tampilkan lagi (${res.length-shown.length} tersisa)</button>`:''}</div>`;
- const rd=()=>({q:$('fq').value.trim()||undefined,tj:$('ftj').value||undefined,sb:$('fsb').value||undefined,kt:$('fkt').value||undefined,a:$('fa').value||undefined,
-   tipe:{Masuk:'M',Keluar:'K',Pindah:'T'}[$('ftp').value],kos:$('fkos').value||undefined,from:$('ffrom').value||undefined,to:$('fto').value||undefined,cek:$('fcek').checked||undefined,rf:$('frf').checked||undefined});
- $('ftj').onchange=()=>{F={...rd(),sb:undefined,kt:undefined};trx()};$('fsb').onchange=()=>{F={...rd(),kt:undefined};trx()};
+ const rd=()=>{const y=$('fy').value,mi=BULAN.indexOf($('fm').value),ym=fYM(F);let from,to;
+   if(ym.cust&&!y&&mi<0){from=F.from;to=F.to}else if(y&&mi>=0){const mm=String(mi+1).padStart(2,'0');from=y+'-'+mm+'-01';to=mEnd(+y,mi)}else if(y){from=y+'-01-01';to=y+'-12-31'}
+   return{q:$('fq').value.trim()||undefined,dr:$('fdr').value||undefined,ke:$('fke').value||undefined,ud:$('fud').value||undefined,kt:$('fkt').value||undefined,
+   tj:F.tj,sb:F.sb,a:F.a,ids:F.ids,tipe:{Masuk:'M',Keluar:'K',Pindah:'T'}[$('ftp').value],kos:$('fkos').value||undefined,from,to,cek:$('fcek').checked||undefined,rf:$('frf').checked||undefined}};
+ ['fdr','fke','fud','fkt','fy','fm','ftp','fkos'].forEach(i=>$(i).onchange=()=>{F={...rd(),title:F.title};page=1;trx()});
  if($('toBuku'))$('toBuku').onclick=()=>{if(F.a)BA.a=F.a;go('buku')};
  $('fgo').onclick=()=>{F=rd();page=1;trx()};$('fclr').onclick=()=>{F={};page=1;trx()};
  $('fq').onkeydown=e=>{if(e.key==='Enter'){F=rd();page=1;trx()}};
@@ -2053,7 +2062,8 @@ function pindahCek(days=120){const from=ds(new Date(Date.now()-days*864e5)),ok=n
  for(const x of M){if(used.has(x.id))continue;const y=pair1(x,K.filter(k=>!done.has(k.id)));if(y){used.add(x.id);done.add(y.id)}}
  for(const x of K){if(done.has(x.id))continue;const c=combo(x,M);if(c){done.add(x.id);c.forEach(y=>used.add(y.id))}}
  for(const x of M){if(used.has(x.id))continue;const c=combo(x,K.filter(k=>!done.has(k.id)));if(c){used.add(x.id);c.forEach(y=>done.add(y.id))}}
- const rep=x=>x.sb==='Pindah akun';for(const x of K)if(rep(x)&&!done.has(x.id)&&x.d>=from&&!ok.has(x.id))res.push({jenis:'tanpa',k:x});
+ const refd=new Set(S.tx.filter(t=>t.ref!=null).map(t=>t.ref)),same=x=>S.tx.some(y=>y.id!==x.id&&y.a===x.a&&y.d===x.d&&y.j===x.j&&y.t===(x.t==='K'?'M':'K')&&y.kt===x.kt);
+ const rep=x=>x.sb==='Pindah akun'&&x.ref==null&&!refd.has(x.id)&&!same(x);for(const x of K)if(rep(x)&&!done.has(x.id)&&x.d>=from&&!ok.has(x.id))res.push({jenis:'tanpa',k:x});
  for(const x of M)if(rep(x)&&!used.has(x.id)&&x.d>=from&&!ok.has(x.id))res.push({jenis:'tanpa',k:x});
  return res.sort((a,b)=>b.k.d.localeCompare(a.k.d))}
 function pindahCard(){const R=pindahCek();return`<div class="card"><h3>Pindah uang yang perlu dicek (4 bulan terakhir)</h3>
