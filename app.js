@@ -521,7 +521,7 @@ const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==u
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
 const flow=(t,a)=>t.iv===a&&t.a!==a?(t.t==='K'?1:t.t==='M'?-1:0):t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-const APPV='98';let V='home',charts={};
+const APPV='99';let V='home',charts={};
 const VIEWS=[['home','Beranda','🏠'],['trx','Transaksi','📋'],['buku','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['fix','Perbaikan dari Claude','🛠️'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','fix','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
@@ -908,6 +908,17 @@ function rep(){LK={};WK={};const P=period(),tree={},C=rangeCtx(P.a,P.b,P.lab);
    <div class="kv" style="border-top:1px solid var(--line,#ddd);margin-top:4px;padding-top:6px"><span><b>= Sisa gaji bulan ini</b></span><span><b class="${sisa<0?'dn':''}">${rp(sisa)}</b></span></div>
    ${sisa<0?(carry>=-sisa?`<div class="st ok">Kurang ${rp(-sisa)} ditutup dari sisa gaji bulan-bulan sebelumnya (tersedia ${rp(carry)}).</div>`:`<div class="st w">⚠️ Kurang ${rp(-sisa)}${carry?`; sisa gaji bulan sebelumnya hanya ${rp(carry)}`:''}. Ada pemakaian yang uangnya bukan dari gaji (misalnya THR, uang jasa, atau pencairan reksadana). Ketuk transaksinya › Ubah › pilih "Uang dari" yang benar.</div>`):''}
    <div class="tiny">Sisa gaji bulan ini = gaji masuk − semua yang "Uang dari"-nya Gaji − uang yang didiamkan di GoPay Tabungan.</div>
+   ${(()=>{if(!B.G.length)return'';const GP=udPocket().filter(n=>n!=='Uang Jasa'),prevD=ds(new Date(pd(P.a).getTime()-864e5)),endD=P.b<today?P.b:today,A0=GP.reduce((p,n)=>p+bal(n,prevD),0),E=GP.map(n=>[n,bal(n,endD)]).filter(x=>x[1]),E1=E.reduce((p,x)=>p+x[1],0),SB=(B.use['Sisa bulan lalu']||{v:0}).v,C=E1-(A0-SB+sisa+B.simpan);
+    const kv=(l,v,b)=>`<div class="kv"><span>${b?'<b>':''}${l}${b?'</b>':''}</span><span>${b?'<b>':''}${rp(v)}${b?'</b>':''}</span></div>`;
+    return`<details class="tip" open><summary><b>🔎 Rincian: sisa gaji ini ada di mana?</b></summary>
+    ${kv('Saldo akun gaji akhir bulan lalu ('+fdate(prevD)+')',A0)}
+    ${SB?kv('− Dipakai dari uang bulan lalu',-SB):''}
+    ${kv('+ Sisa gaji bulan ini',sisa)}
+    ${B.simpan?kv('+ Disimpan di GoPay Tabungan',B.simpan):''}
+    ${C?kv('± Uang titipan & uang lain (uang kos / Disan / jasa / riba / pencairan yang masuk − keluar, bunga, pembulatan)',C):''}
+    ${kv('= Saldo akun gaji ('+fdate(endD)+')',E1,1)}
+    <div class="tiny" style="margin-top:4px">${E.map(x=>`<span class="ac" data-acc="${esc(x[0])}">${esc(x[0])} ${rp(x[1])}</span>`).join(' · ')}</div>
+    <div class="tiny">Akun gaji = Dompet, bank, e-wallet & kas RDN (tanpa Uang Jasa).</div></details>`})()}
    ${oth?`<h3 style="margin-top:12px">Dibayar pakai uang lain (tidak mengurangi gaji)</h3>${oth}`:''}
    <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">"Uang dari" diisi otomatis: pengeluaran dari uang jasa / uang kos / uang Disan / Kantong Uang Riba mengikuti akunnya; tabungan yang uangnya berasal dari "sisa uang jasa" atau dari pencairan reksadana dilacak dari transfer sebelumnya; pemakaian sebelum gaji masuk bulan itu dihitung "Sisa bulan lalu". Kalau ada yang salah, buka transaksinya › Ubah › pilih "Uang dari".</div></details>`})()}
   <button class="b" id="rpPdf" style="width:100%;margin-top:8px">🖨 Cetak / simpan PDF laporan ${esc(P.lab)}</button></div>
