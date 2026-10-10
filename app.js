@@ -507,7 +507,7 @@ const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==u
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
 const flow=(t,a)=>t.iv===a&&t.a!==a?(t.t==='K'?1:t.t==='M'?-1:0):t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-const APPV='92';let V='home',charts={};
+const APPV='93';let V='home',charts={};
 const VIEWS=[['home','Beranda','🏠'],['trx','Transaksi','📋'],['buku','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['fix','Perbaikan dari Claude','🛠️'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','fix','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
@@ -810,6 +810,19 @@ function rangeCtx(a,b,lab){const idI=idsOf(t=>inR(t,a,b)&&t.tj==='Pendapatan'&&t
   fI:[{ids:idI},'Pendapatan · '+lab,{lines:SUMBER.Pendapatan.map(x=>[x,income(a,b,x),{tj:'Pendapatan',sb:x,tipe:'M',from:a,to:b}]).filter(x=>x[1]).concat([['= Total pendapatan',inc,null,1]])}],
   fE:[{ids:idE.concat(idT)},'Pengeluaran · '+lab,{lines:SUMBER.Pengeluaran.map(x=>[x,expense(a,b,x),{tj:'Pengeluaran',sb:x,from:a,to:b}]).filter(x=>x[1]).concat(tb?[['+ Tabungan bersih',tb,{ids:idT}]]:[],[['= Total pengeluaran',exp,null,1]])}],
   fS:[{ids:idI.concat(idE,idT)},'Selisih · '+lab,{lines:[['Pendapatan',inc,{ids:idI}],['− Pengeluaran (termasuk tabungan bersih)',exp,{ids:idE.concat(idT)}],['= Selisih',inc-exp,null,1]]}]}}
+/* Arus uang pribadi (Dompet, Uang Jasa, bank, e-wallet, kas RDN) dalam satu periode: dari mana masuk, ke mana keluar */
+function arusPribadi(a,b){const P=S.acc.filter(x=>x.g==='Pribadi'||x.g==='Investasi (kas RDN)').map(x=>x.n),inP=n=>P.includes(n),G={},T=n=>S.acc.find(x=>x.n===n)?.g||'';
+ const put=(k,v,t)=>{(G[k]=G[k]||{v:0,ids:[]}).v+=v;G[k].ids.push(t.id)};
+ const prev=ds(new Date(pd(a).getTime()-864e5)),open=P.reduce((s,n)=>s+bal(n,prev),0),close=P.reduce((s,n)=>s+bal(n,b),0);
+ for(const t of S.tx){if(!inR(t,a,b))continue;const ia=inP(t.a),it=t.t==='T'&&inP(t.tu);if(!ia&&!it)continue;if(ia&&it)continue;
+  const v=t.t==='T'?(it?t.j:-t.j):(t.t==='M'?t.j:-t.j),o=t.t==='T'?(it?t.a:t.tu):'',go=T(o);let k;
+  if(t.iv==='Reksadana Dana Uang Kos Mama'||t.sb==='Reksadana uang kos mama')k='titip';else if(t.iv)k=v>0?'cair':'setor';
+  else if(t.t==='T'){k=go==='Dana Riba'?(/Pinjam/.test(t.kt)?'pinjamRiba':v<0&&t.kt==='Ganti uang riba'?'gantiRiba':'riba'):/Titipan/.test(go)?'titip':go==='Investasi'?(v>0?'cair':'setor'):'lain'}
+  else if(t.sb==='Dana riba')k='riba';
+  else if(t.tj==='Pendapatan')k=t.sb==='Gaji'&&!/Hasil investasi/.test(t.kt)?'gaji':t.sb==='Jasa'?'jasa':/Uang Kos|Uang Disan/.test(t.sb)?'titip':'masukLain';
+  else if(t.tj==='Pengeluaran')k=/Uang Kos|Uang Disan|Kedai/.test(t.sb)?'titip':isRefund(t)?'kembali':t.sb==='Pengeluaran Jasa'?'keluarJasa':'keluarGaji';
+  else if(t.tj==='Tabungan')k=v>0?'cair':'setor';else k='lain';put(k,v,t)}
+ const g=k=>G[k]||{v:0,ids:[]};return{open,close,g,prev}}
 function rep(){LK={};WK={};const P=period(),tree={},C=rangeCtx(P.a,P.b,P.lab);
  for(const t of S.tx){if(!inR(t,P.a,P.b)||t.tj==='Pindah Uang')continue;const x=tree[t.tj]=tree[t.tj]||{v:0,s:{}},y=x.s[t.sb]=x.s[t.sb]||{v:0,k:{}};
   const sg=t.tj==='Tabungan'?(t.t==='K'?1:-1):isRefund(t)?-1:1;x.v+=t.j*sg;y.v+=t.j*sg;y.k[t.kt]=(y.k[t.kt]||0)+t.j*sg}
@@ -822,6 +835,16 @@ function rep(){LK={};WK={};const P=period(),tree={},C=rangeCtx(P.a,P.b,P.lab);
   <div class="tiny" style="margin-top:6px">Pengeluaran sudah termasuk tabungan bersih ${rp(C.tb)}. Pindah uang tidak dihitung.</div>
   ${(()=>{const R=S.tx.filter(t=>isBack(t)&&inR(t,P.a,P.b));return R.length?`<div class="kv" style="margin-top:6px"><span>↩️ Uang kembali (tidak dihitung pendapatan)</span><span class="ac" data-l="${LKs({ids:R.map(t=>t.id),title:'Uang kembali · '+P.lab})}">${R.length} · ${rp(R.reduce((s,t)=>s+t.j,0))}</span></div>`:''})()}
   <div class="tiny" style="margin-top:6px"><span class="ac" data-l="${LKs({rf:1,title:'Semua uang kembali'})}">↩️ Lihat semua uang kembali (semua waktu)</span></div>
+  ${(()=>{const A=arusPribadi(P.a,P.b),L=(lab,k,neg)=>{const x=A.g(k);if(!x.v)return'';return`<div class="kv"><span>${lab}</span><span class="ac" data-l="${LKs({ids:x.ids,title:lab.replace(/^[+−±] /,'')+' · '+P.lab})}"><span class="${x.v>0?'up':'dn'}">${x.v>0?'+':'−'}${rp(Math.abs(x.v))}</span> ›</span></div>`};
+   const sum=['gaji','jasa','masukLain','cair','pinjamRiba','titip','kembali','keluarGaji','keluarJasa','setor','gantiRiba','riba','lain'].reduce((p,k)=>p+A.g(k).v,0);
+   return`</div><div class="card"><h3>💰 Uang pribadi & sisa gaji · ${esc(P.lab)}</h3><div class="tiny">Dompet, Uang Jasa, bank, e-wallet & kas RDN. Ketuk angka untuk melihat transaksinya.</div>
+   <div class="kv"><span>Saldo uang pribadi awal (${fdate(A.prev)})</span><span><b>${rp(A.open)}</b></span></div>
+   ${L('+ Gaji masuk','gaji')}${L('+ Uang jasa masuk','jasa')}${L('+ Pemasukan lain (dividen, hadiah, dll.)','masukLain')}${L('+ Dicairkan dari investasi','cair')}${L('+ Pinjam dari uang riba','pinjamRiba')}
+   ${L('± Uang kos / Disan lewat akun pribadi (bersih)','titip')}${L('+ Uang kembali','kembali')}
+   ${L('− Pengeluaran (uang gaji)','keluarGaji')}${L('− Pengeluaran (uang jasa)','keluarJasa')}${L('− Ditabung ke investasi','setor')}${L('− Ganti uang riba','gantiRiba')}${L('± Riba (bunga/dividen dipindah)','riba')}${L('± Lainnya','lain')}
+   <div class="kv" style="border-top:1px solid var(--line,#ddd);margin-top:4px;padding-top:6px"><span><b>= Sisa uang pribadi akhir (${fdate(P.b<today?P.b:today)})</b></span><span><b>${rp(A.close)}</b></span></div>
+   ${Math.abs(A.open+sum-A.close)>0.5?`<div class="st w">Selisih hitungan ${rp(A.open+sum-A.close)}</div>`:'<div class="tiny">✓ Cocok dengan saldo akun pribadimu.</div>'}
+   <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">Sisa gaji = gaji dikurangi semua yang keluar dari akun pribadimu. Pengeluaran yang dibayar dari Kantong Uang Riba (pinjam uang riba) tidak memakai gajimu, jadi tidak muncul di sini (lihat Amanah › Riba). Uang kos & uang Disan hanya numpang lewat di akun pribadimu; yang tertulis di sini selisih bersihnya (plus = uang titipan masih ada di akun pribadimu, minus = kamu mengembalikan uang titipan).</div></details>`})()}
   <button class="b" id="rpPdf" style="width:100%;margin-top:8px">🖨 Cetak / simpan PDF laporan ${esc(P.lab)}</button></div>
  <div class="card tree"><h3>Rincian (ketuk untuk asal-usulnya)</h3>${['Pendapatan','Pengeluaran','Tabungan'].map(tj=>{const x=tree[tj];if(!x)return'';
   return rw('n0',tj==='Tabungan'?'Tabungan bersih (semua)':tj,x.v,{tj},tj)+Object.entries(x.s).sort((a,b)=>b[1].v-a[1].v).map(([sb,y])=>
