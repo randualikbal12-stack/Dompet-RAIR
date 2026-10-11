@@ -531,7 +531,7 @@ const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==u
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
 const flow=(t,a)=>t.iv===a&&t.a!==a?(t.t==='K'?1:t.t==='M'?-1:0):t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-const APPV='104';let V='home',charts={};
+const APPV='105';let V='home',charts={};
 const VIEWS=[['home','Beranda','🏠'],['trx','Transaksi','📋'],['buku','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['fix','Perbaikan dari Claude','🛠️'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','fix','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
@@ -895,12 +895,21 @@ function gajiBulan(a,b){const G=S.tx.filter(t=>inR(t,a,b)&&t.t==='M'&&t.tj==='Pe
    const x=us-Math.max(0,av);if(x>0&&L.some(t=>(use['Sisa bulan lalu']||{L:[]}).L.some(z=>z[0]===t)))utang.push({a:X,v:Math.min(x,(use['Sisa bulan lalu']||{v:0}).v),L})}}
  const ut=utang.reduce((p,u)=>p+u.v,0);
  /* lokasi sisa gaji: uang baru di tiap akun (saldo akhir − saldo awal bulan, tanpa titipan & yang disimpan) */
- const loc=[];if(G.length){const sisa0=G.reduce((p,t)=>p+t.j,0)-(use.Gaji||{v:0}).v-simpan-ut;let r=sisa0;
-  const nw=P.filter(n=>n!=='Uang Jasa').map(n=>{let v=bal(n,endD)-Math.max(0,bal(n,prevD));if(n===GP)v-=owed(endD)-Math.min(owed(prevD),Math.max(0,bal(n,prevD)))+simpan;return[n,v]}).filter(x=>x[1]>0).sort((p,q)=>q[1]-p[1]);
-  for(const[n,v]of nw){if(r<=0)break;const x=Math.min(v,r);loc.push([n,x]);r-=x}if(r>0)loc.push(['',r])}
- return{G,use,simpan,utang,ut,loc}}
+ const loc=[];let lain=0;if(G.length){const sisa0=G.reduce((p,t)=>p+t.j,0)-(use.Gaji||{v:0}).v-ut;let r=sisa0;
+  const PP=P.filter(n=>n!=='Uang Jasa'),inM=S.tx.filter(t=>t.d>=a&&t.d<=endD);
+  const oldU=n=>inM.filter(t=>t.a===n).reduce((p,t)=>p+udParts(t).filter(([k,v])=>v>0&&(k==='Sisa bulan lalu'||k==='Uang riba')).reduce((q,[k,v])=>q+v,0),0);
+  const NG=/\b(dividen|bunga|pencairan|riba|jasa|melolo|ipo|penjualan)\b/i;
+  const nonG=n=>{let v=0;for(const t of inM.filter(t=>onAcc(t,n)).sort(txCmp)){if(G.includes(t))continue;const f=flow(t,n)*t.j;
+    if(f>0&&((t.t==='M'&&!isBack(t))||(t.t==='T'&&P.includes(t.a)&&NG.test(t.ket||''))))v+=f;else if(f<0)v=Math.max(0,v+f)}return v};
+  const nonIn=inM.reduce((p,t)=>p+((t.t==='M'&&PP.includes(t.a)&&!G.includes(t)&&!isBack(t))||(t.t==='T'&&PP.includes(t.tu)&&!P.includes(t.a))?t.j:0),0);
+  const nonOut=inM.reduce((p,t)=>p+(PP.includes(t.a)?udParts(t).filter(([k,v])=>k!=='Gaji'&&k!=='Sisa bulan lalu').reduce((q,[k,v])=>q+v,0):0),0);
+  const nonRet=Math.max(0,nonIn-nonOut-(bal(GP,endD)>0?Math.max(0,owed(endD)-owed(prevD)):0));
+  const nw=PP.map(n=>{let v=bal(n,endD)-Math.max(0,bal(n,prevD)-oldU(n));if(n===GP)v-=Math.max(0,owed(endD)-Math.max(0,owed(prevD)-Math.max(0,bal(n,prevD))));v=Math.min(v,bal(n,endD)-nonG(n));return[n,v]}).filter(x=>x[1]>0).sort((p,q)=>q[1]-p[1]);
+  r=Math.min(r,Math.max(0,nw.reduce((p,x)=>p+x[1],0)-nonRet));lain=sisa0-r;
+  if(sisa0<0)lain=0;for(const[n,v]of nw){if(r<=0)break;const x=Math.min(v,r);loc.push([n,x]);r-=x}}
+ return{G,use,simpan,utang,ut,loc,lain}}
 /* sisa gaji per bulan (tanpa sisa bulan lalu) dan sisa yang dibawa (hanya untuk menutup bulan yang kurang) */
-function gajiSisa(y,m){const a=y+'-'+String(m+1).padStart(2,'0')+'-01',b=mEnd(y,m),B=gajiBulan(a,b),gj=B.G.reduce((p,t)=>p+t.j,0),u=(B.use.Gaji||{v:0}).v;return{B,gj,u,s:gj-u-B.simpan-B.ut}}
+function gajiSisa(y,m){const a=y+'-'+String(m+1).padStart(2,'0')+'-01',b=mEnd(y,m),B=gajiBulan(a,b),gj=B.G.reduce((p,t)=>p+t.j,0),u=(B.use.Gaji||{v:0}).v;return{B,gj,u,s:gj-u-B.ut-B.lain}}
 function gajiCarry(y,m){const P=udPocket().filter(n=>n!=='Uang Jasa');let c=S.acc.filter(x=>P.includes(x.n)&&(x.od||'')<='2024-02-01').reduce((p,x)=>p+Math.max(0,+x.o||0),0);for(let yy=2024,mm=1;yy<y||(yy===y&&mm<m);){const x=gajiSisa(yy,mm);c=Math.max(0,c+x.s);const e=mEnd(yy,mm),cap=P.reduce((p,n)=>p+Math.max(0,bal(n,e)),0);c=Math.min(c,cap);mm++;if(mm>11){mm=0;yy++}}return c}
 /* Arus uang pribadi (Dompet, Uang Jasa, bank, e-wallet, kas RDN) dalam satu periode: dari mana masuk, ke mana keluar */
 function arusPribadi(a,b,P){P=P||S.acc.filter(x=>x.g==='Pribadi'||x.g==='Investasi (kas RDN)').map(x=>x.n);const PR=S.acc.filter(x=>x.g==='Pribadi'||x.g==='Investasi (kas RDN)').map(x=>x.n),inP=n=>P.includes(n),G={},T=n=>S.acc.find(x=>x.n===n)?.g||'';
@@ -927,7 +936,7 @@ function rep(){LK={};WK={};const P=period(),tree={},C=rangeCtx(P.a,P.b,P.lab);
   <div class="tiny" style="margin-top:6px">Pengeluaran sudah termasuk tabungan bersih ${rp(C.tb)}. Pindah uang tidak dihitung.</div>
   ${(()=>{const R=S.tx.filter(t=>isBack(t)&&inR(t,P.a,P.b));return R.length?`<div class="kv" style="margin-top:6px"><span>↩️ Uang kembali (tidak dihitung pendapatan)</span><span class="ac" data-l="${LKs({ids:R.map(t=>t.id),title:'Uang kembali · '+P.lab})}">${R.length} · ${rp(R.reduce((s,t)=>s+t.j,0))}</span></div>`:''})()}
   <div class="tiny" style="margin-top:6px"><span class="ac" data-l="${LKs({rf:1,title:'Semua uang kembali'})}">↩️ Lihat semua uang kembali (semua waktu)</span></div>
-  ${(()=>{const B=gajiBulan(P.a,P.b),gj=B.G.reduce((p,t)=>p+t.j,0),U=B.use.Gaji||{v:0,L:[]},sisa=gj-U.v-B.simpan-B.ut;
+  ${(()=>{const B=gajiBulan(P.a,P.b),gj=B.G.reduce((p,t)=>p+t.j,0),U=B.use.Gaji||{v:0,L:[]},sisa=gj-U.v-B.ut-B.lain;
    const row=(t,v)=>{const[x,y]=dariKe(t);return`<div class="kv cl" data-tx="${t.id}"><span>${fdate(t.d)} · ${esc(t.ket||t.kt).slice(0,60)}<div class="tiny">${esc(x)} → ${esc(y)}</div></span><span class="${v>0?'dn':'up'}">${v>0?'−':'+'}${rp(Math.abs(v))}</span></div>`};
    const oth=UD_L.filter(k=>k!=='Gaji'&&B.use[k]&&B.use[k].v).map(k=>`<div class="kv"><span>${esc(k)}</span><span class="ac" data-l="${LKs({ids:B.use[k].L.map(z=>z[0].id),title:'Dibayar pakai '+k+' · '+P.lab})}">${rp(B.use[k].v)} ›</span></div>`).join('');
    return`</div><div class="card"><h3>💰 Gaji · ${esc(P.lab)}</h3>
@@ -935,12 +944,10 @@ function rep(){LK={};WK={};const P=period(),tree={},C=rangeCtx(P.a,P.b,P.lab);
    <div class="tiny" style="margin:6px 0 2px">Dipakai untuk (ketuk untuk detail):</div>
    ${U.L.sort((p,q)=>txCmp(p[0],q[0])).map(([t,v])=>row(t,v)).join('')||'<div class="tiny">—</div>'}
    ${B.utang.map(u=>`<div class="kv cl" data-l="${LKs({ids:u.L.map(t=>t.id),title:'Dibayar sebelum gaji masuk · '+u.a})}"><span>Bayar utang uang titipan (uang kos / Disan / jasa) yang terpakai di ${esc(u.a)} sebelum gaji masuk<div class="tiny">${u.L.map(t=>fdate(t.d)+' '+esc((t.ket||t.kt).slice(0,40))+' '+rp(t.j)).join('; ')} — uang lamamu sendiri di ${esc(u.a)} tidak cukup</div></span><span class="dn">−${rp(u.v)}</span></div>`).join('')}
-   ${B.simpan?`<div class="kv"><span>− Disimpan di GoPay Tabungan (sampai akhir bulan)</span><span class="dn">−${rp(B.simpan)}</span></div>`:''}
+   ${B.lain?`<div class="kv cl" data-l="${LKs({ids:UD_L.filter(k=>k!=='Gaji'&&B.use[k]).flatMap(k=>B.use[k].L.map(z=>z[0].id)),title:'Dibayar pakai uang lain · '+P.lab})}"><span>Sudah keluar untuk pengeluaran yang tercatat memakai uang lain (mis. uang kos / Disan yang ditukar dengan gaji)<div class="tiny">Uang ini sudah tidak ada di saldo akun mana pun.</div></span><span class="dn">−${rp(B.lain)}</span></div>`:''}
    <div class="kv" style="border-top:1px solid var(--line,#ddd);margin-top:4px;padding-top:6px"><span><b>= Sisa gaji bulan ini</b></span><span><b class="${sisa<0?'dn':''}">${rp(sisa)}</b></span></div>
    ${B.G.length?(sisa<0?`<div class="st">Gaji kurang ${rp(-sisa)}: pemakaian bulan ini lebih besar dari gaji yang masuk.</div>`:sisa>0?`<div class="kv"><span><b>Sisa gaji itu ada di</b></span><span>${B.loc.map(([n,v])=>n?`<span class="ac" data-acc="${esc(n)}">${esc(n)} ${rp(v)}</span>`:`<span class="dn">${rp(v)} tidak ada di saldo akun mana pun ⚠️</span>`).join(' · ')}</span></div>`:''):''}
-   ${B.loc.some(z=>!z[0])?`<div class="st">⚠️ Sebagian sisa gaji tidak ada di saldo akun. Artinya ada pemakaian yang sebenarnya dibayar dari gaji, tapi tercatat memakai uang lain (misalnya uang kos yang ditukar dengan gaji). Cek daftar "Dibayar pakai uang lain" di bawah.</div>`:''}
-   ${B.simpan?`<div class="tiny">Uang gaji ${rp(B.simpan)} yang disimpan ada di GoPay Tabungan.</div>`:''}
-   <div class="tiny">Sisa gaji = gaji masuk bulan ini − semua pemakaian dari gaji bulan ini. Sisa gaji bulan lalu tidak ikut dihitung.</div>
+   <div class="tiny">Sisa gaji = uang gaji bulan ini yang masih ada di saldo akun. Yang dihitung keluar hanya uang yang sudah benar-benar keluar. Sisa gaji bulan lalu tidak ikut dihitung.</div>
    ${oth?`<h3 style="margin-top:12px">Dibayar pakai uang lain (tidak mengurangi gaji)</h3>${oth}`:''}
    <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">"Uang dari" diisi otomatis: pengeluaran dari uang jasa / uang kos / uang Disan / Kantong Uang Riba mengikuti akunnya; tabungan yang uangnya berasal dari "sisa uang jasa" atau dari pencairan reksadana dilacak dari transfer sebelumnya; pemakaian sebelum gaji masuk bulan itu dihitung "Sisa bulan lalu". Kalau ada yang salah, buka transaksinya › Ubah › pilih "Uang dari".</div></details>`})()}
   <button class="b" id="rpPdf" style="width:100%;margin-top:8px">🖨 Cetak / simpan PDF laporan ${esc(P.lab)}</button></div>
