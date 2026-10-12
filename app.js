@@ -535,7 +535,7 @@ const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==u
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
 const flow=(t,a)=>t.iv===a&&t.a!==a?(t.t==='K'?1:t.t==='M'?-1:0):t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-const APPV='108';let V='home',charts={};
+const APPV='109';let V='home',charts={};
 const VIEWS=[['home','Beranda','🏠'],['trx','Buku Akun','📒'],['buku','Buku Akun','📒'],['rwy','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['fix','Perbaikan dari Claude','🛠️'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','fix','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
@@ -798,7 +798,7 @@ const RBK=b=>'📒 '+b.n.replace(/^📒\s*/,'');
 const BUKU_INV=new Proxy([],{get(_,k){const L=bukuR().map(b=>[RBK(b),(t)=>(b.rule==='riba'&&RIBA_RULE(t)&&!b.rem.includes(t.id))||b.add.includes(t.id),b.rule==='riba'?'Total riba yang pernah diterima':'Total',b]);const v=L[k];return typeof v==='function'?v.bind(L):v}});
 const invFlow=(t,riba)=>riba?(t.t==='K'?-1:1):(t.t==='M'?-1:1);
 function bukuInv(){const[nm,fl,lbl,BK]=BUKU_INV.find(x=>x[0]===BA.a),M=invEvMap(),riba=true,[y,mm]=BA.m.split('-').map(Number),a0=BA.m+'-01',a1=mEnd(y,mm-1);
- const ALL=S.tx.filter(t=>fl(t,M)).sort(txCmp),nf=v=>v?rp(v).replace('Rp',''):'';
+ const isRb=BK.rule==='riba',ALL=S.tx.filter(t=>fl(t,M)&&(!isRb||RWF==='semua'||rbGrp(t)===RWF)).sort(txCmp),nf=v=>v?rp(v).replace('Rp',''):'';
  let run=ALL.filter(t=>t.d<a0).reduce((p,t)=>p+invFlow(t,riba)*t.j,0);const open=run;let tin=0,tout=0,rows='',cur='';
  for(const t of ALL.filter(t=>t.d>=a0&&t.d<=a1)){const f=invFlow(t,riba);if(t.d!==cur){cur=t.d;rows+=`<tr class="bdh"><td colspan="4">${HARI[pd(t.d).getDay()]}, ${fdate(t.d)}</td></tr>`}
   run+=f*t.j;if(f>0)tin+=t.j;else tout+=t.j;
@@ -811,7 +811,8 @@ function bukuInv(){const[nm,fl,lbl,BK]=BUKU_INV.find(x=>x[0]===BA.a),M=invEvMap(
   <div class="st" style="margin-top:6px">📒 Ini <b>bukan akun</b>, hanya buku riwayat (kumpulan transaksi dari akun mana pun). Tidak mengubah saldo apa pun.${BK.rule==='riba'?' Uang ribanya sendiri ada di akun Kantong Uang Riba.':''}</div>
   <div class="g2" style="margin-top:6px"><button class="b" id="rbAdd">➕ Tambah transaksi</button><button class="b" id="rbRen">✏️ Ubah nama</button></div>
   <div class="g2" style="margin-top:6px"><button class="b" id="rbNew">📒 Buat buku riwayat baru</button><button class="b" id="rbDel" style="color:#c33">🗑 Hapus buku ini</button></div></div>
- <div class="card bk"><h3>${esc(nm)} · ${BULAN[mm-1]} ${y}</h3>
+ ${isRb?rbSummary(fl,y,mm):''}
+ <div class="card bk"><h3>${esc(nm)}${isRb&&RWF!=='semua'?' · '+{bunga:'Bunga saja',dividen:'Dividen saja',lain:'Lainnya saja'}[RWF]:''} · ${BULAN[mm-1]} ${y}</h3>
   <div class="tw"><table class="bkt"><tr><th>Keterangan</th><th class="n">${BK.rule==='riba'?'Riba masuk':'Masuk'}</th><th class="n">${BK.rule==='riba'?'Keluar / pajak':'Keluar'}</th><th class="n">Total</th></tr>
   <tr class="sa"><td>${esc(lbl)} s/d akhir ${BULAN[(mm+10)%12]}</td><td></td><td></td><td class="n"><b>${rp(open).replace('Rp','')}</b></td></tr>
   ${rows||'<tr><td colspan="4" class="tiny" style="padding:14px 4px">Tidak ada transaksi di buku ini pada bulan ini</td></tr>'}
@@ -820,6 +821,7 @@ function bukuInv(){const[nm,fl,lbl,BK]=BUKU_INV.find(x=>x[0]===BA.a),M=invEvMap(
   <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">${BK.rule!=='riba'?'Buku riwayat buatanmu sendiri. Tambah transaksi dengan tombol ➕, keluarkan dengan ➖ di baris transaksinya. Total = uang masuk − uang keluar dari transaksi di buku ini.':riba?'Semua uang riba (bunga bank, bunga deposito, dividen saham bank, untung reksadana non-syariah) dari akun mana pun, beserta pajaknya. Baris yang belum dipindah ke Kantong Uang Riba diberi catatan, dan dicatat sebagai utang ke uang riba. Total = jumlah riba yang pernah diterima.':'Semua uang yang disetor ke / dicairkan dari investasi ini, dari akun mana pun. Bersih = total disetor − total dicairkan (uang cair termasuk keuntungan, jadi bisa beda dengan modal di menu Investasi).'} Ketuk nama akun untuk membuka Buku Akun asalnya. Baris 📈 = detail pembelian/penjualan di riwayat investasi.</div></details></div>`;
  const setM=d=>{BA.m=ds(d).slice(0,7);bukuRwy()};
  $('baA').onchange=e=>{if(e.target.value==='__new'){const v=prompt('Nama buku riwayat baru:');if(v&&v.trim()){const b={id:'b'+Date.now(),n:v.trim(),rule:null,add:[],rem:[]};bukuR().push(b);RWA=RBK(b);save()}bukuRwy();return}RWA=e.target.value;bukuRwy()};$('baM').onchange=e=>{if(e.target.value){BA.m=e.target.value;bukuRwy()}};
+ document.querySelectorAll('[data-rwf]').forEach(b=>b.onclick=()=>{RWF=b.dataset.rwf;bukuRwy()});document.querySelectorAll('[data-rwp]').forEach(b=>b.onclick=()=>{RWP=b.dataset.rwp;bukuRwy()});
  document.querySelectorAll('.rbRem').forEach(el=>el.onclick=e=>{e.stopPropagation();const id=+el.dataset.rr,t=byId(id);if(!confirm('Keluarkan dari buku ini?\n'+(t.ket||t.kt)+' · '+rp(t.j)+'\n(Transaksinya tidak dihapus, hanya tidak ditampilkan di buku ini.)'))return;BK.add=BK.add.filter(x=>x!==id);if(BK.rule==='riba'&&RIBA_RULE(t)&&!BK.rem.includes(id))BK.rem.push(id);save();bukuRwy()});
  $('rbRen').onclick=()=>{const v=prompt('Nama buku riwayat:',BK.n.replace(/^📒\s*/,''));if(v&&v.trim()){BK.n=v.trim();RWA=RBK(BK);save();bukuRwy()}};
  $('rbNew').onclick=()=>{const v=prompt('Nama buku riwayat baru (mis. Biaya kuliah, Motor, Hadiah nikah):');if(!v||!v.trim())return;const b={id:'b'+Date.now(),n:v.trim(),rule:null,add:[],rem:[]};bukuR().push(b);RWA=RBK(b);save();bukuRwy()};
@@ -831,7 +833,36 @@ function bukuInv(){const[nm,fl,lbl,BK]=BUKU_INV.find(x=>x[0]===BA.a),M=invEvMap(
  jbMark();$('baP').onclick=()=>setM(new Date(y,mm-2,1));$('baN').onclick=()=>setM(new Date(y,mm,1));$('bkDaftar').onclick=()=>go('trx');$('bkAkun').onclick=()=>go('buku')}
 function bkSel(sel){const A=S.acc.filter(a=>a.n===sel||bal(a.n)||S.tx.some(t=>onAcc(t,a.n))).map(a=>a.n),o=v=>`<option ${v===sel?'selected':''}>${esc(v)}</option>`;return A.map(o).join('')}
 function rwSel(sel){const o=v=>`<option ${v===sel?'selected':''}>${esc(v)}</option>`;return BUKU_INV.map(x=>x[0]).map(o).join('')+'<option value="__new">➕ Buat buku riwayat baru…</option>'}
-let RWA=null;
+let RWA=null,RWF='semua',RWP='tahun';
+/* riba: bunga / dividen / lainnya */
+const rbGrp=t=>{const x=(t.kt||'')+' '+(t.ket||'');if(/dividen/i.test(x))return'dividen';if(/bunga|pajak bunga|selisih bunga/i.test(x)&&!/deposito/i.test(x))return'bunga';if(/deposito/i.test(x))return'bunga';return'lain'};
+const rbKode=t=>{if(!/[A-Z]{4}/.test(t.ket||'')||/^Bayar Top up pajak$/.test((t.ket||'').trim())){for(const x of S.tx.filter(x=>x.d===t.d&&x!==t)){for(const m of (x.ket||'').matchAll(/Dividen\s+([A-Z]{4})\s+Rp([\d.]+)/g))if(+m[2].replace(/\./g,'')===t.j)return m[1]}}return rbKode0(t)};
+const rbKode0=t=>{const m=(t.ket||'').match(/dividen\s*(?:saham\s*)?([A-Z]{4})\b/i)||(t.ket||'').match(/\b(BBRI|BBCA|BMRI|BBNI|ASII|POWR|MARK|TLKM)\b/);return m?m[1].toUpperCase():'Lainnya'};
+function rbSummary(fl,y,mm){const a0=RWP==='bulan'?y+'-'+String(mm).padStart(2,'0')+'-01':RWP==='tahun'?y+'-01-01':'0000',a1=RWP==='bulan'?mEnd(y,mm-1):RWP==='tahun'?y+'-12-31':'9999';
+ const T=S.tx.filter(t=>fl(t)&&t.d>=a0&&t.d<=a1),nf=v=>v?rp(v).replace('Rp',''):'0',sg=t=>t.t==='K'?-1:1;
+ const B=T.filter(t=>rbGrp(t)==='bunga'),D=T.filter(t=>rbGrp(t)==='dividen'),Ln=T.filter(t=>rbGrp(t)==='lain');
+ const by=(L,key)=>{const m={};for(const t of L){const k=key(t);(m[k]=m[k]||[]).push(t)}return m};
+ const bRow=(n,L)=>{const g=L.filter(t=>/^Bunga/.test(t.kt)).reduce((p,t)=>p+t.j,0),pj=L.filter(t=>/^Pajak/.test(t.kt)).reduce((p,t)=>p+t.j,0),sl=L.filter(t=>/Selisih/.test(t.kt)).reduce((p,t)=>p+sg(t)*t.j,0),ber=g-pj;
+  return[`<tr class="cl" data-l="${LKs({ids:L.map(t=>t.id),title:'Bunga · '+n})}"><td>${esc(n)}</td><td class="n up">${nf(g)}</td><td class="n dn">${nf(pj)}</td><td class="n">${nf(ber)}</td><td class="n ${sl<0?'dn':sl>0?'up':''}">${sl?(sl>0?'+':'−')+nf(Math.abs(sl)):'0'}</td><td class="n"><b>${nf(ber+sl)}</b></td></tr>`,g,pj,sl]};
+ const BB=by(B,t=>/deposito/i.test(t.ket||'')?'Deposito BPR Kirana (masuk ke '+t.a+')':t.a),bR=Object.keys(BB).sort().map(n=>bRow(n,BB[n]));const tg=bR.reduce((p,r)=>p+r[1],0),tp=bR.reduce((p,r)=>p+r[2],0),ts=bR.reduce((p,r)=>p+r[3],0);
+ const DD=by(D,rbKode),dR=Object.keys(DD).sort().map(k=>{const L=DD[k],m=L.filter(t=>t.t==='M').reduce((p,t)=>p+t.j,0),k2=L.filter(t=>t.t==='K').reduce((p,t)=>p+t.j,0);return[`<tr class="cl" data-l="${LKs({ids:L.map(t=>t.id),title:'Dividen · '+k})}"><td>${esc(k)}</td><td class="n up">${nf(m)}</td><td class="n dn">${nf(k2)}</td><td class="n"><b>${nf(m-k2)}</b></td></tr>`,m,k2]});
+ const dm=dR.reduce((p,r)=>p+r[1],0),dk=dR.reduce((p,r)=>p+r[2],0),lt=Ln.reduce((p,t)=>p+sg(t)*t.j,0);
+ const per=RWP==='bulan'?BULAN[mm-1]+' '+y:RWP==='tahun'?'Tahun '+y:'Semua waktu';
+ return`<div class="card"><h3>📊 Ringkasan riba · ${per}</h3>
+  <div class="seg">${[['bulan','Bulan ini'],['tahun','Tahun ini'],['semua','Semua']].map(([k,l])=>`<button data-rwp="${k}" class="${RWP===k?'on':''}">${l}</button>`).join('')}</div>
+  <h3 style="margin-top:10px">🏦 Bunga bank per sumber</h3>
+  <div class="tw"><table class="bkt"><tr><th>Sumber</th><th class="n">Bunga masuk</th><th class="n">Pajak</th><th class="n">Bersih</th><th class="n">Selisih</th><th class="n">Sesuai bank</th></tr>
+  ${bR.map(r=>r[0]).join('')||'<tr><td colspan="6" class="tiny">Tidak ada bunga di periode ini</td></tr>'}
+  <tr class="tot"><td>TOTAL</td><td class="n up">${nf(tg)}</td><td class="n dn">${nf(tp)}</td><td class="n">${nf(tg-tp)}</td><td class="n">${ts?(ts>0?'+':'−')+nf(Math.abs(ts)):'0'}</td><td class="n"><b>${nf(tg-tp+ts)}</b></td></tr></table></div>
+  <div class="tiny">Bersih = bunga masuk − pajak (hitungan aplikasi). Selisih = koreksi pembulatan agar saldo sama dengan aplikasi bank. Sesuai bank = bunga yang benar-benar masuk ke saldo bank. Ketuk baris untuk rinciannya.</div>
+  <h3 style="margin-top:10px">📈 Dividen per saham</h3>
+  <div class="tw"><table class="bkt"><tr><th>Saham</th><th class="n">Dividen masuk</th><th class="n">Pajak / keluar</th><th class="n">Bersih</th></tr>
+  ${dR.map(r=>r[0]).join('')||'<tr><td colspan="4" class="tiny">Tidak ada dividen di periode ini</td></tr>'}
+  <tr class="tot"><td>TOTAL</td><td class="n up">${nf(dm)}</td><td class="n dn">${nf(dk)}</td><td class="n"><b>${nf(dm-dk)}</b></td></tr></table></div>
+  ${Ln.length?`<div class="kv cl" data-l="${LKs({ids:Ln.map(t=>t.id),title:'Riba lainnya'})}" style="margin-top:6px"><span>Riba lainnya (mis. untung EMAS, disalurkan)</span><span>${rp(lt)} ›</span></div>`:''}
+  <div class="kv" style="margin-top:6px"><span><b>Total riba ${per}</b></span><span><b>${rp(tg-tp+ts+dm-dk+lt)}</b></span></div>
+  <div class="tiny" style="margin-top:8px">Tampilkan di buku di bawah:</div>
+  <div class="seg">${[['semua','Semua'],['bunga','Bunga'],['dividen','Dividen'],['lain','Lainnya']].map(([k,l])=>`<button data-rwf="${k}" class="${RWF===k?'on':''}">${l}</button>`).join('')}</div></div>`}
 function bukuRwy(){const L=BUKU_INV.map(x=>x[0]);if(!RWA||!L.includes(RWA))RWA=L[0];const keep=BA.a;BA.a=RWA;LK={};WK={};bukuInv();BA.a=keep}
 function buku(){if(BA.a==='📈 Investasi · Uang riba (bunga & dividen)')BA.a=RBK(bukuR()[0]);LK={};WK={};if(BUKU_INV.some(x=>x[0]===BA.a)){RWA=BA.a;BA.a=S.acc[0].n;return go('rwy',{nopush:1})}if(!S.acc.some(a=>a.n===BA.a))BA.a=S.acc[0].n;const[y,mm]=BA.m.split('-').map(Number),a0=BA.m+'-01',a1=mEnd(y,mm-1),prev=ds(new Date(y,mm-1,0)),n=BA.a;
  const open=bal(n,prev),L=S.tx.filter(t=>inR(t,a0,a1)&&onAcc(t,n)).sort(txCmp);
