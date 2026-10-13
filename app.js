@@ -535,7 +535,7 @@ const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==u
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
 const flow=(t,a)=>t.iv===a&&t.a!==a?(t.t==='K'?1:t.t==='M'?-1:0):t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-const APPV='112';let V='home',charts={};
+const APPV='113';let V='home',charts={};
 const VIEWS=[['home','Beranda','🏠'],['trx','Buku Akun','📒'],['buku','Buku Akun','📒'],['rwy','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['fix','Perbaikan dari Claude','🛠️'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','fix','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
@@ -2691,6 +2691,31 @@ function fixV(){fixInit();const F=S.fixes||[],G={};F.forEach((f,i)=>{(G[f.g]=G[f
  document.querySelectorAll('[data-fun]').forEach(b=>b.onclick=()=>{const L=G[b.dataset.fun];if(!confirm('Kembalikan perubahan ini seperti sebelum Claude mengubahnya?'))return;
   for(const f of L){const t=byId(f.id);if(f.add){if(t){S.tx=S.tx.filter(x=>x!==t)}}else if(t){for(const k in f.old){if(f.old[k]==null)delete t[k];else t[k]=f.old[k]}}S.fixes[f.i].undone=1}
   save();toast('Perubahan dikembalikan ✓');fixV()})}
+/* ================= v113: input nominal rupiah — titik ribuan, terbilang, tombol +000 ================= */
+const TB_S=['','satu','dua','tiga','empat','lima','enam','tujuh','delapan','sembilan','sepuluh','sebelas'];
+function terbilang(n){n=Math.floor(Math.abs(n));if(n<12)return TB_S[n];if(n<20)return terbilang(n-10)+' belas';if(n<100)return terbilang(Math.floor(n/10))+' puluh'+(n%10?' '+terbilang(n%10):'');
+ if(n<200)return'seratus'+(n-100?' '+terbilang(n-100):'');if(n<1000)return terbilang(Math.floor(n/100))+' ratus'+(n%100?' '+terbilang(n%100):'');
+ if(n<2000)return'seribu'+(n-1000?' '+terbilang(n-1000):'');
+ const U=[[1e12,'triliun'],[1e9,'miliar'],[1e6,'juta'],[1e3,'ribu']];for(const[v,w]of U)if(n>=v)return terbilang(Math.floor(n/v))+' '+w+(n%v?' '+terbilang(n%v):'');return''}
+const RPD=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');
+const rpRaw=s=>{s=String(s==null?'':s);const neg=/^\s*-/.test(s);const d=s.replace(/[^\d]/g,'').replace(/^0+(?=\d)/,'');return d?(neg?'-':'')+d:(neg?'-':'')};
+const rpFmt=r=>{if(!r||r==='-')return r||'';const neg=r[0]==='-',d=neg?r.slice(1):r;return(neg?'-':'')+d.replace(/\B(?=(\d{3})+(?!\d))/g,'.')};
+function rpSkip(el){if(el.hasAttribute('max')||el.inputMode==='decimal'||el.getAttribute('inputmode')==='decimal'||el.step==='any')return true;return['il','itn2','kjt','ntfd','rtg'].includes(el.id)}
+function rpEnhance(el){if(el._rp||el.type!=='number'||rpSkip(el))return;el._rp=1;const init=RPD.get.call(el);el.type='text';el.setAttribute('inputmode','numeric');el.autocomplete='off';
+ const small=!!el.style.width;let info=null;
+ if(!small){info=document.createElement('div');info.className='tiny rpinfo';info.style.cssText='margin-top:3px;line-height:1.35';el.insertAdjacentElement('afterend',info)}
+ const upd=()=>{if(!info)return;const r=rpRaw(RPD.get.call(el)),n=+r||0;
+  info.innerHTML=(n?`<b>${n<0?'−':''}Rp${rpFmt(String(Math.abs(n)))}</b> · ${n<0?'minus ':''}${terbilang(n)} rupiah`:'<span style="opacity:.6">Rp0</span>')+(el.disabled?'':` <span style="white-space:nowrap"><button type="button" class="rpq" data-m="1000" style="min-height:0;padding:1px 7px;margin-left:4px;font-size:12px">+000</button><button type="button" class="rpq" data-m="1000000" style="min-height:0;padding:1px 7px;margin-left:4px;font-size:12px">+.000.000</button></span>`);
+  info.querySelectorAll('.rpq').forEach(b=>b.onmousedown=e=>e.preventDefault());
+  info.querySelectorAll('.rpq').forEach(b=>b.onclick=()=>{const v=(+rpRaw(RPD.get.call(el))||0)*+b.dataset.m;if(!v)return;el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))})};
+ Object.defineProperty(el,'value',{configurable:true,get(){return rpRaw(RPD.get.call(el))},set(v){RPD.set.call(el,rpFmt(rpRaw(v)));upd()}});
+ Object.defineProperty(el,'valueAsNumber',{configurable:true,get(){const r=rpRaw(RPD.get.call(el));return r&&r!=='-'?+r:NaN}});
+ RPD.set.call(el,rpFmt(rpRaw(init)));if(!el.placeholder||/^\d/.test(el.placeholder))el.placeholder='Rp '+(el.placeholder||'0');
+ el.addEventListener('input',()=>{const before=RPD.get.call(el),pos=el.selectionStart,digitsRight=before.slice(pos).replace(/[^\d]/g,'').length;const f=rpFmt(rpRaw(before));if(f!==before){RPD.set.call(el,f);let i=f.length,c=0;while(i>0&&c<digitsRight){i--;if(/\d/.test(f[i]))c++}try{el.setSelectionRange(i,i)}catch(_){}}upd()},true);
+ upd()}
+function rpScan(root){(root.querySelectorAll?root:document).querySelectorAll('input[type="number"]').forEach(rpEnhance)}
+new MutationObserver(ms=>{for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1){if(n.tagName==='INPUT')rpEnhance(n);else rpScan(n)}}).observe(document.documentElement,{childList:true,subtree:true});
+rpScan(document);
 /* ================= MULAI ================= */
 load();save();netS();nav();home();lockStart();viewRestore();setTimeout(autoPx,800);setTimeout(autoBackup,3000);setTimeout(rutNotify,2000);
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
