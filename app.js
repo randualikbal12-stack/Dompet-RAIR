@@ -535,7 +535,7 @@ const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==u
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
 const flow=(t,a)=>t.iv===a&&t.a!==a?(t.t==='K'?1:t.t==='M'?-1:0):t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-const APPV='111';let V='home',charts={};
+const APPV='112';let V='home',charts={};
 const VIEWS=[['home','Beranda','🏠'],['trx','Buku Akun','📒'],['buku','Buku Akun','📒'],['rwy','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['fix','Perbaikan dari Claude','🛠️'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','fix','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
@@ -822,7 +822,7 @@ function bukuInv(){const[nm,fl,lbl,BK]=BUKU_INV.find(x=>x[0]===BA.a),M=invEvMap(
   <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">${BK.rule!=='riba'?'Buku riwayat buatanmu sendiri. Tambah transaksi dengan tombol ➕, keluarkan dengan ➖ di baris transaksinya. Total = uang masuk − uang keluar dari transaksi di buku ini.':riba?'Semua uang riba (bunga bank, bunga deposito, dividen saham bank, untung reksadana non-syariah) dari akun mana pun, beserta pajaknya. Baris yang belum dipindah ke Kantong Uang Riba diberi catatan, dan dicatat sebagai utang ke uang riba. Total = jumlah riba yang pernah diterima.':'Semua uang yang disetor ke / dicairkan dari investasi ini, dari akun mana pun. Bersih = total disetor − total dicairkan (uang cair termasuk keuntungan, jadi bisa beda dengan modal di menu Investasi).'} Ketuk nama akun untuk membuka Buku Akun asalnya. Baris 📈 = detail pembelian/penjualan di riwayat investasi.</div></details></div>`;
  const setM=d=>{BA.m=ds(d).slice(0,7);bukuRwy()};
  $('baA').onchange=e=>{if(e.target.value==='__new'){const v=prompt('Nama buku riwayat baru:');if(v&&v.trim()){const b={id:'b'+Date.now(),n:v.trim(),rule:null,add:[],rem:[]};bukuR().push(b);RWA=RBK(b);save()}bukuRwy();return}RWA=e.target.value;bukuRwy()};$('baM').onchange=e=>{if(e.target.value){BA.m=e.target.value;bukuRwy()}};
- document.querySelectorAll('[data-rwf]').forEach(b=>b.onclick=()=>{RWF=b.dataset.rwf;bukuRwy()});document.querySelectorAll('[data-rwp]').forEach(b=>b.onclick=()=>{RWP=b.dataset.rwp;bukuRwy()});document.querySelectorAll('.tabI').forEach(b=>b.onclick=e=>{e.stopPropagation();tabInfo(+b.dataset.ty)});
+ document.querySelectorAll('[data-rwf]').forEach(b=>b.onclick=()=>{RWF=b.dataset.rwf;bukuRwy()});document.querySelectorAll('[data-rwp]').forEach(b=>b.onclick=()=>{RWP=b.dataset.rwp;bukuRwy()});document.querySelectorAll('.tabI').forEach(b=>b.onclick=e=>{e.stopPropagation();tabInfo(+b.dataset.ty)});document.querySelectorAll('.tabRow').forEach(b=>b.onclick=()=>tabList(b.dataset.ty));
  document.querySelectorAll('.rbRem').forEach(el=>el.onclick=e=>{e.stopPropagation();const id=+el.dataset.rr,t=byId(id);if(!confirm('Keluarkan dari buku ini?\n'+(t.ket||t.kt)+' · '+rp(t.j)+'\n(Transaksinya tidak dihapus, hanya tidak ditampilkan di buku ini.)'))return;BK.add=BK.add.filter(x=>x!==id);if(BK.rule==='riba'&&RIBA_RULE(t)&&!BK.rem.includes(id))BK.rem.push(id);save();bukuRwy()});
  $('rbRen').onclick=()=>{const v=prompt('Nama buku riwayat:',BK.n.replace(/^📒\s*/,''));if(v&&v.trim()){BK.n=v.trim();RWA=RBK(BK);save();bukuRwy()}};
  $('rbNew').onclick=()=>{const v=prompt('Nama buku riwayat baru (mis. Biaya kuliah, Motor, Hadiah nikah):');if(!v||!v.trim())return;const b={id:'b'+Date.now(),n:v.trim(),rule:null,add:[],rem:[]};bukuR().push(b);RWA=RBK(b);save();bukuRwy()};
@@ -841,23 +841,34 @@ const tabF=t=>{const n=tabAcc(t);return n?flow(t,n):0};
 const tabOpen=()=>TABI().reduce((p,n)=>p+(+((S.acc.find(a=>a.n===n)||{}).o)||0),0);
 const isGain=t=>/Keuntungan|Kerugian|Cashback/.test(t.kt||'');
 function tabYears(){const L=S.tx.filter(t=>tabAcc(t)).sort(txCmp),pool=[],Y={};
- for(const t of L){const yy=t.d.slice(0,4),o=Y[yy]=Y[yy]||{set:0,cair:0,putar:0,putC:0,gain:0,ids:[]},f=tabF(t)*t.j;o.ids.push(t.id);
-  if(isGain(t)){o.gain+=f;continue}
-  if(f<0){pool.push({d:t.d,r:-f});o.cair+=-f;continue}
-  let v=f;for(const p of pool){if(!p.r||p.d.slice(0,4)!==yy||(pd(t.d)-pd(p.d))/864e5>14)continue;const x=Math.min(p.r,v);p.r-=x;v-=x;o.putar+=x;Y[p.d.slice(0,4)].putC+=x;if(!v)break}
-  o.set+=f}
+ for(const t of L){const yy=t.d.slice(0,4),o=Y[yy]=Y[yy]||{set:0,cair:0,putar:0,putC:0,gain:0,ids:[],rows:[]},f=tabF(t)*t.j;o.ids.push(t.id);
+  if(isGain(t)){o.gain+=f;o.rows.push({t,k:'gain',v:f,p:0});continue}
+  if(f<0){const pe={d:t.d,r:-f,t};pool.push(pe);o.cair+=-f;o.rows.push({t,k:'cair',v:-f,pe});continue}
+  let v=f,pu=0;for(const p of pool){if(!p.r||p.d.slice(0,4)!==yy||(pd(t.d)-pd(p.d))/864e5>14)continue;const x=Math.min(p.r,v);p.r-=x;v-=x;pu+=x;o.putar+=x;Y[p.d.slice(0,4)].putC+=x;if(!v)break}
+  o.set+=f;o.rows.push({t,k:'set',v:f,p:pu})}
+ for(const o of Object.values(Y))for(const r of o.rows)if(r.k==='cair')r.p=r.v-r.pe.r;
  return Y}
+function tabList(yy){const o=tabYears()[yy];if(!o)return;const nf=v=>rp(v);
+ const lab=r=>r.k==='gain'?(r.v>=0?'📈 Keuntungan':'📉 Kerugian'):r.k==='set'?(r.p>=r.v?'🔁 Putar ulang (setor lagi)':r.p?'💰 Ditabung · sebagian putar ulang':'💰 Ditabung'):(r.p>=r.v?'🔁 Putar ulang (dicairkan lalu disetor lagi)':r.p?'💸 Dicairkan · sebagian putar ulang':'💸 Dicairkan & dipakai');
+ const amt=r=>r.k==='gain'?`<span class="${r.v>=0?'up':'dn'}">${r.v>=0?'+':'−'}${nf(Math.abs(r.v))}</span>`:r.k==='set'?`<span class="up">+${nf(r.v)}</span>${r.p?`<div class="tiny">uang baru ${nf(r.v-r.p)} · putar ${nf(r.p)}</div>`:''}`:`<span class="dn">−${nf(r.v)}</span>${r.p?`<div class="tiny">dipakai ${nf(r.v-r.p)} · putar ${nf(r.p)}</div>`:''}`;
+ const kv=(l,v,b)=>`<div class="kv"><span>${b?'<b>':''}${l}${b?'</b>':''}</span><span>${b?'<b>':''}${rp(v)}${b?'</b>':''}</span></div>`;
+ sheet(`<h3>💰 Tabungan & investasi ${yy}</h3>
+  ${kv('Semua setoran',o.set)}${kv('− Putar ulang',-o.putar)}${kv('= Uang baru ditabung',o.set-o.putar,1)}
+  ${kv('Semua pencairan',o.cair)}${kv('− Putar ulang',-o.putC)}${kv('= Dicairkan & dipakai',o.cair-o.putC,1)}
+  ${kv('Keuntungan investasi',o.gain)}
+  <div class="tiny" style="margin:6px 0">Angka di atas sama dengan tabel. Di bawah: setiap transaksi beserta labelnya (ketuk untuk detail).</div>
+  ${o.rows.slice().reverse().map(r=>{const n=tabAcc(r.t);return`<div class="row" data-tx="${r.t.id}"><div class="l"><div class="t1">${lab(r)}</div><div class="t2">${fdate(r.t.d)} · ${esc(n)}<br>${esc((r.t.ket||r.t.kt).slice(0,80))}</div></div><div class="r" style="text-align:right">${amt(r)}</div></div>`}).join('')}`)}
 function tabSummary(y){const Y=tabYears(),I=TABI(),nf=v=>v?rp(v).replace('Rp',''):'0',now=+today.slice(0,4);let rows='',T={b:0,c:0,g:0};
  for(let yy=2023;yy<=2040;yy++){const o=Y[yy]||{set:0,cair:0,putar:0,putC:0,gain:0,ids:[]},baru=o.set-o.putar,pakai=o.cair-o.putC,net=baru-pakai,end=yy<=now?I.reduce((p,n)=>p+bal(n,yy===now?today:yy+'-12-31'),0):null;T.b+=baru;T.c+=pakai;T.g+=o.gain;
   const st=yy===2023||yy<=now?I.reduce((p,n)=>p+bal(n,(yy-1)+'-12-31'),0):null;window._tabI=window._tabI||{};window._tabI[yy]={o,baru,pakai,net,st,end};
-  rows+=`<tr class="${o.ids.length?'cl':''}" ${o.ids.length?`data-l="${LKs({ids:o.ids,title:'Tabungan & investasi · '+yy})}"`:''}><td>${yy} ${o.ids.length?`<span class="ac tabI" data-ty="${yy}">ⓘ</span>`:''}</td><td class="n up">${nf(baru)}</td><td class="n dn">${nf(pakai)}</td><td class="n ${net<0?'dn':''}">${nf(net)}</td><td class="n">${nf(o.gain)}</td><td class="n">${end==null?'–':'<b>'+nf(end)+'</b>'}</td></tr>`}
+  rows+=`<tr class="${o.ids.length?'cl tabRow':''}" data-ty="${yy}"><td>${yy} ${o.ids.length?`<span class="ac tabI" data-ty="${yy}">ⓘ</span>`:''}</td><td class="n up">${nf(baru)}</td><td class="n dn">${nf(pakai)}</td><td class="n ${net<0?'dn':''}">${nf(net)}</td><td class="n">${nf(o.gain)}</td><td class="n">${end==null?'–':'<b>'+nf(end)+'</b>'}</td></tr>`}
  const tot=I.reduce((p,n)=>p+bal(n),0);
  return`<div class="card"><h3>💰 Tabungan & investasi 2023–2040</h3>
   <div class="kv"><span><b>Total tabungan sekarang</b></span><span><b>${rp(tot)}</b></span></div>
   <div class="tiny">${I.filter(n=>bal(n)).map(n=>`<span class="ac" data-bka="${esc(n)}">${esc(n)} ${rp(bal(n))}</span>`).join(' · ')}</div>
   <div class="tw" style="margin-top:8px"><table class="bkt"><tr><th>Tahun</th><th class="n">Uang baru ditabung</th><th class="n">Dicairkan & dipakai</th><th class="n">Tabungan bersih</th><th class="n">Keuntungan</th><th class="n">Total akhir tahun</th></tr>${rows}
   <tr class="tot"><td>TOTAL</td><td class="n up">${nf(T.b)}</td><td class="n dn">${nf(T.c)}</td><td class="n">${nf(T.b-T.c)}</td><td class="n">${nf(T.g)}</td><td class="n"><b>${nf(tot)}</b></td></tr></table></div>
-  <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">Uang yang dicairkan lalu disetor lagi ke tabungan dalam 14 hari dihitung <b>putar ulang</b>, tidak dihitung dua kali: tidak masuk "uang baru ditabung" dan tidak masuk "dicairkan & dipakai". Pindah antar portofolio (mis. Dana Darurat → Dana Kuliah) juga tidak dihitung. Reksadana Dana Uang Kos Mama tidak ikut (uang mama). Ketuk tahun untuk transaksinya.</div></details></div>`}
+  <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">Uang yang dicairkan lalu disetor lagi ke tabungan dalam 14 hari dihitung <b>putar ulang</b>, tidak dihitung dua kali: tidak masuk "uang baru ditabung" dan tidak masuk "dicairkan & dipakai". Pindah antar portofolio (mis. Dana Darurat → Dana Kuliah) juga tidak dihitung. Reksadana Dana Uang Kos Mama tidak ikut (uang mama). Ketuk tahun untuk daftar transaksinya (berlabel Ditabung / Dicairkan / Putar ulang).</div></details></div>`}
 function tabInfo(yy){const x=(window._tabI||{})[yy];if(!x)return;const{o,baru,pakai,net,st,end}=x,kv=(l,v,b)=>`<div class="kv"><span>${b?'<b>':''}${l}${b?'</b>':''}</span><span>${b?'<b>':''}${rp(v)}${b?'</b>':''}</span></div>`;
  sheet(`<h3>ⓘ Tabungan & investasi ${yy}</h3>
   ${kv('Semua setoran ke tabungan',o.set)}${kv('− Putar ulang (uang cair yang disetor lagi ≤14 hari, tahun yang sama)',-o.putar)}${kv('= Uang baru ditabung',baru,1)}
@@ -865,7 +876,7 @@ function tabInfo(yy){const x=(window._tabI||{})[yy];if(!x)return;const{o,baru,pa
   <div style="height:8px"></div>${kv('Tabungan bersih (uang baru − dipakai)',net,1)}${kv('+ Keuntungan investasi (untung jual, cashback, rugi)',o.gain)}${kv('= Tambahan tabungan tahun ini',net+o.gain,1)}
   ${end!=null?`<div style="height:8px"></div>${kv('Total akhir tahun lalu',st)}${kv('+ Tambahan tabungan tahun ini',net+o.gain)}${kv('= Total akhir '+(yy===+today.slice(0,4)?'hari ini':'tahun '+yy),end,1)}<div class="st ${st+net+o.gain===end?'ok':''}">${st+net+o.gain===end?'✓ Cocok dengan saldo semua akun investasi.':'Selisih '+rp(end-st-net-o.gain)+' dengan saldo akun investasi.'}</div>`:''}
   <div class="tiny" style="margin-top:8px"><b>Putar ulang</b>: misalnya reksadana dicairkan lalu uangnya disetor lagi ke reksadana lain dalam 14 hari. Uangnya tidak pernah keluar dari tabungan, jadi tidak dihitung sebagai menabung baru maupun dipakai. Pencocokan hanya di tahun yang sama, supaya tiap tahun cocok dengan total akhir tahunnya. Pindah antar portofolio dan Reksadana Dana Uang Kos Mama tidak dihitung.</div>
-  <button class="b" style="width:100%;margin-top:8px" data-l="${LKs({ids:o.ids,title:'Tabungan & investasi · '+yy})}">Lihat semua transaksi ${yy}</button>`)}
+  <button class="b" style="width:100%;margin-top:8px" onclick="tabList(${yy})">Lihat semua transaksi ${yy}</button>`)}
 let RWA=null,RWF='semua',RWP='tahun';
 /* riba: bunga / dividen / lainnya */
 const rbGrp=t=>{const x=(t.kt||'')+' '+(t.ket||'');if(/dividen/i.test(x))return'dividen';if(/bunga|pajak bunga|selisih bunga/i.test(x)&&!/deposito/i.test(x))return'bunga';if(/deposito/i.test(x))return'bunga';return'lain'};
