@@ -565,7 +565,7 @@ const clean=f=>{const o={};for(const k in f)if(k!=='title'&&k!=='keep'&&f[k]!==u
 function lacak(f,title){window._prevF={...F};F={...clean(f),title:title||f.title};page=1;go('trx')}
 const flow=(t,a)=>t.iv===a&&t.a!==a?(t.t==='K'?1:t.t==='M'?-1:0):t.t==='T'?(t.tu===a?1:(t.a===a?-1:0)):(t.t==='M'?1:-1);
 /* ================= NAVIGASI ================= */
-const APPV='125';let V='home',charts={};
+const APPV='126';let V='home',charts={};
 const VIEWS=[['home','Beranda','🏠'],['trx','Buku Akun','📒'],['buku','Buku Akun','📒'],['rwy','Buku Akun','📒'],['rep','Laporan','📊'],['mama','Amanah','🤝'],['inv','Investasi','📈'],['plan','Rencana','🎯'],['bud','Anggaran','💰'],['rut','Rutin & Tagihan','🔁'],['rec','Cocokkan Saldo','⚖️'],['warn','Peringatan','⚠️'],['add','Catat','➕'],['jago','Cocokkan Bank','🏦'],['log','Riwayat & Sampah','🕘'],['fix','Perbaikan dari Claude','🛠️'],['guide','Panduan','📖'],['set','Atur','⚙️']];
 const NAV_MORE=['rut','rec','jago','warn','log','fix','guide'];
 function nav(){const cur=VIEWS.find(v=>v[0]===V)||VIEWS[0];$('ttl').textContent=cur[1];
@@ -1073,13 +1073,18 @@ function rep(){LK={};WK={};const P=period(),tree={},C=rangeCtx(P.a,P.b,P.lab);
    const oth=UD_L.filter(k=>k!=='Gaji'&&B.use[k]&&B.use[k].v).map(k=>`<div class="kv"><span>${esc(k)}</span><span class="ac" data-l="${LKs({ids:B.use[k].L.map(z=>z[0].id),title:'Dibayar pakai '+k+' · '+P.lab})}">${rp(B.use[k].v)} ›</span></div>`).join('');
    return`</div><div class="card"><h3>💰 Gaji · ${esc(P.lab)}</h3>
    ${B.G.map(t=>`<div class="kv cl" data-tx="${t.id}"><span><b>${t.kt==='Gaji bulanan'?'Gaji masuk':esc(t.kt)}</b> · ${fdate(t.d)} · ${esc(t.a)}</span><span class="up"><b>${rp(t.j)}</b></span></div>`).join('')||'<div class="tiny">Belum ada gaji masuk di periode ini.</div>'}
-   <div class="tiny" style="margin:6px 0 2px">Dipakai untuk (ketuk untuk detail):</div>
+   ${(()=>{const keluar=gj-sisa,inS=B.loc.filter(x=>x[0]).reduce((p,x)=>p+x[1],0),ok=inS===sisa;return B.G.length?`
+   <div class="kv"><span>Dikurangi semua pengeluaran dari gaji</span><span class="dn">−${rp(keluar)}</span></div>
+   <details style="margin:2px 0 4px"><summary class="tiny ac">Lihat rincian pengeluaran dari gaji</summary>
    ${U.L.sort((p,q)=>txCmp(p[0],q[0])).map(([t,v])=>row(t,v)).join('')||'<div class="tiny">—</div>'}
-   ${B.utang.map(u=>`<div class="kv cl" data-l="${LKs({ids:u.L.map(t=>t.id),title:'Dibayar sebelum gaji masuk · '+u.a+' (total '+rp(u.us)+', '+rp(u.av)+' dari uang lama, '+rp(u.v)+' dari uang titipan)'})}"><span>Bayar utang uang titipan (uang kos / Disan / jasa) yang terpakai di ${esc(u.a)} sebelum gaji masuk<div class="tiny">Sebelum gaji masuk, dari ${esc(u.a)} keluar <b>${rp(u.us)}</b> (${u.L.length} transaksi). Uang lamamu sendiri di ${esc(u.a)} hanya <b>${rp(u.av)}</b>, jadi <b>${rp(u.us)} − ${rp(u.av)} = ${rp(u.v)}</b> memakai uang titipan dan dibayar dari gaji. Ketuk untuk melihat ${u.L.length} transaksinya.</div></span><span class="dn">−${rp(u.v)}</span></div>`).join('')}
    ${B.lain?`<div class="kv cl" data-l="${LKs({ids:UD_L.filter(k=>k!=='Gaji'&&B.use[k]).flatMap(k=>B.use[k].L.map(z=>z[0].id)),title:'Dibayar pakai uang lain · '+P.lab})}"><span>Sudah keluar untuk pengeluaran yang tercatat memakai uang lain (mis. uang kos / Disan yang ditukar dengan gaji)<div class="tiny">Uang ini sudah tidak ada di saldo akun mana pun.</div></span><span class="dn">−${rp(B.lain)}</span></div>`:''}
    <div class="kv" style="border-top:1px solid var(--line,#ddd);margin-top:4px;padding-top:6px"><span><b>= Sisa gaji bulan ini</b></span><span><b class="${sisa<0?'dn':''}">${rp(sisa)}</b></span></div>
-   ${B.G.length?(sisa<0?`<div class="st">Gaji kurang ${rp(-sisa)}: pemakaian bulan ini lebih besar dari gaji yang masuk.</div>`:sisa>0?`<div class="kv"><span><b>Sisa gaji itu ada di</b></span><span>${B.loc.map(([n,v])=>n?`<span class="ac" data-acc="${esc(n)}">${esc(n)} ${rp(v)}</span>`:`<span class="dn">${rp(v)} tidak ada di saldo akun mana pun ⚠️</span>`).join(' · ')}</span></div>`:''):''}
-   <div class="tiny">Sisa gaji = uang gaji bulan ini yang masih ada di saldo akun. Yang dihitung keluar hanya uang yang sudah benar-benar keluar. Sisa gaji bulan lalu tidak ikut dihitung.</div>
+   </details>
+   <div class="kv" style="border-top:1px solid var(--line,#ddd);margin-top:4px;padding-top:6px"><span><b>① Sisa gaji (hitungan)</b></span><span><b class="${sisa<0?'dn':''}">${rp(sisa)}</b></span></div>
+   <div class="kv"><span><b>② Uang gaji yang masih ada di saldo</b></span><span><b>${rp(inS)}</b></span></div>
+   ${B.loc.map(([n,v])=>n?`<div class="kv"><span>· <span class="ac" data-acc="${esc(n)}">${esc(n)}</span></span><span>${rp(v)}</span></div>`:'').join('')}
+   ${sisa<0&&inS===0?`<div class="st">Gaji habis: pemakaian bulan ini ${rp(-sisa)} lebih besar dari gaji yang masuk, kekurangannya terpakai dari uang lain di saldo. Sisa uang gajimu Rp0.</div>`:ok?`<div class="kv"><span>Status</span><span class="up"><b>✅ Cocok — sisa uang gajimu ${rp(sisa)}</b></span></div>`:`<div class="st">⚠️ Tidak cocok: hitungan ${rp(sisa)}, di saldo ${rp(inS)} (selisih ${rp(sisa-inS)}). Ada transaksi yang perlu dicek.</div>`}`:''})()}
+   <div class="tiny">① = gaji masuk dikurangi uang gaji yang sudah benar-benar keluar. ② = uang gaji bulan ini yang masih ada di saldo akun. Kalau keduanya sama, itulah sisa uang gajimu. Sisa gaji bulan lalu tidak ikut dihitung.</div>
    ${oth?`<h3 style="margin-top:12px">Dibayar pakai uang lain (tidak mengurangi gaji)</h3>${oth}`:''}
    <details class="tip"><summary>ⓘ Penjelasan</summary><div class="tiny">"Uang dari" diisi otomatis: pengeluaran dari uang jasa / uang kos / uang Disan / Kantong Uang Riba mengikuti akunnya; tabungan yang uangnya berasal dari "sisa uang jasa" atau dari pencairan reksadana dilacak dari transfer sebelumnya; pemakaian sebelum gaji masuk bulan itu dihitung "Sisa bulan lalu". Kalau ada yang salah, buka transaksinya › Ubah › pilih "Uang dari".</div></details>`})()}
   <button class="b" id="rpPdf" style="width:100%;margin-top:8px">🖨 Cetak / simpan PDF laporan ${esc(P.lab)}</button></div>
